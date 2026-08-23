@@ -1,0 +1,392 @@
+================================================================
+Limagination Sans v3 · 견본 시트 생성 프롬프트 (image-to-fonts 스킬용)
+================================================================
+버전: v3.0 · 작성일: 2026-08-05
+기반 문서: LIMAGINATION_BRAND_CONSTITUTION.txt (브랜드 헌장 v2.0)
+디자인 참고: 산돌구름 무료폰트 (sandollcloud.com/freefonts)
+
+v3.0 변경 (중요): "단순하고 창의성이 없다" 피드백 반영 —
+기본 산세리프 + 살짝 둥글게라는 접근을 버렸다. 한국 창의 폰트들의
+DNA를 3층으로 결합한 '말랑꾸불 산세리프'로 전면 재작성:
+① 꾸불림체의 곡선 에너지(획이 숨 쉰다) ② Ok Mallang의 쫀득한 둥글림
+③ 을지로체의 한국적 자신감(단단하고 당당한 무게) — 그리고 Apple 수준의
+마감으로 정제. 절대 기본 폰트처럼 보이면 안 된다.
+
+목적: AI 이미지 생성기(Midjourney / DALL·E / Stable Diffusion 등)로
+폰트 견본 시트 이미지를 만든 뒤, image-to-fonts 스킬 파이프라인
+(img2bin → segment → build → OTF)에 넣어 실제 폰트 파일로 변환한다.
+
+타깃 커버리지: 영어(A–Z, a–z) + 숫자(0–9) + 한글(자주 쓰는 음절) + 실용 기호(약 50종)
+
+  We Begin with Imagination.   (우리는 상상에서 시작한다)
+  호기심이 우리의 시작이다     →  넓게 열린 카운터 — 읽고 싶어지는 형태
+  상상이 우리의 언어다         →  꾸불거리는 생동감 있는 곡선 — 이 폰트의 주축
+  창의가 우리의 표현이다       →  손으로 그린 듯한 시그니처 디테일
+  세련됨이 우리의 기준이다     →  균일한 굵기·정밀한 마감 — 프리미엄
+
+----------------------------------------------------------------
+0) 커버리지 설계 — 시트를 4장으로 나눠야 한다
+----------------------------------------------------------------
+이미지 생성기 하나로 영문+한글+기호를 한 장에 담으면 글자가 반드시 깨진다.
+글자 수를 줄이고 해상도를 높이기 위해 시트를 분리하고, image-to-fonts의
+"여러 시트 병합" 절차로 하나의 폰트로 합친다.
+
+  시트                내용                     글자 수   라벨 방식
+  Sheet 1 — Latin     A–Z, a–z, 0–9            62        standard: true 자동 라벨
+  Sheet 2 — Hangul A  가 거 고 구 그 (5행×14자)  70        비표준 → 수동 라벨
+  Sheet 3 — Hangul B  기 개 게 교 규 (5행×14자)  70        비표준 → 수동 라벨
+  Sheet 4 — Symbols   실용 기호 약 50종         50        비표준 → 수동 라벨
+  (선택) Sheet 5 — Hangul 받침  자주 쓰는 받침 음절  ~30   비표준 → 수동 라벨
+
+  [한글의 정직한 한계 (반드시 읽어볼 것)]
+  - image-to-fonts는 이미지 속 글자 그대로 벡터화한다. 한글 자모(jamo) 조합
+    (11,172자 자동 생성)은 지원하지 않는다. 결과 폰트에는 시트에 넣은 음절만
+    들어간다. 브랜드·제목·짧은 문구용으로는 충분하다.
+  - AI 이미지 모델은 한글을 자주 '깨진 한글'로 그린다. 생성 후 반드시
+    contact_sheet.py → contact.png를 눈으로 확인해 글자 하나하나를 검증하고,
+    깨진 칸은 patch 또는 시트 재생성으로 교체한다.
+  - 한글 곡선 표현이 강해질수록 AI 오타 위험이 커진다. 안정성을 우선하려면
+    Pretendard Rounded / Cafe24 Ssurround 같은 둥근 한글을 큰 사이즈로
+    렌더링해 시트로 넣는 방법도 있다 (파이프라인은 그려진 모양을 그대로
+    추적하므로 생성기 오타 위험이 없음).
+
+----------------------------------------------------------------
+0.5) 스타일 미리보기 (선택 — 한 장으로 빨리 확인)
+----------------------------------------------------------------
+본격적인 4장 시트 전에 폰트의 분위기만 먼저 보고 싶을 때 사용하는
+1장짜리 프롬프트. [주의] 이 이미지는 견본이므로 폰트 변환 파이프라인에는
+넣지 말 것 (문장이 섞여 있어 분해 불가). 스타일 확인용으로만 쓰고,
+확정 후 아래 시트 프롬프트로 생성한다.
+
+A bold brand font poster for a Korean-born soft rounded grotesque
+typeface called "Limagination Sans": playful curved energy, chewy
+squishy rounded forms, confident Korean attitude, premium finish —
+inspired by Korea's most characterful display fonts. The phrase
+"We Imagine Before We Create." written huge — strokes are never dead
+straight, they carry a gentle lively curve and end in squishy rounded
+bulbs; dots are perfect soft circles. Below it, one line each: the
+uppercase alphabet "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z",
+the lowercase alphabet "a b c d e f g h i j k l m n o p q r s t u v
+w x y z", the digits "0 1 2 3 4 5 6 7 8 9", and Korean syllables
+"가 나 다 라 마 바 사 아 자 차 카 타 파 하" with big perfect circle ㅇ
+and softly curved jamo corners. Warm, playful, crafted, premium — pure
+black text on pure white background, flat frontal view, no colors, no
+gradients, no shadows, no 3D, no background patterns, no frames.
+
+----------------------------------------------------------------
+1) 공통 디자인 언어 (모든 시트에 동일하게 적용)
+----------------------------------------------------------------
+LIMAGINATION brand typeface — a Korean-born soft rounded grotesque with
+real creative energy. Inspired by Korea's most characterful fonts:
+the playful CURVED ENERGY of Baemin Ggureullim (꾸불림체), the CHEWY
+SQUISHY SOFTNESS of Ok Mallang (말랑), and the CONFIDENT SOLID presence
+of Korean retro signage (을지로체) — refined to Apple-level premium.
+It must never look like a default font.
+
+THREE LAYERS OF CHARACTER (make them VISIBLY present):
+
+1. CURVY ENERGY (꾸불림) — strokes are never dead straight:
+   - vertical stems carry a gentle, lively curve — they breathe;
+   - crossbars on t, f, e bow softly upward;
+   - Korean ㅣ, ㅏ, ㅗ stems bend gently like they are alive;
+   - each letter feels slightly hand-drawn, not printed.
+
+2. CHEWY SOFTNESS (말랑) — squishy and bouncy:
+   - every stroke end is a squishy pill-shaped bulb;
+   - bowls are plump and bouncy; dots on i, j, !, ? are perfect
+     soft circles; : and ; use round dots;
+   - ball terminals on a, c, f, r, y; double-storey a and g with fat
+     circular bowls; wide round O, C, D, G; rounded apexes on A, M, V, W.
+
+3. SIGNATURE WONDER (독특) — memorable hand-drawn details:
+   - Q has a playful curled tail; & has a lifted curly tail;
+   - g, q, y have gentle teardrop curls;
+   - digits are tabular with circular forms: open 4, round 0,
+     soft flat-top 7.
+
+KOREAN — rounded, confident, characterful:
+   - ㅇ is a big perfect circle;
+   - jamo stroke ends are squishy rounded; corners where strokes meet
+     are softly curved, never sharp;
+   - horizontal strokes carry a gentle upward curve (을지로의 자신감),
+     vertical strokes breathe with a soft bend;
+   - solid even weight, balanced vertical and horizontal rhythm.
+
+THE FINISH (Apple-level): optically even stroke weight, zero contrast,
+precise alignment, clean and crafted — playful personality, premium
+finish.
+
+FORBIDDEN: serifs, scripts, handwriting, calligraphy, blackletter,
+pixel fonts, 3D, gradients, shadows, textures, colors, watermarks,
+borders, frames, background patterns, sample sentences, headers,
+titles, ornaments, flourishes, decorative extras, extra glyphs,
+broken glyphs, plain generic sans-serif, thin strokes, boring.
+
+TECHNICAL: pure white background, solid black #000 glyphs, flat frontal
+view, high contrast, crisp vector-like edges, each glyph at least
+300px tall, perfectly clean isolated glyphs, uniform grid with generous
+cell spacing, all glyphs on one common baseline, no overlap.
+
+  [부정 프롬프트 (negative prompt) — 지원 모델 한정]
+  serif, script, handwriting, calligraphy, blackletter, pixel font,
+  3D, gradient, shadow, texture, color, watermark, border, frame,
+  background pattern, sample text, flourishes, ornaments, extra glyphs,
+  skewed, perspective, broken glyphs, garbled text, mojibake, faux
+  hangul, plain generic font, boring sans-serif, thin strokes, default
+  system font, Helvetica, Arial
+
+----------------------------------------------------------------
+2) 시트별 프롬프트 (영문 — 복붙 즉시 생성 가능한 완결형)
+----------------------------------------------------------------
+
+[Sheet 1 — Latin + Digits (62자, 가장 중요) — 복붙용]
+
+A font specimen sheet for a Korean-born soft rounded grotesque
+typeface full of creative energy, called "Limagination Sans": playful
+curved strokes, chewy squishy rounded forms, premium finish — inspired
+by Korea's most characterful display fonts, never a default font.
+Pure white background, solid black glyphs, nothing else.
+
+CONTENT: exactly 62 glyphs in a neat uniform grid, read left-to-right,
+top-to-bottom, in this exact order:
+A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+a b c d e f g h i j k l m n o p q r s t u v w x y z
+0 1 2 3 4 5 6 7 8 9
+All glyphs identical optical size, aligned on one common baseline,
+even generous cell spacing, no overlap, no missing glyphs.
+
+STYLE — creative, NOT plain:
+- CURVY: strokes are never dead straight — vertical stems carry a
+  gentle lively curve and breathe; crossbars on t, f, e bow softly
+  upward; letters feel slightly hand-drawn, not printed.
+- SOFT: every stroke end is a squishy pill-shaped bulb; dots on
+  i, j, !, ? are perfect soft circles; ball terminals on a, c, f, r, y;
+  double-storey a and g with plump circular bowls; wide round O, C, D, G;
+  rounded apexes on A, M, V, W.
+- WONDER: Q with a playful curled tail; & with a lifted curly tail;
+  g, q, y with gentle teardrop curls; digits tabular and circular —
+  open 4, round 0, soft flat-top 7.
+Optically even stroke weight, zero contrast, crafted premium finish —
+warm, playful, confident; never cold, never generic.
+
+FORBIDDEN: serifs, scripts, handwriting, calligraphy, blackletter,
+3D, gradients, shadows, textures, colors, watermarks, borders,
+sample sentences, titles, ornaments, flourishes, extra characters,
+plain generic sans-serif, thin strokes.
+
+TECHNICAL: each glyph at least 300px tall; pure black #000 on pure
+white #FFFFFF; flat frontal view; crisp edges; no anti-aliasing
+artifacts.
+
+[Sheet 2 — Hangul A (70자: 가 거 고 구 그 × 14자음) — 복붙용]
+
+A font specimen sheet for a Korean Hangul typeface matching the
+"Limagination Sans" brand style: playful curved energy, chewy soft
+rounded forms, confident Korean attitude, premium finish — inspired
+by Korea's most characterful display fonts, never a default font.
+Pure white background, solid black glyphs, nothing else.
+
+CONTENT: exactly 70 Korean syllables in a neat 5-row by 14-column
+grid, read left-to-right, top-to-bottom, in this exact order:
+row 1: 가 나 다 라 마 바 사 아 자 차 카 타 파 하
+row 2: 거 너 더 러 머 버 서 어 저 처 커 터 퍼 허
+row 3: 고 노 도 로 모 보 소 오 조 초 코 토 포 호
+row 4: 구 누 두 루 무 부 수 우 주 추 쿠 투 푸 후
+row 5: 그 느 드 르 므 브 스 으 즈 츠 크 트 프 흐
+Every syllable identical optical size, aligned on one common baseline,
+even cell spacing, no overlap, no missing cells. Spell each syllable
+correctly — never invent or deform Korean letters.
+
+STYLE — Korean-specific, creative and confident, NOT plain:
+- ㅇ is a big perfect circle; every jamo stroke end is a squishy
+  rounded bulb;
+- corners where strokes meet are softly curved, never sharp;
+- horizontal strokes carry a gentle upward curve, vertical strokes
+  breathe with a soft bend — alive, like a hand-drawn Korean sign;
+- solid even weight, zero contrast, balanced rhythm, crafted premium
+  finish — warm, playful, confident; never plain, never generic.
+
+FORBIDDEN: serifs, scripts, handwriting, calligraphy, 3D, gradients,
+shadows, textures, colors, watermarks, borders, sample sentences,
+ornaments, extra characters, invented or misspelled syllables.
+
+TECHNICAL: each syllable at least 300px tall; pure black #000 on pure
+white #FFFFFF; flat frontal view; crisp edges; no anti-aliasing
+artifacts.
+
+[Sheet 3 — Hangul B (70자: 기 개 게 교 규 × 14자음) — 복붙용]
+
+Sheet 2와 동일한 프롬프트에서 CONTENT만 아래로 교체:
+
+CONTENT: exactly 70 Korean syllables in a neat 5-row by 14-column
+grid, read left-to-right, top-to-bottom, in this exact order:
+row 1: 기 니 디 리 미 비 시 이 지 치 키 티 피 히
+row 2: 개 내 대 래 매 배 새 애 재 채 캐 태 패 해
+row 3: 게 네 데 레 메 베 세 에 제 체 케 테 페 헤
+row 4: 교 뇨 됴 료 묘 뵤 쇼 요 죠 쵸 쿄 툐 표 효
+row 5: 규 뉴 듀 류 뮤 뷰 슈 유 쥬 츄 큐 튜 퓨 휴
+Every syllable identical optical size, aligned on one common baseline,
+even cell spacing, no overlap, no missing cells. Spell each syllable
+correctly — never invent or deform Korean letters.
+
+[Sheet 4 — Symbols (50자) — 복붙용]
+
+A font specimen sheet for the "Limagination Sans" brand symbol set:
+playful curved energy, soft rounded forms, premium finish. Pure white
+background, solid black glyphs, nothing else.
+
+CONTENT: exactly 50 symbols in a neat uniform grid, read
+left-to-right, top-to-bottom, in this exact order:
+. , : ; ! ? … · — – " " ' ' ( ) [ ] { } < > / \ |
+@ # $ % ^ & * + - = _ ~ ※ ₩ ° ± ÷ × → ← ★ ☆ ○ ● ♥
+All symbols identical optical size, aligned on one common baseline
+and centered in their cells, even spacing, no overlap, no missing
+symbols. Render each symbol exactly as listed — never substitute
+or deform them.
+
+STYLE — creative, matching the letters:
+period, colon and semicolon are perfect soft circles; the comma is a
+rounded teardrop; the ampersand has its lifted curly tail; the percent
+and asterisk are clean but playfully drawn, not plain; parentheses and
+brackets have rounded corners. Warm, crafted, premium — never plain.
+
+FORBIDDEN: serifs, scripts, handwriting, calligraphy, 3D, gradients,
+shadows, textures, colors, watermarks, borders, sample text, ornaments,
+extra symbols, substituted or misspelled symbols.
+
+TECHNICAL: each symbol at least 300px tall; pure black #000 on pure
+white #FFFFFF; flat frontal view; crisp edges; no anti-aliasing
+artifacts.
+
+[(선택) Sheet 5 — 자주 쓰는 받침 음절 (~30자)]
+
+완성도가 필요하면 아래 음절을 1장 더 추가한다 (프롬프트는 Sheet 2와 동일,
+CONTENT만 교체):
+
+은 는 이 가 를 을 한 안 만 반 산 잔 찬 탄 판 간
+것 있 없 잘 못 던 된 될 등 분 손 눈 운 준 춘 쿤 툰 훈 원
+
+----------------------------------------------------------------
+2.5) 창의성 다이얼 — 결과가 마음에 안 들 때 조절법
+----------------------------------------------------------------
+  증상                 조절 방법 (STYLE 문장에 한 줄 추가/교체)
+  아직도 너무 단순함   "Make the curved energy STRONGER: stems bend more,
+                       terminals are fatter bulbs, letters bounce more
+                       playfully — like a hand-painted Korean storefront sign."
+  너무 꾸불거림/어수선  "Tone down the curves: keep strokes mostly straight,
+                       keep only the rounded terminals and circular dots —
+                       calm but still not plain."
+  너무 귀여움          "Less playful: minimal curve, subtle rounded corners
+  (사무적이길 원함)     only, keep the confident solid weight and premium
+                       finish — like a refined Korean brand."
+  둥글림이 안 보임     "Make the rounded stroke ends and circular dots MUCH
+                       larger and more obvious."
+
+----------------------------------------------------------------
+3) 프롬프트 한글 해설 (이미지 생성기용 안내문)
+----------------------------------------------------------------
+LIMAGINATION 브랜드 폰트 견본 시트를 만들어줘. 배경은 순수한 흰색,
+글자는 순수한 검정, 고대비로 벡터처럼 날카롭게. 시트에 있는 글자
+외에는 아무것도 넣지 마.
+
+성격: 한국 창의 폰트의 DNA를 담은 '말랑꾸불 산세리프' — 절대 기본
+폰트처럼 보이면 안 돼.
+- 꾸불림: 획이 죽은 직선이 아니야. 세로 획은 살아서 살짝 휘고,
+  t, f, e 의 가로 획은 위로 살짝 활처럼 휘어. 손으로 그린 듯한 생동감.
+- 말랑함: 모든 획 끝은 쫀득한 알약 모양 볼. i, j, !, ? 의 점은
+  완벽한 부드러운 원. a, c, f, r, y 는 볼 터미널. a, g 는 통통한
+  원형 볼의 이층 구조. O, C, D, G 는 넓고 둥글게.
+- 독특함: Q 는 장난기 있는 말린 꼬리, & 는 들린 곱슬 꼬리,
+  g, q, y 는 부드러운 물방울 컬. 숫자는 표 형식의 둥근 형태 —
+  4 는 열린 형태, 0 은 둥글게, 7 은 부드러운 평평한 상단.
+- 한글: ㅇ 은 크고 완벽한 원. 자모 획 끝은 쫀득하게 둥글게.
+  획이 만나는 모서리는 날카롭지 않게 부드럽게. 가로 획은 위로
+  살짝 휘고(을지로체의 자신감), 세로 획은 숨 쉬듯 부드럽게.
+- 마감: 균일한 굵기, 대비 없음, 정밀한 정렬, 프리미엄 (Apple 수준) —
+  따뜻하고 자신 있고, 결코 차갑거나 밋밋하지 않게.
+
+금지: 세리프, 필기체, 캘리그라피, 픽셀 폰트, 3D, 그라데이션, 그림자,
+질감, 색상, 워터마크, 테두리, 배경 패턴, 샘플 문장, 제목, 장식,
+추가 글자, 기본 산세리프.
+한글 시트는 글자를 절대 변형·창작하지 말고 나열한 대로 정확히.
+
+기술 조건: 글자 높이 300px 이상, 정면 플랫 뷰, 순수 검정(#000) + 순수
+흰색(#FFF), 균일 그리드, 모든 글자 하나의 기준선, 겹침 없음.
+
+----------------------------------------------------------------
+4) image-to-fonts 스킬 사용 가이드
+----------------------------------------------------------------
+  항목               요구사항
+  글자 높이         300px 이상 권장 (150px 미만이면 확대 시 울퉁불퉁)
+  배경/글자색        순수 흰색 + 순수 검정 (이진화·연결요소 분리 품질 좌우)
+  장식 제거          제목·샘플 문구·그림자·그라데이션 절대 금지
+                    (행 필터가 헤더를 걸러내지만 겹치면 오판독)
+  Sheet 1 (라틴)    62자 = standard: true → A–Z a–z 0–9 자동 라벨
+  Sheet 2·3·4·5     standard: false → contact_sheet.py로 눈으로 확인 후
+  (한글·기호)        labels.json 수동 작성. 깨진 한글·바뀐 기호는 "?" 처리
+  병합              4장의 comps.json을 재번호로 병합, 하나의 labels.json
+                    작성 후 build는 한 번만 (대문자 기준 스케일 capMed 일관 적용)
+  이름              영어로: Limagination Sans (한글 이름은 일부 앱에서
+                    목록에 안 보임)
+  교체              한 글자만 어긋나면 pipeline.js patch로 해당 글자만
+                    고해상도 재생성
+  자간·굵기         재업로드 없이 pipeline.js 상수만 조정해 재빌드
+                    (사이드베어링 배율 0.66, 스페이스 LSB×5.4 등)
+
+  [권장 작업 순서]
+  1. (선택) 스타일 미리보기 프롬프트로 분위기 확정 (창의성 다이얼로 조절)
+  2. Sheet 1 생성 → standard 자동 라벨 확인 → build 후 기하 품질 확인
+  3. Sheet 2·3(한글) 생성 → contact.png 눈 검증
+     (생성기 한글 오타가 가장 흔한 실패 지점 — 곡선이 강할수록 더 꼼꼼히)
+  4. Sheet 4(기호) 생성 → contact.png로 기호 매칭 검증 (≠ 로 잘못 그려진 것 흔함)
+  5. 4장 병합 → fix_mac_names.py → fontbakery/OTS QA → OTF 배포
+  6. 미리보기 HTML로 한글·라틴 혼합 문장 확인:
+     "모든 가능성은 상상에서 시작된다. We Imagine First 2026!"
+
+----------------------------------------------------------------
+5) 디자인 레퍼런스
+----------------------------------------------------------------
+
+[산돌구름 무료폰트에서 얻은 영감 (sandollcloud.com/freefonts)]
+  폰트                    얻은 디자인 DNA                              적용
+  배달의민족 꾸불림체      획 자체가 꾸불거리는 곡선 에너지             1번째 층: CURVY ENERGY
+                          — 죽은 직선 금지
+  Ok Mallang (말랑)       쫀득하고 통통한 둥글림, 부드러운 볼          2번째 층: CHEWY SOFTNESS
+  배민 을지로체            한국 간판의 단단하고 당당한 무게감,            한글 ㅗ/ㅏ/ㅣ 처리
+                          가로획의 자신감                              + 고른 무게
+  둥글둥글체/꾸러기체/     한국 특유의 발랄한 둥근 글꼴 감성            따뜻함의 베이스
+  해맑음체
+  퍼즐체/갈무리9/검은고딕  (참고) 극단적 개성 — 브랜드 톤과               금지 리스트에서
+                          안 맞으면 과함                               제외 원칙 확인용
+
+  > 한 단계 더 창의적으로: 산돌에서 영감을 받되 그대로 따라 하지 않는다
+    (헌장 원칙: 새로움은 기존 패턴 위의 변주로만). 꾸불림·말랑·을지로의
+    에너지를 섞고 Apple 수준의 마감으로 정제하는 것이 이 폰트의 독자성이다.
+
+[브랜드 헌장 v2.0에서 추출]
+- We Begin with Imagination. — 호기심은 시작, 상상은 언어, 창의는 표현,
+  세련됨은 기준.
+- 상상의 순환 (The Imagination Cycle): 호기심 → 상상 → 창조 → 다듬음 →
+  의미 — 폰트도 이 순환을 따른다: 열린 카운터로 호기심을, 꾸불거리는
+  곡선으로 상상을, 손으로 그린 듯한 디테일로 창의를, 균일한 마감으로
+  다듬음을, 기억에 남는 꼬리·점으로 의미를 말한다.
+- 브랜드 원칙 (Brand Principles):
+  - Imagine First — 익숙한 기본 폰트의 변주 금지, 먼저 그린 상상
+  - Make it Human — 손으로 그린 듯한 생동감 (꾸불림의 이유)
+  - Keep it Clear — 어떤 크기에서도 읽히는 명료함
+  - Refine Relentlessly — 끝까지 다듬은 마감
+  - Leave Wonder — 오래 기억되는 작은 디테일 (말린 꼬리·원형 점)
+- 행동 (Behaviors): 질문한다 · 탐험한다 · 상상한다 · 만든다 · 다듬는다 · 공유한다.
+- 이 폰트의 한 문장 정의: "한국의 창의적 폰트 DNA에서 태어나, 손으로
+  그린 듯 꾸불거리고, 말랑하게 부풀고, 끝까지 다듬어 잊히지 않는 —
+  LIMAGINATION의 폰트."
+- Apple × Recall × LIMAGINATION 적용: 구조(격자·비례·타이포)는 Apple
+  수준의 명료함(L1), 둥근 모서리·부드러운 획·따뜻함은 Recall(L2),
+  꾸불림·말린 꼬리·원형 점의 개성은 LIMAGINATION(L3) — 세 층위가 하나의
+  글자 안에 공존한다.
+- 브랜드 서명: "Made with LIMAGINATION" — 이 폰트로 쓰는 모든 문장은
+  그 서명이 된다.
+
+================================================================
+본 프롬프트는 LIMAGINATION 브랜드 헌장 v2.0을 기반으로 제작되었다.
+================================================================
