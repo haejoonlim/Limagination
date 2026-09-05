@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>orch dashboard</title>
+<link rel="icon" href="data:,">
+<style>
+  :root {
+    --bg-canvas: #F2F2F7; --card: #FFFFFF; --text-primary: #1C1C1E;
+    --text-muted: #6C6C70; --border: #D1D1D6;
+    --accent: #8B5CF6; --accent-ink: #6D28D9;
+    --success: #248A3D; --danger: #D70015;
+    --grad-brand: linear-gradient(135deg, #8B5CF6, #4F46E5);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg-canvas: #000000; --card: #1C1C1E; --text-primary: #F2F2F7;
+      --text-muted: #98989F; --border: #38383A;
+      --accent: #8B5CF6; --accent-ink: #A78BFA;
+      --success: #30D158; --danger: #FF453A;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg-canvas: #000000; --card: #1C1C1E; --text-primary: #F2F2F7;
+    --text-muted: #98989F; --border: #38383A;
+    --accent: #8B5CF6; --accent-ink: #A78BFA;
+    --success: #30D158; --danger: #FF453A;
+  }
+  body { font-family: Pretendard, -apple-system, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; max-width: 960px; margin: 24px auto; padding: 0 16px; background: var(--bg-canvas); color: var(--text-primary); }
+  #app-header .wordmark { font-family: -apple-system, system-ui, sans-serif; font-weight: 800; letter-spacing: 2px; font-size: 22px; }
+  #app-header .wordmark span { color: var(--accent); }
+  #app-header .sub { color: var(--text-muted); font-size: 13px; margin-top: 2px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin-top: 12px; }
+  footer { color: var(--text-muted); font-size: 12px; text-align: center; margin: 24px 0; }
+  h1 { font-size: 20px; }
+  .tabs button { margin-right: 6px; padding: 6px 12px; cursor: pointer; border: 1px solid var(--border); background: var(--card); color: var(--text-primary); border-radius: 8px; }
+  .tabs button.active { font-weight: bold; border-color: var(--accent); color: var(--accent-ink); }
+  button { cursor: pointer; border: 1px solid var(--border); background: var(--card); color: var(--text-primary); border-radius: 8px; padding: 6px 12px; }
+  button:hover { border-color: var(--accent); }
+  #runbtn { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: bold; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 12px; }
+  .done { background: #d4edda; color: #1a4d2e; } .failed { background: #f8d7da; color: #7a1f2b; } .running { background: #fff3cd; color: #6b5900; }
+  table { border-collapse: collapse; width: 100%; margin-top: 12px; font-size: 14px; }
+  thead th { border: none; border-bottom: 2px solid var(--border); padding: 6px 8px; text-align: left; font-size: 12px; color: var(--text-muted); font-weight: 600; white-space: nowrap; }
+  tbody td { border: none; border-bottom: 1px solid var(--border); padding: 8px; text-align: left; vertical-align: top; }
+  tbody tr:last-child td { border-bottom: none; }
+  td.taskid, td.branch { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; }
+  td.trunc { max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  textarea { width: 100%; height: 56px; background: var(--bg-canvas); color: var(--text-primary); border: 1px solid var(--border); border-radius: 8px; padding: 8px; font: inherit; }
+  input, select { background: var(--bg-canvas); color: var(--text-primary); border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px; font: inherit; }
+  .row { margin-top: 12px; }
+  button { cursor: pointer; }
+  .muted { color: var(--text-muted); font-size: 12px; }
+  .phase-steps .step { display: inline-block; width: 22px; height: 6px; border-radius: 3px; background: var(--border); margin-right: 4px; }
+  .phase-steps .step.done { background: var(--accent); }
+  .phase-steps .step.now { background: var(--accent); animation: pulse 1.2s infinite; }
+  @keyframes pulse { 50% { opacity: 0.4; } }
+  tr.celebrate td:first-child { box-shadow: inset 3px 0 0 #8B5CF6; }
+  .empty-tasks { text-align: center; color: var(--text-muted); padding: 20px; }
+  .detail-plan pre { white-space: pre-wrap; word-break: break-word; font-size: 12px; }
+  .detail-timeline { margin-top: 8px; }
+</style>
+</head>
+<body>
+<header id="app-header">
+  <div class="wordmark">LIMAGINATION <span>orch</span></div>
+  <div class="sub">질문을 현실로 — 코딩 오케스트레이터
+    <button id="theme-toggle" onclick="cycleTheme()" style="margin-left:8px">테마: 시스템</button>
+  </div>
+</header>
+<main>
+<div class="tabs" id="repo-tabs"></div>
+<div class="row">
+  <span id="lockinfo" class="muted"></span>
+  <button onclick="toggleAgents()" style="margin-left:8px">에이전트</button>
+  <span id="agentsummary" class="muted"></span>
+</div>
+<section class="card" id="agents-panel" style="display:none">
+  <b>에이전트</b> <span class="muted">모델·effort는 비우면 기본값</span>
+  <table><thead><tr><th></th><th>에이전트</th><th>모델</th><th>effort</th></tr></thead>
+  <tbody id="agents"></tbody></table>
+  <b>역할</b>
+  <table><thead><tr><th>역할</th><th>에이전트</th><th>모델(override)</th><th>effort(override)</th><th>서브에이전트</th></tr></thead>
+  <tbody id="roles"></tbody></table>
+  <button onclick="saveAgents()">저장</button>
+  <span id="agentsmsg" class="muted"></span>
+</section>
+<section class="card" id="run-panel">
+<div class="row" style="margin-top:0">
+  <div id="stackhint" class="muted"></div>
+  <div id="presets"></div>
+  <textarea id="task" placeholder="작업 설명 (예: Add a divide function to calc.py)"></textarea><br>
+  <button id="runbtn" onclick="runTask()">시작하기</button>
+  <span id="runmsg" class="muted"></span>
+  <span id="watchbox" style="margin-left:8px"></span>
+</div>
+</section>
+<section class="card">
+<table id="task-table">
+  <thead><tr><th>작업</th><th>출처</th><th>상태</th><th>PR</th><th>이유</th><th></th></tr></thead>
+  <tbody id="tasks"></tbody>
+</table>
+</section>
+<div class="row muted" id="recent"></div>
+<footer>Made with LIMAGINATION</footer>
+</main>
+<script>
+let repos = [], current = null, timer = null;
+const THEME_LABEL = {system: '시스템', dark: '다크', light: '라이트'};
+
+function applyTheme() {
+  const saved = localStorage.getItem('orch-theme') || 'system';
+  if (saved === 'dark' || saved === 'light') {
+    document.documentElement.setAttribute('data-theme', saved);
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+  }
+  const b = document.getElementById('theme-toggle');
+  if (b) b.textContent = '테마: ' + (THEME_LABEL[saved] || '시스템');
+}
+
+function cycleTheme() {
+  const order = ['system', 'dark', 'light'];
+  const cur = localStorage.getItem('orch-theme') || 'system';
+  localStorage.setItem('orch-theme', order[(order.indexOf(cur) + 1) % order.length]);
+  applyTheme();
+}
+applyTheme();
+
+const PHASE_KO = {analyzing:'분석 중', implementing:'구현 중', testing:'테스트 중', fixing:'수정 중', reviewing:'검토 중', pr:'PR 생성 중', done:'완료', failed:'실패'};
+const STEPS = ['analyzing', 'implementing', 'testing', 'pr'];
+const STEP_OF = {analyzing: 0, implementing: 1, testing: 2, fixing: 2, pr: 3, done: 4, failed: -1};
+function stepper(phase) {
+  if (!(phase in STEP_OF) || STEP_OF[phase] < 0 || STEP_OF[phase] > 3) return '';
+  const idx = STEP_OF[phase];
+  return '<div class="phase-steps">' + STEPS.map((s, i) =>
+    '<span class="step' + (i < idx || idx === 4 ? ' done' : i === idx ? ' now' : '') + '"></span>').join('') + '</div>';
+}
+const PRESETS = [
+  {label: '버그 고치기', text: '___ 문제를 고쳐줘. 관련 파일: ___. 재현 방법: ___. 질문하지 말고 구현할 것.'},
+  {label: '기능 추가', text: '___ 기능을 ___ 파일에 추가해. 테스트도 함께. 질문하지 말고 구현할 것.'},
+  {label: '리팩터', text: '___ 파일을 ___ 방향으로 정리해. 동작 변경 없이. 질문하지 말고 구현할 것.'}
+];
+
+async function api(path, opts) {
+  const r = await fetch(path, opts);
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.error || r.status);
+  return j;
+}
+
+async function init() {
+  const j = await api('/api/repos');
+  repos = j.repos;
+  const box = document.getElementById('repo-tabs');
+  box.innerHTML = '';
+  repos.forEach(r => {
+    const b = document.createElement('button');
+    b.textContent = r.alias + (r.locked ? ' (실행중)' : '');
+    if (r.alias === current) b.className = 'active';
+    b.onclick = () => { current = r.alias; renderPresets(); refresh(); };
+    box.appendChild(b);
+  });
+  if (!current && repos.length) current = repos[0].alias;
+  if (timer) clearInterval(timer);
+  timer = setInterval(refresh, 2000);
+  renderPresets();
+  renderAgentSummary();
+  refresh();
+}
+
+function repoOf(alias) { return repos.find(r => r.alias === alias) || {}; }
+
+async function renderAgentSummary() {
+  let j;
+  try { j = await api('/api/agents'); } catch (e) { return; }
+  const roles = (j.profiles || {}).roles || {};
+  const short = r => r ? (r.agent || '?') + '/' + (r.subagent || r.effort || r.model || '기본값') : '?';
+  const el = document.getElementById('agentsummary');
+  if (el) el.textContent = '분석: ' + short(roles.analyze) + ' · 구현: ' + short(roles.implement);
+}
+
+function renderPresets() {
+  const box = document.getElementById('presets');  box.innerHTML = '';
+  PRESETS.forEach(p => {
+    const b = document.createElement('button');
+    b.textContent = p.label;
+    b.style.marginRight = '6px';
+    b.onclick = () => { document.getElementById('task').value = p.text; };
+    box.appendChild(b);
+  });
+  const r = repoOf(current);
+  document.getElementById('stackhint').textContent =
+    '이 저장소: ' + (r.stack || '?') + ' — 테스트는 자동 검증돼';
+}
+
+async function refresh() {
+  if (!current) return;
+  let j;
+  try { j = await api('/api/events?repo=' + encodeURIComponent(current)); }
+  catch (e) { return; }
+  const lockEl = document.getElementById('lockinfo');
+  const busy = j.running.length > 0;
+  lockEl.textContent = busy ? '실행 중: ' + j.running.join(', ') : '대기 중';
+  const wb = document.getElementById('watchbox');
+  wb.innerHTML = '';
+  const wbtn = document.createElement('button');
+  wbtn.textContent = j.watching ? 'watch 중지' : 'watch 시작';
+  wbtn.onclick = () => toggleWatch(!j.watching);
+  wb.appendChild(wbtn);
+  const tb = document.getElementById('tasks');
+  tb.innerHTML = '';
+  if (j.tasks.length === 0) {
+    tb.innerHTML = '<tr><td colspan="6" class="empty-tasks">아직 작업이 없어. 위에 한 줄 적어주면 시작할게.</td></tr>';
+  }
+  j.tasks.forEach(t => {
+    const tr = document.createElement('tr');
+    const st = (t.status || 'running');
+    if (st === 'done') tr.className = 'celebrate';
+    const phase = PHASE_KO[t.phase] || t.phase || st;
+    const phaseLine = (st === 'done' && t.pr_url) ? '끝났어! PR 확인해줘 🌱' : esc(phase);
+    const reasonText = t.failure_reason || t.error || '';
+    const helpLine = reasonText && t.help ? '<br><span class="muted">' + esc(t.help.title) + ' → ' + esc(t.help.action) + '</span>' : '';
+    tr.innerHTML = '<td class="taskid trunc" title="' + esc(t.task_id) + '"><a href="#" onclick="toggleDetail(event, \'' + esc(t.task_id) + '\')">' + esc(t.task_id) + '</a></td><td>' + esc(t.origin) + '</td>' +
+      '<td><span class="badge ' + esc(st) + '">' + esc(phase) + '</span><br><span class="muted">' + phaseLine + '</span><br>' + stepper(t.phase) + '</td>' +
+      '<td>' + (t.pr_url ? '<a href="' + esc(t.pr_url) + '" target="_blank">PR</a>' : '') + '</td>' +
+      '<td>' + esc(reasonText) + helpLine + '</td>';
+    const td = document.createElement('td');
+    if (st === 'failed' && t.task_id) {
+      const b = document.createElement('button');
+      b.textContent = '다시 시도';
+      b.onclick = () => resumeTask(t.task_id);
+      td.appendChild(b);
+    }
+    tr.appendChild(td);
+    tb.appendChild(tr);
+    if (openDetailTask === t.task_id) renderDetailRow(tb, t);
+  });
+  const rc = document.getElementById('recent');
+  rc.textContent = j.recent.slice(-3).map(r =>
+    r.task_id + ': ' + (r.status || r.error || '?')).join(' | ');
+}
+
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+let openDetailTask = null;
+let detailSources = {};
+let detailEvents = {};
+function toggleDetail(ev, task_id) {
+  if (ev) ev.preventDefault();
+  if (openDetailTask === task_id) {
+    openDetailTask = null;
+    if (detailSources[task_id]) { try { detailSources[task_id].close(); } catch (e) {} delete detailSources[task_id]; }
+    delete detailEvents[task_id];
+  } else {
+    openDetailTask = task_id;
+    if (!detailEvents[task_id]) detailEvents[task_id] = [];
+    ensureSource(task_id);
+  }
+  refresh();
+}
+function ensureSource(task_id) {
+  if (detailSources[task_id]) return;
+  try {
+    const src = new EventSource('/api/log?task=' + encodeURIComponent(task_id));
+    detailSources[task_id] = src;
+    src.onmessage = m => {
+      let ev;
+      try { ev = JSON.parse(m.data); } catch (e) { return; }
+      (detailEvents[task_id] = detailEvents[task_id] || []).push(ev);
+      const box = document.querySelector('#detail-' + task_id + ' .detail-timeline');
+      if (box) appendEv(box, ev);
+    };
+  } catch (e) {}
+}
+function appendEv(box, ev) {
+  const d = document.createElement('div');
+  d.textContent = new Date(ev.ts * 1000).toLocaleTimeString() + ' ' + (PHASE_KO[ev.phase] || ev.phase);
+  box.appendChild(d);
+}
+function renderDetailRow(tb, t) {
+  const tr = document.createElement('tr');
+  tr.id = 'detail-' + t.task_id;
+  tr.innerHTML = '<td colspan="6"><div class="detail-branch muted">브랜치: ' + esc(t.branch || '(없음)') + '</div><div class="detail-plan muted">불러오는 중...</div><div class="detail-timeline muted"></div></td>';
+  tb.appendChild(tr);
+  const box = tr.querySelector('.detail-plan');
+  if (box) box.innerHTML = '<b>plan</b><pre>' + esc(t.plan || '(없음)') + '</pre>' +
+    '<b>test</b><pre>' + esc(((t.test_result || {}).output || '(없음)').slice(-2000)) + '</pre>';
+  const tl = tr.querySelector('.detail-timeline');
+  (detailEvents[t.task_id] || []).forEach(ev => appendEv(tl, ev));
+}
+
+async function runTask() {
+  const t = document.getElementById('task').value.trim();
+  if (!t) return;
+  document.getElementById('runmsg').textContent = '시작 중...';
+  try {
+    const j = await api('/api/run', {method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({repo: current, task: t})});
+    document.getElementById('runmsg').textContent = '시작됨: ' + j.task_id;
+    document.getElementById('task').value = '';
+  } catch (e) { document.getElementById('runmsg').textContent = '잠깐만, 다시 시도해볼까? (' + e.message + ')'; }
+  refresh();
+}
+
+async function resumeTask(task_id) {
+  await api('/api/resume', {method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({repo: current, task_id})});
+  refresh();
+}
+
+async function toggleWatch(stop) {
+  await api('/api/watch', {method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(stop === true ? {repo: current, stop: true} : {repo: current, interval: 60})});
+  refresh();
+}
+
+let agentEfforts = [];
+let agentModels = {};
+let agentProfiles = {agents: {}, roles: {}};
+function modelOptions(agent, cur) {
+  const list = agentModels[agent] || [];
+  const known = cur && list.includes(cur);
+  let h = '<option value="">(기본값)</option>' +
+    list.map(m => '<option value="' + esc(m) + '"' + (cur === m ? ' selected' : '') + '>' + esc(m) + '</option>').join('') +
+    '<option value="__custom__"' + (cur && !known ? ' selected' : '') + '>직접 입력...</option>';
+  return h;
+}
+function modelCell(scope, key, agent, cur, placeholder) {
+  const custom = cur && !(agentModels[agent] || []).includes(cur);
+  return '<select data-' + scope + '="' + esc(key) + '" data-k="model" data-msel="1" onchange="modelChanged(this)">' +
+    modelOptions(agent, cur) + '</select>' +
+    '<input data-' + scope + '="' + esc(key) + '" data-k="model-custom" value="' + esc(custom ? cur : '') + '"' +
+    ' placeholder="' + esc(placeholder) + '" size="20"' + (custom ? '' : ' style="display:none"') + '>';
+}
+function modelChanged(sel) {
+  const wrap = sel.parentElement;
+  const txt = wrap && wrap.querySelector('[data-k="model-custom"]');
+  if (txt) txt.style.display = (sel.value === '__custom__') ? '' : 'none';
+}
+function modelValue(scope, key) {
+  const sel = document.querySelector('#agents-panel [data-' + scope + '="' + key + '"][data-msel]');
+  const txt = document.querySelector('#agents-panel [data-' + scope + '="' + key + '"][data-k="model-custom"]');
+  if (sel && sel.value === '__custom__') return txt ? txt.value : '';
+  return sel ? sel.value : '';
+}
+function toggleAgents() {
+  const p = document.getElementById('agents-panel');
+  p.style.display = (p.style.display === 'none') ? '' : 'none';
+  if (p.style.display !== 'none') loadAgents();
+}
+async function loadAgents() {
+  let j;
+  try { j = await api('/api/agents'); } catch (e) { return; }
+  agentEfforts = j.efforts || [];
+  agentProfiles = j.profiles || {agents: {}, roles: {}};
+  try { agentModels = await api('/api/models'); } catch (e) { agentModels = {}; }
+  renderAgentRows();
+  renderRoleRows();
+}
+function renderAgentRows() {
+  const prof = agentProfiles;
+  const ab = document.getElementById('agents');
+  ab.innerHTML = '';
+  Object.keys(prof.agents || {}).forEach(name => {
+    const a = prof.agents[name];
+    const tr = document.createElement('tr');
+    tr.innerHTML = '<td><input type="checkbox" data-agent="' + esc(name) + '" data-k="enabled"' + (a.enabled ? ' checked' : '') + '></td>' +
+      '<td>' + esc(name) + '</td>' +
+      '<td>' + modelCell('agent', name, name, a.model || '', 'provider/model') + '</td>' +
+      '<td><select data-agent="' + esc(name) + '" data-k="effort"><option value="">(기본값)</option>' +
+      agentEfforts.map(e => '<option value="' + e + '"' + (a.effort === e ? ' selected' : '') + '>' + e + '</option>').join('') + '</select></td>';
+    ab.appendChild(tr);
+  });
+}
+function renderRoleRows() {
+  const prof = agentProfiles;
+  const KO = {analyze: '분석', implement: '구현', review: '리뷰'};
+  const rb = document.getElementById('roles');
+  rb.innerHTML = '';
+  Object.keys(prof.roles || {}).forEach(role => {
+    const ko = KO[role] || role;
+    const r = (prof.roles || {})[role] || {};
+    const tr = document.createElement('tr');
+    tr.innerHTML = '<td>' + ko + '</td>' +
+      '<td><select data-role="' + role + '" data-k="agent" onchange="renderRoleRows()">' +
+      Object.keys(prof.agents || {}).map(n => '<option value="' + n + '"' + (r.agent === n ? ' selected' : '') + '>' + n + '</option>').join('') + '</select></td>' +
+      '<td>' + modelCell('role', role, roleAgentOf(role), r.model || '', '(에이전트 값)') + '</td>' +
+      '<td><select data-role="' + role + '" data-k="effort"><option value="">(에이전트 값)</option>' +
+      agentEfforts.map(e => '<option value="' + e + '"' + (r.effort === e ? ' selected' : '') + '>' + e + '</option>').join('') + '</select></td>' +
+      '<td><input data-role="' + role + '" data-k="subagent" value="' + esc(r.subagent || '') + '" placeholder="(opencode 전용)" size="12"></td>';
+    rb.appendChild(tr);
+  });
+}
+function roleAgentOf(role) {
+  const sel = document.querySelector('#agents-panel [data-role="' + role + '"][data-k="agent"]');
+  if (sel) return sel.value;
+  return ((agentProfiles.roles || {})[role] || {}).agent || 'opencode';
+}
+async function saveAgents() {
+  const doc = {agents: {}, roles: {}};
+  document.querySelectorAll('#agents-panel [data-agent]').forEach(el => {
+    const n = el.getAttribute('data-agent'), k = el.getAttribute('data-k');
+    if (k === 'model' || k === 'model-custom') return;
+    doc.agents[n] = doc.agents[n] || {};
+    doc.agents[n][k] = (el.type === 'checkbox') ? el.checked : el.value;
+  });
+  document.querySelectorAll('#agents-panel [data-agent]').forEach(el => {
+    if (el.getAttribute('data-k') !== 'model' || !el.hasAttribute('data-msel')) return;
+    const n = el.getAttribute('data-agent');
+    doc.agents[n] = doc.agents[n] || {};
+    doc.agents[n]['model'] = modelValue('agent', n);
+  });
+  document.querySelectorAll('#agents-panel [data-role]').forEach(el => {
+    const n = el.getAttribute('data-role'), k = el.getAttribute('data-k');
+    if (k === 'model' || k === 'model-custom') return;
+    doc.roles[n] = doc.roles[n] || {};
+    doc.roles[n][k] = el.value;
+  });
+  document.querySelectorAll('#agents-panel [data-role][data-msel]').forEach(el => {
+    const n = el.getAttribute('data-role');
+    doc.roles[n] = doc.roles[n] || {};
+    doc.roles[n]['model'] = modelValue('role', n);
+  });
+  try {
+    await api('/api/agents', {method: 'POST',
+      headers: {'Content-Type': 'application/json'}, body: JSON.stringify(doc)});
+    document.getElementById('agentsmsg').textContent = '저장됐어';
+    renderAgentSummary();
+  } catch (e) { document.getElementById('agentsmsg').textContent = '잠깐만, 다시 시도해볼까? (' + e.message + ')'; }
+}
+
+init();
+</script>
+</body>
+</html>
