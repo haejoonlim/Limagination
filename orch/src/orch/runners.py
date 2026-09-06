@@ -475,6 +475,12 @@ def assert_clean_tree(repo_path: str) -> None:
         if "__pycache__" in path or path.endswith(".pyc") or \
                 path == ".pytest_cache" or path.startswith(".pytest_cache/"):
             continue  # test-run byproducts (often from orch's own test gate)
+        if path.endswith("/") and os.path.exists(os.path.join(repo_path, path, ".git")):
+            continue  # embedded git repo (e.g. sibling projects under one parent
+            # checkout) — a separate project with its own history, not this
+            # repo's uncommitted work. Only when .git sits directly inside:
+            # a plain untracked dir that merely contains one deeper still
+            # blocks, because its own files are real untracked content.
         meaningful.add(ln)
     if meaningful:
         preview = "\n".join(sorted(meaningful)[:10])

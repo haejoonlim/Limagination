@@ -287,6 +287,32 @@ def test_assert_clean_tree_refuses_user_changes(tmp_path):
         runners.assert_clean_tree(repo)
 
 
+def test_assert_clean_tree_ignores_nested_git_repo(tmp_path):
+    """An untracked dir that is itself a git repo is a separate project
+    (observed: soul-commander/ + RecallInfinity/ nested in Limagination),
+    not this repo's uncommitted work."""
+    import subprocess
+    repo = _dirty_repo(tmp_path)
+    nested = os.path.join(repo, "sibling-project")
+    os.makedirs(nested)
+    subprocess.run(["git", "init", "-q", nested], check=True)
+    open(os.path.join(nested, "own.txt"), "w").write("x")
+    runners.assert_clean_tree(repo)  # no raise
+
+
+def test_assert_clean_tree_still_blocks_untracked_dir_with_buried_repo(tmp_path):
+    """A plain untracked dir whose .git sits deeper still counts: its own
+    top-level files are real untracked content."""
+    import subprocess
+    repo = _dirty_repo(tmp_path)
+    outer = os.path.join(repo, "not-a-project")
+    os.makedirs(os.path.join(outer, "deeper"))
+    subprocess.run(["git", "init", "-q", os.path.join(outer, "deeper")], check=True)
+    open(os.path.join(outer, "own.txt"), "w").write("x")
+    with pytest.raises(runners.DirtyTreeError, match="uncommitted changes"):
+        runners.assert_clean_tree(repo)
+
+
 def test_implement_and_fix_prompts_forbid_tests_docs_ci():
     from orch.graph import _fix_prompt, _implement_prompt
     for p in (_implement_prompt("plan", "task", "m"), _fix_prompt("plan", "out", "m")):
