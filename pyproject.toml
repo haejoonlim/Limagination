@@ -1,0 +1,7 @@
+[tool.pytest.ini_options]
+# Root-level pytest gate for Limagination: run the orch suite.
+# orch/pyproject.toml has its own config for in-dir runs (`cd orch && pytest`);
+# this one makes `pytest` from the repo root work the same way — which is what
+# orch's test detector executes for tasks targeting this repo.
+testpaths = ["orch/tests"]
+pythonpath = ["orch/src"]

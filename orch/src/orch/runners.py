@@ -293,6 +293,9 @@ def _resolve_runner(role: str) -> tuple:
     raise RuntimeError("no enabled coding CLI installed")
 
 
+_WATCHDOG = os.path.join(os.path.dirname(os.path.abspath(__file__)), "_watch.py")
+
+
 def _kill_process_tree(proc: subprocess.Popen) -> None:
     try:
         os.killpg(os.getpgid(proc.pid), signal.SIGKILL)
@@ -306,11 +309,22 @@ def _kill_process_tree(proc: subprocess.Popen) -> None:
 def _run(cmd, *, cwd=None, env=None, timeout_s: int) -> tuple[int, str, str | None]:
     """Run a command with stdin closed; kill the whole process tree on timeout.
 
+    The child runs under a parent-death watchdog (orch/_watch.py): if THIS
+    process dies — crash, `kill -9`, a harness killing the run (observed
+    2026-09-05: a review agent was orphaned when the CLI was killed at 600s)
+    — the watchdog reaps the whole child tree instead of leaving the coding
+    agent running. start_new_session keeps the timeout killpg from ever
+    hitting orch itself.
+
     Returns (returncode, combined_output, error). error is set only on timeout
     (already-killed tree) — non-zero exits are NOT errors here; callers decide.
     """
+    # ORCH_DISABLE_WATCHDOG=1 opts out (embedded/harness edge cases).
+    spawn_cmd = cmd
+    if not os.environ.get("ORCH_DISABLE_WATCHDOG") and os.path.exists(_WATCHDOG):
+        spawn_cmd = [sys.executable, _WATCHDOG, str(os.getpid()), "--", *cmd]
     proc = subprocess.Popen(
-        cmd,
+        spawn_cmd,
         cwd=cwd,
         env=env,
         stdin=subprocess.DEVNULL,

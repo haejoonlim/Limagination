@@ -1,0 +1,41 @@
+name: orch-tests
+
+# orch/ 프로젝트 푸시마다 pytest 전체 스위트 (135+ tests) 실행.
+# paths 필터 때문에 orch 밖 변경(README 등)은 재생 안 함 — 전 푸시 트리거를
+# 원하면 paths 블록만 지우면 된다.
+on:
+  push:
+    paths:
+      - "orch/**"
+      - ".github/workflows/orch-tests.yml"
+
+concurrency:
+  group: orch-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pytest:
+    name: pytest (3.11, locked)
+    # 로컬 개발은 3.14 venv지만 CI는 requires-python 하한 3.11을 검증 —
+    # 하한이 깨지는 커밋을 push 단계에서 잡는다.
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: orch
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv + Python 3.11
+        uses: astral-sh/setup-uv@v8
+        with:
+          python-version: "3.11"
+          enable-cache: true
+          cache-dependency-glob: orch/uv.lock
+
+      - name: Sync dependencies (locked)
+        run: uv sync --frozen
+
+      - name: Run tests
+        # pythonpath=src, testpaths=tests 는 pyproject [tool.pytest.ini_options]가 담당
+        run: uv run pytest -q

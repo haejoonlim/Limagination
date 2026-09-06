@@ -1,5 +1,9 @@
 """UX + UI plan tests (no agent calls, no real launches)."""
 
+from pathlib import Path
+
+DASHBOARD = Path(__file__).resolve().parent.parent / "src" / "orch" / "dashboard.html"
+
 
 def test_install_writes_valid_plist(tmp_path, monkeypatch):
     import os
@@ -86,7 +90,7 @@ def test_stack_of(tmp_path, monkeypatch):
 
 def _css():
     import re
-    src = open("src/orch/dashboard.html", encoding="utf-8").read()
+    src = open(DASHBOARD, encoding="utf-8").read()
     return src.split("<style>")[1].split("</style>")[0]
 
 
@@ -130,14 +134,14 @@ def test_contrast_clone():
 
 
 def test_app_layout_ids():
-    src = open("src/orch/dashboard.html", encoding="utf-8").read()
+    src = open(DASHBOARD, encoding="utf-8").read()
     for eid in ["app-header", "repo-tabs", "run-panel", "task-table",
                 "LIMAGINATION", "Made with LIMAGINATION"]:
         assert eid in src
 
 
 def test_state_experience_markup():
-    src = open("src/orch/dashboard.html", encoding="utf-8").read()
+    src = open(DASHBOARD, encoding="utf-8").read()
     assert "phase-steps" in src
     assert "empty-tasks" in src
     assert "grad-brand" in src or "celebrate" in src
@@ -146,7 +150,7 @@ def test_state_experience_markup():
 
 def test_brand_voice():
     import re
-    src = open("src/orch/dashboard.html", encoding="utf-8").read()
+    src = open(DASHBOARD, encoding="utf-8").read()
     for banned in ["처리되었습니다", "왜 안 했", "실패했습니다"]:
         assert banned not in src
     for m in re.finditer(r'[가-힣][^<>]{0,80}', src):
@@ -158,7 +162,7 @@ def test_brand_voice():
 
 def test_korean_type_stack():
     import re
-    src = open("src/orch/dashboard.html", encoding="utf-8").read()
+    src = open(DASHBOARD, encoding="utf-8").read()
     assert "Pretendard" in src
     assert "@import" not in src and "fonts.googleapis" not in src
     m = re.search(r"font-family:\s*([^;]+);", src)
@@ -166,7 +170,7 @@ def test_korean_type_stack():
 
 
 def test_dashboard_korean_chrome():
-    src = open("src/orch/dashboard.html", encoding="utf-8").read()
+    src = open(DASHBOARD, encoding="utf-8").read()
     for must in ["<th>작업</th>", "<th>상태</th>", "STEP_OF", "fixing: 2"]:
         assert must in src
     assert "<th>task</th>" not in src
@@ -223,52 +227,52 @@ def test_sse_log_replays_history(tmp_path, monkeypatch):
 
 
 def test_detail_view_markup():
-    src = open("src/orch/dashboard.html", encoding="utf-8").read()
+    src = open(DASHBOARD, encoding="utf-8").read()
     assert "toggleDetail" in src
     assert "EventSource" in src and "/api/log?task=" in src
     assert "detail-plan" in src and "detail-timeline" in src
 
 
 def test_theme_toggle_markup():
-    src = open("src/orch/dashboard.html", encoding="utf-8").read()
+    src = open(DASHBOARD, encoding="utf-8").read()
     assert "data-theme" in src
     assert "orch-theme" in src
     assert "theme-toggle" in src
 
 
 def test_polish_round1_no_help_without_reason():
-    src = open("src/orch/dashboard.html", encoding="utf-8").read()
+    src = open(DASHBOARD, encoding="utf-8").read()
     assert "reasonText" in src
     assert "thead th" in src and "white-space: nowrap" in src
     assert "taskid" in src
 
 
 def test_polish_round2_ellipsis_and_celebrate():
-    src = open("src/orch/dashboard.html", encoding="utf-8").read()
+    src = open(DASHBOARD, encoding="utf-8").read()
     assert "td.trunc" in src and "text-overflow: ellipsis" in src
     assert "box-shadow: inset 3px 0 0 #8B5CF6" in src
     assert "border-image" not in src
 
 
 def test_inputs_themed():
-    src = open("src/orch/dashboard.html", encoding="utf-8").read()
+    src = open(DASHBOARD, encoding="utf-8").read()
     assert "textarea {" in src and "background: var(--bg-canvas)" in src
     assert "input, select" in src
 
 
 def test_detail_survives_refresh():
-    src = open("src/orch/dashboard.html", encoding="utf-8").read()
+    src = open(DASHBOARD, encoding="utf-8").read()
     assert "openDetailTask" in src
     assert "renderDetailRow" in src
 
 
 def test_detail_pre_wraps():
-    src = open("src/orch/dashboard.html", encoding="utf-8").read()
+    src = open(DASHBOARD, encoding="utf-8").read()
     assert ".detail-plan pre" in src and "pre-wrap" in src
 
 
 def test_model_picker_markup():
-    src = open("src/orch/dashboard.html", encoding="utf-8").read()
+    src = open(DASHBOARD, encoding="utf-8").read()
     assert "modelCell" in src and "data-msel" in src
     assert "/api/models" in src and "__custom__" in src
 
@@ -288,14 +292,14 @@ def test_install_sets_service_path(tmp_path, monkeypatch):
 
 
 def test_simplified_layout():
-    src = open("src/orch/dashboard.html", encoding="utf-8").read()
+    src = open(DASHBOARD, encoding="utf-8").read()
     assert "<th>브랜치</th>" not in src  # A1: branch lives in detail only
     assert "agentsummary" in src  # A3: mapping summary when panel closed
     assert "detail-branch" in src  # A1: branch shown in detail row
 
 
 def test_role_subagent_input_present():
-    src = open("src/orch/dashboard.html", encoding="utf-8").read()
+    src = open(DASHBOARD, encoding="utf-8").read()
     assert 'data-k="subagent"' in src
     assert "<th>서브에이전트</th>" in src
 
@@ -309,6 +313,6 @@ def test_phase_reviewing():
 
 
 def test_review_role_row_renders():
-    src = open("src/orch/dashboard.html", encoding="utf-8").read()
+    src = open(DASHBOARD, encoding="utf-8").read()
     assert "review" in src and "리뷰" in src
     assert "reviewing" in src and "검토 중" in src

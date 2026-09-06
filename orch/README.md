@@ -92,5 +92,17 @@ CLI origin prints the reason to stdout; GitHub origin comments it on the issue
 ## Development
 
 ```bash
-uv run pytest          # 64 tests: helpers + graph topology (runners stubbed) + server
+uv run pytest
+
+# e2e fixture: reset to known-clean main before/after manual e2e runs
+scripts/reset_e2e_fixture.sh            # clean /tmp/orch-e2e to the seed
+scripts/reset_e2e_fixture.sh --check    # exit 1 if residue remains (CI-able)
+scripts/reset_e2e_fixture.sh --recreate # re-clone from origin when missing/broken
+scripts/reset_e2e_fixture.sh --reseed   # rotate seed to a fresh init commit
 ```
+
+Default fixture dir `/tmp/orch-e2e`, origin `haejoonlim/orch-e2e-fixture` —
+override with `ORCH_E2E_DIR` / `ORCH_E2E_REMOTE` (the latter also accepts a
+local path, which is what the test suite uses). Checks: worktree matches
+seed, on main, no extra local branches, no drift. `--reseed --remote`
+force-pushes and rewrites origin/main — review before using.
