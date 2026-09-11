@@ -4,6 +4,7 @@
 
 # 별도 독립 저장소 (루트 추적 금지 — auto-night 사고 방지)
 soul-commander/
+soul-commander-wt-*/
 RecallInfinity/
 __pycache__/
 
