@@ -6,3 +6,7 @@
 soul-commander/
 RecallInfinity/
 __pycache__/
+
+# 자동 생성·임시 산출물
+$TMPDIR/
+ashen-oath-*.jpeg
