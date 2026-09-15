@@ -1,0 +1,5486 @@
+{
+ "schemaVersion": "1.0",
+ "gddRef": {
+  "gdd": "SoulCommander_GDD_v7.11",
+  "sections": [
+   "5.3 속성 상성",
+   "9.7 몬스터 곡선",
+   "17.1 AI 유형",
+   "17.2 위협도 공식",
+   "17.3 AI 의사결정",
+   "19.2 보스 기믹"
+  ],
+  "monsterIndex": "Anokolisa 54종 + Tier1 T5/보스 5종 추가 (59종)"
+ },
+ "enums": {
+  "category": {
+   "1": "인류형 & 이종족",
+   "2": "언데드",
+   "3": "용족",
+   "4": "신화 & 합성수",
+   "5": "정령 & 구동체",
+   "6": "외계 & 변형체"
+  },
+  "aiType": [
+   "melee",
+   "ranged",
+   "magic",
+   "assassin"
+  ],
+  "element": [
+   "fire",
+   "water",
+   "nature",
+   "earth",
+   "light",
+   "dark"
+  ],
+  "tier": {
+   "1": "일반",
+   "2": "정예",
+   "3": "미니보스",
+   "4": "보스",
+   "5": "월드/최종보스"
+  },
+  "threatGrade": {
+   "weak": "<30 약함",
+   "normal": "30~60 보통",
+   "danger": "60~90 위험",
+   "critical": "90~120 심각",
+   "doom": "120+ 파멸"
+  }
+ },
+ "monsters": [
+  {
+   "id": "mon_goblin_01",
+   "name": "고블린",
+   "category": 1,
+   "aiType": "melee",
+   "tier": 1,
+   "threatBase": 25,
+   "element": "none",
+   "stats": {
+    "hp": 150,
+    "atk": 12,
+    "def": 5,
+    "aspd": 14,
+    "mdef": 3
+   },
+   "weakness": {
+    "element": [
+     "fire"
+    ],
+    "bonus": 0.2,
+    "note": "불 +20%"
+   },
+   "resistance": {
+    "physical": 0,
+    "bleed": 0
+   },
+   "statusImmune": [],
+   "aiDecision": {
+    "enrageHp": 0.3,
+    "patternCooldown": [
+     6,
+     10
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "pack_rush",
+    "fleeHp": 0.3
+   },
+   "pattern": [
+    {
+     "name": "무리 돌진",
+     "cd": 8,
+     "effect": "전방 2m 1.2xATK",
+     "telegraph": "초록 경고선",
+     "counter": "이동"
+    },
+    {
+     "name": "함정 연계",
+     "cd": 20,
+     "effect": "코볼드 함정 발동 유도",
+     "telegraph": "바닥 경고판 1초",
+     "counter": "집중공격으로 사전 제거"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     2,
+     3,
+     4
+    ],
+    "wave": [
+     "normal"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "하"
+    ],
+    "gold": 50,
+    "exp": 20
+   },
+   "ecology": {
+    "diet": "omnivore",
+    "role": "scavenger",
+    "habitat": [
+     "cave",
+     "ruins"
+    ],
+    "activity": "nocturnal",
+    "temperature": {
+     "min": 5,
+     "max": 30
+    },
+    "water_need": 0.4,
+    "food_need": 0.5,
+    "aggression": 0.6,
+    "territoriality": 0.4,
+    "sociality": 0.8,
+    "reproduction": 0.7,
+    "predators": [
+     "mon_ogre_01",
+     "mon_wolf_01"
+    ],
+    "prey": [
+     "mon_slime_green_01",
+     "mon_kobold_01"
+    ]
+   }
+  },
+  {
+   "id": "mon_orc_01",
+   "name": "오크",
+   "category": 1,
+   "aiType": "melee",
+   "tier": 2,
+   "threatBase": 65,
+   "element": "none",
+   "stats": {
+    "hp": 375,
+    "atk": 29,
+    "def": 10,
+    "aspd": 9,
+    "mdef": 4
+   },
+   "weakness": {
+    "element": [
+     "water"
+    ],
+    "bonus": 0.2,
+    "note": "수해 +20%, M.DEF 낮음"
+   },
+   "resistance": {
+    "physical": 0,
+    "bleed": 0
+   },
+   "statusImmune": [],
+   "aiDecision": {
+    "enrageHp": 0.5,
+    "patternCooldown": [
+     7,
+     11
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "triple_strike",
+    "enrageAtkBonus": 0.3
+   },
+   "pattern": [
+    {
+     "name": "근접 돌진",
+     "cd": 5,
+     "effect": "이동 후 1xATK",
+     "telegraph": "돌진 경고선",
+     "counter": "측면 기동"
+    },
+    {
+     "name": "3연타",
+     "cd": 9,
+     "effect": "3회 0.8xATK (마지막 타 경직)",
+     "telegraph": "파란 경고선",
+     "counter": "방어 태세"
+    },
+    {
+     "name": "광폭화",
+     "cd": 0,
+     "effect": "HP 50% 이하 시 ATK +30%",
+     "telegraph": "붉은 오라",
+     "counter": "스킬 봉인"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     9,
+     10
+    ],
+    "wave": [
+     "normal",
+     "elite"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "하"
+    ],
+    "gold": 120,
+    "exp": 40
+   },
+   "ecology": {
+    "diet": "carnivore",
+    "role": "predator",
+    "habitat": [
+     "plains",
+     "forest"
+    ],
+    "activity": "diurnal",
+    "temperature": {
+     "min": 0,
+     "max": 35
+    },
+    "water_need": 0.5,
+    "food_need": 0.7,
+    "aggression": 0.8,
+    "territoriality": 0.7,
+    "sociality": 0.6,
+    "reproduction": 0.5,
+    "predators": [
+     "mon_troll_01"
+    ],
+    "prey": [
+     "mon_goblin_01",
+     "mon_wolf_01"
+    ]
+   }
+  },
+  {
+   "id": "mon_troll_01",
+   "name": "트롤",
+   "category": 1,
+   "aiType": "melee",
+   "tier": 3,
+   "threatBase": 95,
+   "element": "none",
+   "stats": {
+    "hp": 3125,
+    "atk": 88,
+    "def": 24,
+    "aspd": 6,
+    "mdef": 8
+   },
+   "weakness": {
+    "element": [
+     "fire"
+    ],
+    "bonus": 0.5,
+    "note": "불 +50%, 산성(화염 계열) +50% — 재생 억제, 재생 중 화염 피해 2배"
+   },
+   "resistance": {
+    "physical": 0,
+    "bleed": 0.5
+   },
+   "statusImmune": [
+    "bleed"
+   ],
+   "aiDecision": {
+    "enrageHp": 0,
+    "patternCooldown": [
+     12,
+     16
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "boulder_throw",
+    "regenPerSec": 0.015
+   },
+   "pattern": [
+    {
+     "name": "신체 재생",
+     "cd": 0,
+     "effect": "초당 1.5% HP 회복 (상시)",
+     "telegraph": "초록 이펙트",
+     "counter": "화염 집중공격으로 재생 차단"
+    },
+    {
+     "name": "바위 던지기",
+     "cd": 12,
+     "effect": "원거리 1.4xATK",
+     "telegraph": "붉은 원",
+     "counter": "이동"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+     "floors": [
+       11,
+       13,
+       14
+     ],
+     "wave": [
+       "normal",
+       "elite"
+     ]
+   },
+   "loot": {
+    "soul": [
+     "중"
+    ],
+    "gold": 300,
+    "exp": 80
+   },
+   "ecology": {
+    "diet": "carnivore",
+    "role": "apex",
+    "habitat": [
+     "cave",
+     "mountain"
+    ],
+    "activity": "crepuscular",
+    "temperature": {
+     "min": -5,
+     "max": 25
+    },
+    "water_need": 0.3,
+    "food_need": 0.8,
+    "aggression": 0.9,
+    "territoriality": 0.9,
+    "sociality": 0.3,
+    "reproduction": 0.3,
+    "predators": [],
+    "prey": [
+     "mon_orc_01",
+     "mon_bear_01"
+    ]
+   }
+  },
+  {
+   "id": "mon_ogre_01",
+   "name": "오거",
+   "category": 1,
+   "aiType": "melee",
+   "tier": 2,
+   "threatBase": 65,
+   "element": "none",
+   "stats": {
+    "hp": 375,
+    "atk": 29,
+    "def": 10,
+    "aspd": 9,
+    "mdef": 4
+   },
+   "weakness": {
+    "element": [
+     "water"
+    ],
+    "bonus": 0.2,
+    "note": "수해 +20%, M.DEF 낮음"
+   },
+   "resistance": {
+    "physical": 0,
+    "bleed": 0
+   },
+   "statusImmune": [],
+   "aiDecision": {
+    "enrageHp": 0.5,
+    "patternCooldown": [
+     7,
+     11
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "triple_strike",
+    "enrageAtkBonus": 0.3
+   },
+   "pattern": [
+    {
+     "name": "근접 돌진",
+     "cd": 5,
+     "effect": "이동 후 1xATK",
+     "telegraph": "돌진 경고선",
+     "counter": "측면 기동"
+    },
+    {
+     "name": "3연타",
+     "cd": 9,
+     "effect": "3회 0.8xATK (마지막 타 경직)",
+     "telegraph": "파란 경고선",
+     "counter": "방어 태세"
+    },
+    {
+     "name": "광폭화",
+     "cd": 0,
+     "effect": "HP 50% 이하 시 ATK +30%",
+     "telegraph": "붉은 오라",
+     "counter": "스킬 봉인"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     9,
+     10
+    ],
+    "wave": [
+     "normal",
+     "elite"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "하"
+    ],
+    "gold": 120,
+    "exp": 40
+   },
+   "ecology": {
+    "diet": "omnivore",
+    "role": "predator",
+    "habitat": [
+     "plains",
+     "cave"
+    ],
+    "activity": "crepuscular",
+    "temperature": {
+     "min": -5,
+     "max": 35
+    },
+    "water_need": 0.5,
+    "food_need": 0.7,
+    "aggression": 0.7,
+    "territoriality": 0.6,
+    "sociality": 0.4,
+    "reproduction": 0.4,
+    "predators": [
+     "mon_troll_01"
+    ],
+    "prey": [
+     "mon_goblin_01",
+     "mon_boar_01"
+    ]
+   }
+  },
+  {
+   "id": "mon_kobold_01",
+   "name": "코볼드",
+   "category": 1,
+   "aiType": "melee",
+   "tier": 1,
+   "threatBase": 25,
+   "element": "none",
+   "stats": {
+    "hp": 150,
+    "atk": 12,
+    "def": 5,
+    "aspd": 14,
+    "mdef": 3
+   },
+   "weakness": {
+    "element": [
+     "fire"
+    ],
+    "bonus": 0.2,
+    "note": "불 +20%"
+   },
+   "resistance": {
+    "physical": 0,
+    "bleed": 0
+   },
+   "statusImmune": [],
+   "aiDecision": {
+    "enrageHp": 0.3,
+    "patternCooldown": [
+     6,
+     10
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "pack_rush",
+    "fleeHp": 0.3
+   },
+   "pattern": [
+    {
+     "name": "무리 돌진",
+     "cd": 8,
+     "effect": "전방 2m 1.2xATK",
+     "telegraph": "초록 경고선",
+     "counter": "이동"
+    },
+    {
+     "name": "함정 연계",
+     "cd": 20,
+     "effect": "코볼드 함정 발동 유도",
+     "telegraph": "바닥 경고판 1초",
+     "counter": "집중공격으로 사전 제거"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     2,
+     3,
+     4
+    ],
+    "wave": [
+     "normal"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "하"
+    ],
+    "gold": 50,
+    "exp": 20
+   },
+   "ecology": {
+    "diet": "omnivore",
+    "role": "scavenger",
+    "habitat": [
+     "cave",
+     "mine"
+    ],
+    "activity": "nocturnal",
+    "temperature": {
+     "min": 5,
+     "max": 25
+    },
+    "water_need": 0.3,
+    "food_need": 0.4,
+    "aggression": 0.3,
+    "territoriality": 0.5,
+    "sociality": 0.9,
+    "reproduction": 0.8,
+    "predators": [
+     "mon_goblin_01"
+    ],
+    "prey": [
+     "mon_slime_green_01"
+    ]
+   }
+  },
+  {
+   "id": "mon_hobgoblin_01",
+   "name": "흉고블린",
+   "category": 1,
+   "aiType": "melee",
+   "tier": 2,
+   "threatBase": 65,
+   "element": "none",
+   "stats": {
+    "hp": 375,
+    "atk": 29,
+    "def": 10,
+    "aspd": 9,
+    "mdef": 4
+   },
+   "weakness": {
+    "element": [
+     "water"
+    ],
+    "bonus": 0.2,
+    "note": "수해 +20%, M.DEF 낮음"
+   },
+   "resistance": {
+    "physical": 0,
+    "bleed": 0
+   },
+   "statusImmune": [],
+   "aiDecision": {
+    "enrageHp": 0.5,
+    "patternCooldown": [
+     7,
+     11
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "triple_strike",
+    "enrageAtkBonus": 0.3
+   },
+   "pattern": [
+    {
+     "name": "근접 돌진",
+     "cd": 5,
+     "effect": "이동 후 1xATK",
+     "telegraph": "돌진 경고선",
+     "counter": "측면 기동"
+    },
+    {
+     "name": "3연타",
+     "cd": 9,
+     "effect": "3회 0.8xATK (마지막 타 경직)",
+     "telegraph": "파란 경고선",
+     "counter": "방어 태세"
+    },
+    {
+     "name": "광폭화",
+     "cd": 0,
+     "effect": "HP 50% 이하 시 ATK +30%",
+     "telegraph": "붉은 오라",
+     "counter": "스킬 봉인"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     9,
+     10
+    ],
+    "wave": [
+     "normal",
+     "elite"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "하"
+    ],
+    "gold": 120,
+    "exp": 40
+   },
+   "ecology": {
+    "diet": "carnivore",
+    "role": "predator",
+    "habitat": [
+     "ruins",
+     "forest"
+    ],
+    "activity": "nocturnal",
+    "temperature": {
+     "min": 5,
+     "max": 30
+    },
+    "water_need": 0.4,
+    "food_need": 0.6,
+    "aggression": 0.7,
+    "territoriality": 0.6,
+    "sociality": 0.7,
+    "reproduction": 0.6,
+    "predators": [
+     "mon_orc_01"
+    ],
+    "prey": [
+     "mon_goblin_01",
+     "mon_kobold_01"
+    ]
+   }
+  },
+  {
+   "id": "mon_bugbear_01",
+   "name": "버그베어",
+   "category": 1,
+   "aiType": "melee",
+   "tier": 2,
+   "threatBase": 65,
+   "element": "none",
+   "stats": {
+    "hp": 375,
+    "atk": 29,
+    "def": 10,
+    "aspd": 9,
+    "mdef": 4
+   },
+   "weakness": {
+    "element": [
+     "water"
+    ],
+    "bonus": 0.2,
+    "note": "수해 +20%, M.DEF 낮음"
+   },
+   "resistance": {
+    "physical": 0,
+    "bleed": 0
+   },
+   "statusImmune": [],
+   "aiDecision": {
+    "enrageHp": 0.5,
+    "patternCooldown": [
+     7,
+     11
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "triple_strike",
+    "enrageAtkBonus": 0.3
+   },
+   "pattern": [
+    {
+     "name": "근접 돌진",
+     "cd": 5,
+     "effect": "이동 후 1xATK",
+     "telegraph": "돌진 경고선",
+     "counter": "측면 기동"
+    },
+    {
+     "name": "3연타",
+     "cd": 9,
+     "effect": "3회 0.8xATK (마지막 타 경직)",
+     "telegraph": "파란 경고선",
+     "counter": "방어 태세"
+    },
+    {
+     "name": "광폭화",
+     "cd": 0,
+     "effect": "HP 50% 이하 시 ATK +30%",
+     "telegraph": "붉은 오라",
+     "counter": "스킬 봉인"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     9,
+     10
+    ],
+    "wave": [
+     "normal",
+     "elite"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "하"
+    ],
+    "gold": 120,
+    "exp": 40
+   },
+   "ecology": {
+    "diet": "carnivore",
+    "role": "ambusher",
+    "habitat": [
+     "forest",
+     "cave"
+    ],
+    "activity": "nocturnal",
+    "temperature": {
+     "min": 0,
+     "max": 25
+    },
+    "water_need": 0.3,
+    "food_need": 0.6,
+    "aggression": 0.8,
+    "territoriality": 0.7,
+    "sociality": 0.4,
+    "reproduction": 0.4,
+    "predators": [
+     "mon_bear_01"
+    ],
+    "prey": [
+     "mon_goblin_01",
+     "mon_wolf_01"
+    ]
+   }
+  },
+  {
+   "id": "mon_yuan_ti_01",
+   "name": "야안티",
+   "category": 1,
+   "aiType": "melee",
+   "tier": 2,
+   "threatBase": 65,
+   "element": "none",
+   "stats": {
+    "hp": 375,
+    "atk": 29,
+    "def": 10,
+    "aspd": 9,
+    "mdef": 4
+   },
+   "weakness": {
+    "element": [
+     "water"
+    ],
+    "bonus": 0.2,
+    "note": "수해 +20%, M.DEF 낮음"
+   },
+   "resistance": {
+    "physical": 0,
+    "bleed": 0
+   },
+   "statusImmune": [],
+   "aiDecision": {
+    "enrageHp": 0.5,
+    "patternCooldown": [
+     7,
+     11
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "triple_strike",
+    "enrageAtkBonus": 0.3
+   },
+   "pattern": [
+    {
+     "name": "근접 돌진",
+     "cd": 5,
+     "effect": "이동 후 1xATK",
+     "telegraph": "돌진 경고선",
+     "counter": "측면 기동"
+    },
+    {
+     "name": "3연타",
+     "cd": 9,
+     "effect": "3회 0.8xATK (마지막 타 경직)",
+     "telegraph": "파란 경고선",
+     "counter": "방어 태세"
+    },
+    {
+     "name": "광폭화",
+     "cd": 0,
+     "effect": "HP 50% 이하 시 ATK +30%",
+     "telegraph": "붉은 오라",
+     "counter": "스킬 봉인"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     9,
+     10
+    ],
+    "wave": [
+     "normal",
+     "elite"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "하"
+    ],
+    "gold": 120,
+    "exp": 40
+   },
+   "ecology": {
+    "diet": "carnivore",
+    "role": "predator",
+    "habitat": [
+     "jungle",
+     "ruins"
+    ],
+    "activity": "diurnal",
+    "temperature": {
+     "min": 15,
+     "max": 40
+    },
+    "water_need": 0.6,
+    "food_need": 0.6,
+    "aggression": 0.7,
+    "territoriality": 0.8,
+    "sociality": 0.5,
+    "reproduction": 0.4,
+    "predators": [],
+    "prey": [
+     "mon_rat_01",
+     "mon_giant_spider_01"
+    ]
+   }
+  },
+  {
+   "id": "mon_lycanthrope_01",
+   "name": "라이칸슬로프",
+   "category": 6,
+   "aiType": "assassin",
+   "tier": 3,
+   "threatBase": 78,
+   "element": "dark",
+   "stats": {
+    "hp": 2600,
+    "atk": 88,
+    "def": 25,
+    "aspd": 13,
+    "mdef": 18
+   },
+   "weakness": {
+    "element": [
+     "light"
+    ],
+    "bonus": 0.3,
+    "note": "빛 +30%, 은 계열 +50%"
+   },
+   "resistance": {
+    "physical": 0.1,
+    "bleed": 0.3
+   },
+   "statusImmune": [],
+   "aiDecision": {
+    "enrageHp": 0,
+    "patternCooldown": [
+     6,
+     9
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "transform",
+    "transformSpdMult": 2.0,
+    "transformMdefPenalty": -0.3
+   },
+   "pattern": [
+    {
+     "name": "인간형 근접",
+     "cd": 6,
+     "effect": "1xATK",
+     "telegraph": "초록 경고선",
+     "counter": "방어 태세"
+    },
+    {
+     "name": "변신",
+     "cd": 0,
+     "effect": "3초 경고 후 공속·이속 2배 (M.DEF -30%)",
+     "telegraph": "붉은 오라 3초",
+     "counter": "방어 태세로 버티기"
+    },
+    {
+     "name": "발톱 4연타",
+     "cd": 8,
+     "effect": "변신 후 4회 0.7xATK",
+     "telegraph": "붉은 경고선",
+     "counter": "은 무기 반격"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     23,
+     26
+    ],
+    "wave": [
+     "normal",
+     "elite"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "중"
+    ],
+    "gold": 380,
+    "exp": 105
+   },
+   "ecology": {
+    "diet": "carnivore",
+    "role": "apex",
+    "habitat": [
+     "forest",
+     "mountain"
+    ],
+    "activity": "nocturnal",
+    "temperature": {
+     "min": -5,
+     "max": 20
+    },
+    "water_need": 0.4,
+    "food_need": 0.8,
+    "aggression": 0.9,
+    "territoriality": 0.8,
+    "sociality": 0.3,
+    "reproduction": 0.3,
+    "predators": [],
+    "prey": [
+     "mon_wolf_01",
+     "mon_orc_01"
+    ]
+   }
+  },
+  {
+   "id": "mon_skeleton_01",
+   "name": "스켈레톤",
+   "category": 2,
+   "aiType": "melee",
+   "tier": 1,
+   "threatBase": 22,
+   "element": "dark",
+   "stats": {
+    "hp": 150,
+    "atk": 12,
+    "def": 5,
+    "aspd": 10,
+    "mdef": 4
+   },
+   "weakness": {
+    "element": [
+     "light"
+    ],
+    "bonus": 0.3,
+    "note": "빛 +30%, 둔기 +30%"
+   },
+   "resistance": {
+    "physical": 0,
+    "bleed": 0,
+    "pierce": 0.3
+   },
+   "statusImmune": [
+    "bleed",
+    "poison"
+   ],
+   "aiDecision": {
+    "enrageHp": 0,
+    "patternCooldown": [
+     6,
+     10
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "shield_block"
+   },
+   "pattern": [
+    {
+     "name": "방패 막기",
+     "cd": 10,
+     "effect": "전방 2초 피해 무시",
+     "telegraph": "파란 이펙트",
+     "counter": "측면 기동으로 배후 타격"
+    },
+    {
+     "name": "검 베기",
+     "cd": 4,
+     "effect": "0.9xATK",
+     "telegraph": "초록 경고선",
+     "counter": "방어 태세"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     1,
+     6,
+     12
+    ],
+    "wave": [
+     "normal"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "하"
+    ],
+    "gold": 40,
+    "exp": 18
+   },
+   "ecology": {
+    "diet": "none",
+    "role": "undead",
+    "habitat": [
+     "ruins",
+     "graveyard"
+    ],
+    "activity": "nocturnal",
+    "temperature": {
+     "min": -10,
+     "max": 15
+    },
+    "water_need": 0.0,
+    "food_need": 0.0,
+    "aggression": 0.5,
+    "territoriality": 0.3,
+    "sociality": 0.7,
+    "reproduction": 0.0,
+    "predators": [],
+    "prey": []
+   }
+  },
+  {
+   "id": "mon_zombie_01",
+   "name": "좀비",
+   "category": 2,
+   "aiType": "melee",
+   "tier": 1,
+   "threatBase": 22,
+   "element": "dark",
+   "stats": {
+    "hp": 150,
+    "atk": 12,
+    "def": 5,
+    "aspd": 10,
+    "mdef": 4
+   },
+   "weakness": {
+    "element": [
+     "light"
+    ],
+    "bonus": 0.3,
+    "note": "빛 +30%, 둔기 +30%"
+   },
+   "resistance": {
+    "physical": 0,
+    "bleed": 0,
+    "pierce": 0.3
+   },
+   "statusImmune": [
+    "bleed",
+    "poison"
+   ],
+   "aiDecision": {
+    "enrageHp": 0,
+    "patternCooldown": [
+     6,
+     10
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "shield_block"
+   },
+   "pattern": [
+    {
+     "name": "방패 막기",
+     "cd": 10,
+     "effect": "전방 2초 피해 무시",
+     "telegraph": "파란 이펙트",
+     "counter": "측면 기동으로 배후 타격"
+    },
+    {
+     "name": "검 베기",
+     "cd": 4,
+     "effect": "0.9xATK",
+     "telegraph": "초록 경고선",
+     "counter": "방어 태세"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     1,
+     6,
+     12
+    ],
+    "wave": [
+     "normal"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "하"
+    ],
+    "gold": 40,
+    "exp": 18
+   },
+   "ecology": {
+    "diet": "none",
+    "role": "undead",
+    "habitat": [
+     "graveyard",
+     "ruins"
+    ],
+    "activity": "nocturnal",
+    "temperature": {
+     "min": -10,
+     "max": 20
+    },
+    "water_need": 0.0,
+    "food_need": 0.0,
+    "aggression": 0.4,
+    "territoriality": 0.2,
+    "sociality": 0.6,
+    "reproduction": 0.0,
+    "predators": [],
+    "prey": []
+   }
+  },
+  {
+   "id": "mon_skeleton_yaksha_01",
+   "name": "스켈레톤 야차",
+   "category": 2,
+   "aiType": "melee",
+   "tier": 2,
+   "threatBase": 55,
+   "element": "dark",
+   "stats": {
+    "hp": 350,
+    "atk": 25,
+    "def": 8,
+    "aspd": 8,
+    "mdef": 5
+   },
+   "weakness": {
+    "element": [
+     "fire"
+    ],
+    "bonus": 0.3,
+    "note": "불 +30%"
+   },
+   "resistance": {
+    "physical": 0,
+    "bleed": 0.5
+   },
+   "statusImmune": [
+    "bleed",
+    "poison"
+   ],
+   "aiDecision": {
+    "enrageHp": 0,
+    "patternCooldown": [
+     6,
+     9
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "corpse_eat",
+    "corpseAtkBonus": 0.2
+   },
+   "pattern": [
+    {
+     "name": "시체 탐식",
+     "cd": 12,
+     "effect": "처치한 아군 시체 흡수 시 ATK +20%",
+     "telegraph": "보라 오라",
+     "counter": "퍼머데스 전 빠른 처리"
+    },
+    {
+     "name": "발톱 할퀴기",
+     "cd": 5,
+     "effect": "1.1xATK + 출혈",
+     "telegraph": "초록 경고선",
+     "counter": "방어 태세"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     7
+    ],
+    "wave": [
+     "normal"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "하",
+     "중"
+    ],
+    "gold": 90,
+    "exp": 35
+   },
+   "ecology": {
+    "diet": "none",
+    "role": "undead",
+    "habitat": [
+     "temple",
+     "ruins"
+    ],
+    "activity": "nocturnal",
+    "temperature": {
+     "min": -10,
+     "max": 20
+    },
+    "water_need": 0.0,
+    "food_need": 0.0,
+    "aggression": 0.7,
+    "territoriality": 0.6,
+    "sociality": 0.3,
+    "reproduction": 0.0,
+    "predators": [],
+    "prey": []
+   }
+  },
+  {
+   "id": "mon_skeleton_warrior_01",
+   "name": "스켈레톤 워리어",
+   "category": 2,
+   "aiType": "melee",
+   "tier": 2,
+   "threatBase": 55,
+   "element": "dark",
+   "stats": {
+    "hp": 350,
+    "atk": 25,
+    "def": 8,
+    "aspd": 8,
+    "mdef": 5
+   },
+   "weakness": {
+    "element": [
+     "fire"
+    ],
+    "bonus": 0.3,
+    "note": "불 +30%"
+   },
+   "resistance": {
+    "physical": 0,
+    "bleed": 0.5
+   },
+   "statusImmune": [
+    "bleed",
+    "poison"
+   ],
+   "aiDecision": {
+    "enrageHp": 0,
+    "patternCooldown": [
+     6,
+     9
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "corpse_eat",
+    "corpseAtkBonus": 0.2
+   },
+   "pattern": [
+    {
+     "name": "시체 탐식",
+     "cd": 12,
+     "effect": "처치한 아군 시체 흡수 시 ATK +20%",
+     "telegraph": "보라 오라",
+     "counter": "퍼머데스 전 빠른 처리"
+    },
+    {
+     "name": "발톱 할퀴기",
+     "cd": 5,
+     "effect": "1.1xATK + 출혈",
+     "telegraph": "초록 경고선",
+     "counter": "방어 태세"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     7
+    ],
+    "wave": [
+     "normal"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "하",
+     "중"
+    ],
+    "gold": 90,
+    "exp": 35
+   },
+   "ecology": {
+    "diet": "none",
+    "role": "undead",
+    "habitat": [
+     "ruins",
+     "dungeon"
+    ],
+    "activity": "nocturnal",
+    "temperature": {
+     "min": -10,
+     "max": 20
+    },
+    "water_need": 0.0,
+    "food_need": 0.0,
+    "aggression": 0.6,
+    "territoriality": 0.5,
+    "sociality": 0.6,
+    "reproduction": 0.0,
+    "predators": [],
+    "prey": []
+   }
+  },
+  {
+   "id": "mon_skeleton_mage_01",
+   "name": "스켈레톤 메이지",
+   "category": 2,
+   "aiType": "melee",
+   "tier": 2,
+   "threatBase": 55,
+   "element": "dark",
+   "stats": {
+    "hp": 350,
+    "atk": 25,
+    "def": 8,
+    "aspd": 8,
+    "mdef": 5
+   },
+   "weakness": {
+    "element": [
+     "fire"
+    ],
+    "bonus": 0.3,
+    "note": "불 +30%"
+   },
+   "resistance": {
+    "physical": 0,
+    "bleed": 0.5
+   },
+   "statusImmune": [
+    "bleed",
+    "poison"
+   ],
+   "aiDecision": {
+    "enrageHp": 0,
+    "patternCooldown": [
+     6,
+     9
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "corpse_eat",
+    "corpseAtkBonus": 0.2
+   },
+   "pattern": [
+    {
+     "name": "시체 탐식",
+     "cd": 12,
+     "effect": "처치한 아군 시체 흡수 시 ATK +20%",
+     "telegraph": "보라 오라",
+     "counter": "퍼머데스 전 빠른 처리"
+    },
+    {
+     "name": "발톱 할퀴기",
+     "cd": 5,
+     "effect": "1.1xATK + 출혈",
+     "telegraph": "초록 경고선",
+     "counter": "방어 태세"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     7
+    ],
+    "wave": [
+     "normal"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "하",
+     "중"
+    ],
+    "gold": 90,
+    "exp": 35
+   },
+   "ecology": {
+    "diet": "none",
+    "role": "undead",
+    "habitat": [
+     "ruins",
+     "library"
+    ],
+    "activity": "nocturnal",
+    "temperature": {
+     "min": -10,
+     "max": 20
+    },
+    "water_need": 0.0,
+    "food_need": 0.0,
+    "aggression": 0.5,
+    "territoriality": 0.4,
+    "sociality": 0.3,
+    "reproduction": 0.0,
+    "predators": [],
+    "prey": []
+   }
+  },
+  {
+   "id": "mon_raider_01",
+   "name": "레이더",
+   "category": 1,
+   "aiType": "melee",
+   "tier": 2,
+   "threatBase": 65,
+   "element": "none",
+   "stats": {
+    "hp": 375,
+    "atk": 29,
+    "def": 10,
+    "aspd": 9,
+    "mdef": 4
+   },
+   "weakness": {
+    "element": [
+     "water"
+    ],
+    "bonus": 0.2,
+    "note": "수해 +20%, M.DEF 낮음"
+   },
+   "resistance": {
+    "physical": 0,
+    "bleed": 0
+   },
+   "statusImmune": [],
+   "aiDecision": {
+    "enrageHp": 0.5,
+    "patternCooldown": [
+     7,
+     11
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "triple_strike",
+    "enrageAtkBonus": 0.3
+   },
+   "pattern": [
+    {
+     "name": "근접 돌진",
+     "cd": 5,
+     "effect": "이동 후 1xATK",
+     "telegraph": "돌진 경고선",
+     "counter": "측면 기동"
+    },
+    {
+     "name": "3연타",
+     "cd": 9,
+     "effect": "3회 0.8xATK (마지막 타 경직)",
+     "telegraph": "파란 경고선",
+     "counter": "방어 태세"
+    },
+    {
+     "name": "광폭화",
+     "cd": 0,
+     "effect": "HP 50% 이하 시 ATK +30%",
+     "telegraph": "붉은 오라",
+     "counter": "스킬 봉인"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     9,
+     10
+    ],
+    "wave": [
+     "normal",
+     "elite"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "하"
+    ],
+    "gold": 120,
+    "exp": 40
+   },
+   "ecology": {
+    "diet": "omnivore",
+    "role": "scavenger",
+    "habitat": [
+     "ruins",
+     "plains"
+    ],
+    "activity": "nocturnal",
+    "temperature": {
+     "min": 0,
+     "max": 30
+    },
+    "water_need": 0.4,
+    "food_need": 0.5,
+    "aggression": 0.7,
+    "territoriality": 0.5,
+    "sociality": 0.6,
+    "reproduction": 0.5,
+    "predators": [
+     "mon_orc_01"
+    ],
+    "prey": [
+     "mon_goblin_01",
+     "mon_kobold_01"
+    ]
+   }
+  },
+  {
+   "id": "mon_wight_01",
+   "name": "위트",
+   "category": 2,
+   "aiType": "melee",
+   "tier": 2,
+   "threatBase": 55,
+   "element": "dark",
+   "stats": {
+    "hp": 350,
+    "atk": 25,
+    "def": 8,
+    "aspd": 8,
+    "mdef": 5
+   },
+   "weakness": {
+    "element": [
+     "fire"
+    ],
+    "bonus": 0.3,
+    "note": "불 +30%"
+   },
+   "resistance": {
+    "physical": 0,
+    "bleed": 0.5
+   },
+   "statusImmune": [
+    "bleed",
+    "poison"
+   ],
+   "aiDecision": {
+    "enrageHp": 0,
+    "patternCooldown": [
+     6,
+     9
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "corpse_eat",
+    "corpseAtkBonus": 0.2
+   },
+   "pattern": [
+    {
+     "name": "시체 탐식",
+     "cd": 12,
+     "effect": "처치한 아군 시체 흡수 시 ATK +20%",
+     "telegraph": "보라 오라",
+     "counter": "퍼머데스 전 빠른 처리"
+    },
+    {
+     "name": "발톱 할퀴기",
+     "cd": 5,
+     "effect": "1.1xATK + 출혈",
+     "telegraph": "초록 경고선",
+     "counter": "방어 태세"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     7
+    ],
+    "wave": [
+     "normal"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "하",
+     "중"
+    ],
+    "gold": 90,
+    "exp": 35
+   },
+   "ecology": {
+    "diet": "none",
+    "role": "undead",
+    "habitat": [
+     "graveyard",
+     "swamp"
+    ],
+    "activity": "nocturnal",
+    "temperature": {
+     "min": -10,
+     "max": 15
+    },
+    "water_need": 0.0,
+    "food_need": 0.0,
+    "aggression": 0.7,
+    "territoriality": 0.6,
+    "sociality": 0.3,
+    "reproduction": 0.0,
+    "predators": [],
+    "prey": []
+   }
+  },
+  {
+   "id": "mon_banshee_01",
+   "name": "밴시",
+   "category": 2,
+   "aiType": "melee",
+   "tier": 2,
+   "threatBase": 55,
+   "element": "dark",
+   "stats": {
+    "hp": 350,
+    "atk": 25,
+    "def": 8,
+    "aspd": 8,
+    "mdef": 5
+   },
+   "weakness": {
+    "element": [
+     "fire"
+    ],
+    "bonus": 0.3,
+    "note": "불 +30%"
+   },
+   "resistance": {
+    "physical": 0,
+    "bleed": 0.5
+   },
+   "statusImmune": [
+    "bleed",
+    "poison"
+   ],
+   "aiDecision": {
+    "enrageHp": 0,
+    "patternCooldown": [
+     6,
+     9
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "corpse_eat",
+    "corpseAtkBonus": 0.2
+   },
+   "pattern": [
+    {
+     "name": "시체 탐식",
+     "cd": 12,
+     "effect": "처치한 아군 시체 흡수 시 ATK +20%",
+     "telegraph": "보라 오라",
+     "counter": "퍼머데스 전 빠른 처리"
+    },
+    {
+     "name": "발톱 할퀴기",
+     "cd": 5,
+     "effect": "1.1xATK + 출혈",
+     "telegraph": "초록 경고선",
+     "counter": "방어 태세"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     7
+    ],
+    "wave": [
+     "normal"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "하",
+     "중"
+    ],
+    "gold": 90,
+    "exp": 35
+   },
+   "ecology": {
+    "diet": "none",
+    "role": "undead",
+    "habitat": [
+     "ruins",
+     "cave"
+    ],
+    "activity": "nocturnal",
+    "temperature": {
+     "min": -10,
+     "max": 10
+    },
+    "water_need": 0.0,
+    "food_need": 0.0,
+    "aggression": 0.6,
+    "territoriality": 0.5,
+    "sociality": 0.2,
+    "reproduction": 0.0,
+    "predators": [],
+    "prey": []
+   }
+  },
+  {
+   "id": "mon_guardian_spirit_01",
+   "name": "수호령",
+   "category": 2,
+   "aiType": "ranged",
+   "tier": 3,
+   "threatBase": 70,
+   "element": "dark",
+   "stats": {
+    "hp": 2600,
+    "atk": 70,
+    "def": 20,
+    "aspd": 5,
+    "mdef": 18
+   },
+   "weakness": {
+    "element": [
+     "fire"
+    ],
+    "bonus": 0.5,
+    "note": "불 +50%"
+   },
+   "resistance": {
+    "physical": 0.2,
+    "bleed": 0.4
+   },
+   "statusImmune": [
+    "bleed",
+    "poison"
+   ],
+   "aiDecision": {
+    "enrageHp": 0,
+    "patternCooldown": [
+     8,
+     12
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "bandage_wrap"
+   },
+   "pattern": [
+    {
+     "name": "붕대 휘감기",
+     "cd": 10,
+     "effect": "원거리 속박 2초",
+     "telegraph": "흰 경고선",
+     "counter": "스킬 봉인"
+    },
+    {
+     "name": "저주",
+     "cd": 14,
+     "effect": "Sanity -5",
+     "telegraph": "보라 원",
+     "counter": "정신 회복 아이템"
+    },
+    {
+     "name": "붕대 절단",
+     "cd": 0,
+     "effect": "부위 파괴 3회 시 이동 속도 감소",
+     "telegraph": "부위 게이지",
+     "counter": "부위 파괴 (19.2)"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     12
+    ],
+    "wave": [
+     "normal"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "중"
+    ],
+    "gold": 250,
+    "exp": 70
+   },
+   "ecology": {
+    "diet": "mana",
+    "role": "guardian",
+    "habitat": [
+     "temple",
+     "shrine"
+    ],
+    "activity": "always",
+    "temperature": {
+     "min": -20,
+     "max": 50
+    },
+    "water_need": 0.0,
+    "food_need": 0.3,
+    "aggression": 0.3,
+    "territoriality": 0.9,
+    "sociality": 0.2,
+    "reproduction": 0.0,
+    "predators": [],
+    "prey": []
+   }
+  },
+  {
+   "id": "mon_lich_01",
+   "name": "리치",
+   "category": 2,
+   "aiType": "assassin",
+   "tier": 5,
+   "threatBase": 125,
+   "element": "dark",
+   "stats": {
+    "hp": 26000,
+    "atk": 420,
+    "def": 60,
+    "aspd": 18,
+    "mdef": 50
+   },
+   "weakness": {
+    "element": [
+     "light"
+    ],
+    "bonus": 0.5,
+    "note": "빛 +50%, 성스러운 은 계열"
+   },
+   "resistance": {
+    "physical": 0.2,
+    "bleed": 0,
+    "dark": -0.5
+   },
+   "statusImmune": [
+    "bleed",
+    "poison"
+   ],
+   "aiDecision": {
+    "enrageHp": 0.3,
+    "patternCooldown": [
+     6,
+     10
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "blood_drain",
+    "mistSpeedBonus": 0.5,
+    "transformSpdMult": 2.0
+   },
+   "pattern": [
+    {
+     "name": "흡혈 접촉",
+     "cd": 6,
+     "effect": "0.9xATK + HP 흡수",
+     "telegraph": "붉은 경고선",
+     "counter": "빛 파티 + 스킬 봉인"
+    },
+    {
+     "name": "안개화",
+     "cd": 12,
+     "effect": "이동속도 +50% 3초",
+     "telegraph": "회색 이펙트",
+     "counter": "광역 공격"
+    },
+    {
+     "name": "박쥐 소환",
+     "cd": 16,
+     "effect": "박쥐 3마리 소환 (0.3xATK)",
+     "telegraph": "붉은 원",
+     "counter": "광역 정리"
+    },
+    {
+     "name": "완전체 변신",
+     "cd": 0,
+     "effect": "HP 30% 이하 시 공속 2배",
+     "telegraph": "붉은 오라",
+     "counter": "빛 집중공격"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     36,
+     40
+    ],
+    "wave": [
+     "elite",
+     "boss"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "상"
+    ],
+    "gold": 2500,
+    "exp": 700
+   },
+   "ecology": {
+    "diet": "mana",
+    "role": "apex",
+    "habitat": [
+     "ruins",
+     "tower"
+    ],
+    "activity": "nocturnal",
+    "temperature": {
+     "min": -20,
+     "max": 10
+    },
+    "water_need": 0.0,
+    "food_need": 0.5,
+    "aggression": 0.8,
+    "territoriality": 0.9,
+    "sociality": 0.2,
+    "reproduction": 0.0,
+    "predators": [],
+    "prey": []
+   }
+  },
+  {
+   "id": "mon_vampire_01",
+   "name": "뱀파이어",
+   "category": 2,
+   "aiType": "assassin",
+   "tier": 5,
+   "threatBase": 125,
+   "element": "dark",
+   "stats": {
+    "hp": 26000,
+    "atk": 420,
+    "def": 60,
+    "aspd": 18,
+    "mdef": 50
+   },
+   "weakness": {
+    "element": [
+     "light"
+    ],
+    "bonus": 0.5,
+    "note": "빛 +50%, 성스러운 은 계열"
+   },
+   "resistance": {
+    "physical": 0.2,
+    "bleed": 0,
+    "dark": -0.5
+   },
+   "statusImmune": [
+    "bleed",
+    "poison"
+   ],
+   "aiDecision": {
+    "enrageHp": 0.3,
+    "patternCooldown": [
+     6,
+     10
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "blood_drain",
+    "mistSpeedBonus": 0.5,
+    "transformSpdMult": 2.0
+   },
+   "pattern": [
+    {
+     "name": "흡혈 접촉",
+     "cd": 6,
+     "effect": "0.9xATK + HP 흡수",
+     "telegraph": "붉은 경고선",
+     "counter": "빛 파티 + 스킬 봉인"
+    },
+    {
+     "name": "안개화",
+     "cd": 12,
+     "effect": "이동속도 +50% 3초",
+     "telegraph": "회색 이펙트",
+     "counter": "광역 공격"
+    },
+    {
+     "name": "박쥐 소환",
+     "cd": 16,
+     "effect": "박쥐 3마리 소환 (0.3xATK)",
+     "telegraph": "붉은 원",
+     "counter": "광역 정리"
+    },
+    {
+     "name": "완전체 변신",
+     "cd": 0,
+     "effect": "HP 30% 이하 시 공속 2배",
+     "telegraph": "붉은 오라",
+     "counter": "빛 집중공격"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     36,
+     40
+    ],
+    "wave": [
+     "elite",
+     "boss"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "상"
+    ],
+    "gold": 2500,
+    "exp": 700
+   },
+   "ecology": {
+    "diet": "blood",
+    "role": "apex",
+    "habitat": [
+     "castle",
+     "ruins"
+    ],
+    "activity": "nocturnal",
+    "temperature": {
+     "min": 5,
+     "max": 25
+    },
+    "water_need": 0.2,
+    "food_need": 0.8,
+    "aggression": 0.8,
+    "territoriality": 0.9,
+    "sociality": 0.3,
+    "reproduction": 0.1,
+    "predators": [],
+    "prey": [
+     "mon_goblin_01"
+    ]
+   }
+  },
+  {
+   "id": "mon_wolf_01",
+   "name": "늑대",
+   "category": 4,
+   "aiType": "melee",
+   "tier": 1,
+   "threatBase": 25,
+   "element": "none",
+   "stats": {
+    "hp": 150,
+    "atk": 12,
+    "def": 5,
+    "aspd": 14,
+    "mdef": 3
+   },
+   "weakness": {
+    "element": [
+     "fire"
+    ],
+    "bonus": 0.2,
+    "note": "불 +20%"
+   },
+   "resistance": {
+    "physical": 0,
+    "bleed": 0
+   },
+   "statusImmune": [],
+   "aiDecision": {
+    "enrageHp": 0.3,
+    "patternCooldown": [
+     6,
+     10
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "pack_rush",
+    "fleeHp": 0.3
+   },
+   "pattern": [
+    {
+     "name": "무리 돌진",
+     "cd": 8,
+     "effect": "전방 2m 1.2xATK",
+     "telegraph": "초록 경고선",
+     "counter": "이동"
+    },
+    {
+     "name": "함정 연계",
+     "cd": 20,
+     "effect": "코볼드 함정 발동 유도",
+     "telegraph": "바닥 경고판 1초",
+     "counter": "집중공격으로 사전 제거"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     2,
+     3,
+     4
+    ],
+    "wave": [
+     "normal"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "하"
+    ],
+    "gold": 50,
+    "exp": 20
+   },
+   "ecology": {
+    "diet": "carnivore",
+    "role": "predator",
+    "habitat": [
+     "forest",
+     "plains"
+    ],
+    "activity": "crepuscular",
+    "temperature": {
+     "min": -10,
+     "max": 25
+    },
+    "water_need": 0.4,
+    "food_need": 0.6,
+    "aggression": 0.6,
+    "territoriality": 0.6,
+    "sociality": 0.8,
+    "reproduction": 0.6,
+    "predators": [
+     "mon_troll_01",
+     "mon_ogre_01"
+    ],
+    "prey": [
+     "mon_boar_01"
+    ]
+   }
+  },
+  {
+   "id": "mon_dire_wolf_01",
+   "name": "거대 늑대",
+   "category": 4,
+   "aiType": "ranged",
+   "tier": 2,
+   "threatBase": 50,
+   "element": "nature",
+   "stats": {
+    "hp": 400,
+    "atk": 30,
+    "def": 10,
+    "aspd": 17,
+    "mdef": 8
+   },
+   "weakness": {
+    "element": [],
+    "bonus": 0,
+    "note": "후방 치명타 취약, 진흙 지형 이동 저하"
+   },
+   "resistance": {
+    "physical": 0,
+    "bleed": 0
+   },
+   "statusImmune": [],
+   "aiDecision": {
+    "enrageHp": 0,
+    "patternCooldown": [
+     5,
+     8
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "horse_archer",
+    "rangeSwitch": true
+   },
+   "pattern": [
+    {
+     "name": "기마 사격",
+     "cd": 5,
+     "effect": "원거리 1.2xATK",
+     "telegraph": "초록 경고선",
+     "counter": "접근 압박"
+    },
+    {
+     "name": "근접 창",
+     "cd": 9,
+     "effect": "1.1xATK",
+     "telegraph": "파란 경고선",
+     "counter": "방어 태세"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     8
+    ],
+    "wave": [
+     "normal"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "하",
+     "중"
+    ],
+    "gold": 120,
+    "exp": 40
+   },
+   "ecology": {
+    "diet": "carnivore",
+    "role": "predator",
+    "habitat": [
+     "forest",
+     "mountain"
+    ],
+    "activity": "nocturnal",
+    "temperature": {
+     "min": -15,
+     "max": 20
+    },
+    "water_need": 0.4,
+    "food_need": 0.7,
+    "aggression": 0.8,
+    "territoriality": 0.8,
+    "sociality": 0.7,
+    "reproduction": 0.4,
+    "predators": [
+     "mon_troll_01"
+    ],
+    "prey": [
+     "mon_wolf_01",
+     "mon_bear_01"
+    ]
+   }
+  },
+  {
+   "id": "mon_bear_01",
+   "name": "곰",
+   "category": 4,
+   "aiType": "ranged",
+   "tier": 2,
+   "threatBase": 50,
+   "element": "nature",
+   "stats": {
+    "hp": 400,
+    "atk": 30,
+    "def": 10,
+    "aspd": 17,
+    "mdef": 8
+   },
+   "weakness": {
+    "element": [],
+    "bonus": 0,
+    "note": "후방 치명타 취약, 진흙 지형 이동 저하"
+   },
+   "resistance": {
+    "physical": 0,
+    "bleed": 0
+   },
+   "statusImmune": [],
+   "aiDecision": {
+    "enrageHp": 0,
+    "patternCooldown": [
+     5,
+     8
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "horse_archer",
+    "rangeSwitch": true
+   },
+   "pattern": [
+    {
+     "name": "기마 사격",
+     "cd": 5,
+     "effect": "원거리 1.2xATK",
+     "telegraph": "초록 경고선",
+     "counter": "접근 압박"
+    },
+    {
+     "name": "근접 창",
+     "cd": 9,
+     "effect": "1.1xATK",
+     "telegraph": "파란 경고선",
+     "counter": "방어 태세"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     8
+    ],
+    "wave": [
+     "normal"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "하",
+     "중"
+    ],
+    "gold": 120,
+    "exp": 40
+   },
+   "ecology": {
+    "diet": "omnivore",
+    "role": "predator",
+    "habitat": [
+     "forest",
+     "mountain"
+    ],
+    "activity": "diurnal",
+    "temperature": {
+     "min": -5,
+     "max": 30
+    },
+    "water_need": 0.5,
+    "food_need": 0.7,
+    "aggression": 0.5,
+    "territoriality": 0.7,
+    "sociality": 0.3,
+    "reproduction": 0.4,
+    "predators": [
+     "mon_troll_01"
+    ],
+    "prey": [
+     "mon_boar_01"
+    ]
+   }
+  },
+  {
+   "id": "mon_dire_bear_01",
+   "name": "거대 곰",
+   "category": 4,
+   "aiType": "melee",
+   "tier": 3,
+   "threatBase": 85,
+   "element": "none",
+   "stats": {
+    "hp": 3200,
+    "atk": 95,
+    "def": 30,
+    "aspd": 9,
+    "mdef": 20
+   },
+   "weakness": {
+    "element": [
+     "fire"
+    ],
+    "bonus": 0.2,
+    "note": "화염 +20%"
+   },
+   "resistance": {
+    "physical": 0.1,
+    "bleed": 0.2
+   },
+   "statusImmune": [],
+   "aiDecision": {
+    "enrageHp": 0,
+    "patternCooldown": [
+     6,
+     10
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "tri_head",
+    "headOrder": [
+     "snake",
+     "goat",
+     "lion"
+    ]
+   },
+   "pattern": [
+    {
+     "name": "사자 머리",
+     "cd": 6,
+     "effect": "근접 1.5xATK",
+     "telegraph": "붉은 경고선",
+     "counter": "방어 태세"
+    },
+    {
+     "name": "염소 머리 돌진",
+     "cd": 9,
+     "effect": "돌진 1.2xATK",
+     "telegraph": "붉은 경고선 1초",
+     "counter": "이동"
+    },
+    {
+     "name": "뱀 머리 독",
+     "cd": 12,
+     "effect": "원거리 독",
+     "telegraph": "초록 경고선",
+     "counter": "해독"
+    },
+    {
+     "name": "머리 보상 버프",
+     "cd": 0,
+     "effect": "머리 1개 파괴 시 나머지 ATK +20%",
+     "telegraph": "붉은 오라",
+     "counter": "동시 파괴"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     22,
+     25
+    ],
+    "wave": [
+     "elite"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "중",
+     "상"
+    ],
+    "gold": 500,
+    "exp": 140
+   },
+   "ecology": {
+    "diet": "carnivore",
+    "role": "apex",
+    "habitat": [
+     "mountain",
+     "tundra"
+    ],
+    "activity": "diurnal",
+    "temperature": {
+     "min": -20,
+     "max": 15
+    },
+    "water_need": 0.5,
+    "food_need": 0.8,
+    "aggression": 0.7,
+    "territoriality": 0.9,
+    "sociality": 0.2,
+    "reproduction": 0.3,
+    "predators": [],
+    "prey": [
+     "mon_bear_01",
+     "mon_wolf_01"
+    ]
+   }
+  },
+  {
+   "id": "mon_boar_01",
+   "name": "멧돼지",
+   "category": 4,
+   "aiType": "melee",
+   "tier": 1,
+   "threatBase": 25,
+   "element": "none",
+   "stats": {
+    "hp": 150,
+    "atk": 12,
+    "def": 5,
+    "aspd": 14,
+    "mdef": 3
+   },
+   "weakness": {
+    "element": [
+     "fire"
+    ],
+    "bonus": 0.2,
+    "note": "불 +20%"
+   },
+   "resistance": {
+    "physical": 0,
+    "bleed": 0
+   },
+   "statusImmune": [],
+   "aiDecision": {
+    "enrageHp": 0.3,
+    "patternCooldown": [
+     6,
+     10
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "pack_rush",
+    "fleeHp": 0.3
+   },
+   "pattern": [
+    {
+     "name": "무리 돌진",
+     "cd": 8,
+     "effect": "전방 2m 1.2xATK",
+     "telegraph": "초록 경고선",
+     "counter": "이동"
+    },
+    {
+     "name": "함정 연계",
+     "cd": 20,
+     "effect": "코볼드 함정 발동 유도",
+     "telegraph": "바닥 경고판 1초",
+     "counter": "집중공격으로 사전 제거"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     2,
+     3,
+     4
+    ],
+    "wave": [
+     "normal"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "하"
+    ],
+    "gold": 50,
+    "exp": 20
+   },
+   "ecology": {
+    "diet": "herbivore",
+    "role": "prey",
+    "habitat": [
+     "forest",
+     "plains"
+    ],
+    "activity": "diurnal",
+    "temperature": {
+     "min": -5,
+     "max": 30
+    },
+    "water_need": 0.5,
+    "food_need": 0.6,
+    "aggression": 0.3,
+    "territoriality": 0.4,
+    "sociality": 0.5,
+    "reproduction": 0.7,
+    "predators": [
+     "mon_wolf_01",
+     "mon_orc_01"
+    ],
+    "prey": [
+     "grass",
+     "roots"
+    ]
+   }
+  },
+  {
+   "id": "mon_dire_boar_01",
+   "name": "거대 멧돼지",
+   "category": 4,
+   "aiType": "ranged",
+   "tier": 2,
+   "threatBase": 50,
+   "element": "nature",
+   "stats": {
+    "hp": 400,
+    "atk": 30,
+    "def": 10,
+    "aspd": 17,
+    "mdef": 8
+   },
+   "weakness": {
+    "element": [],
+    "bonus": 0,
+    "note": "후방 치명타 취약, 진흙 지형 이동 저하"
+   },
+   "resistance": {
+    "physical": 0,
+    "bleed": 0
+   },
+   "statusImmune": [],
+   "aiDecision": {
+    "enrageHp": 0,
+    "patternCooldown": [
+     5,
+     8
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "horse_archer",
+    "rangeSwitch": true
+   },
+   "pattern": [
+    {
+     "name": "기마 사격",
+     "cd": 5,
+     "effect": "원거리 1.2xATK",
+     "telegraph": "초록 경고선",
+     "counter": "접근 압박"
+    },
+    {
+     "name": "근접 창",
+     "cd": 9,
+     "effect": "1.1xATK",
+     "telegraph": "파란 경고선",
+     "counter": "방어 태세"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     8
+    ],
+    "wave": [
+     "normal"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "하",
+     "중"
+    ],
+    "gold": 120,
+    "exp": 40
+   },
+   "ecology": {
+    "diet": "herbivore",
+    "role": "prey",
+    "habitat": [
+     "forest",
+     "mountain"
+    ],
+    "activity": "diurnal",
+    "temperature": {
+     "min": -10,
+     "max": 25
+    },
+    "water_need": 0.4,
+    "food_need": 0.6,
+    "aggression": 0.5,
+    "territoriality": 0.5,
+    "sociality": 0.5,
+    "reproduction": 0.6,
+    "predators": [
+     "mon_dire_wolf_01",
+     "mon_troll_01"
+    ],
+    "prey": [
+     "grass",
+     "roots"
+    ]
+   }
+  },
+  {
+   "id": "mon_giant_spider_01",
+   "name": "거대 거미",
+   "category": 4,
+   "aiType": "ranged",
+   "tier": 2,
+   "threatBase": 50,
+   "element": "nature",
+   "stats": {
+    "hp": 400,
+    "atk": 30,
+    "def": 10,
+    "aspd": 17,
+    "mdef": 8
+   },
+   "weakness": {
+    "element": [],
+    "bonus": 0,
+    "note": "후방 치명타 취약, 진흙 지형 이동 저하"
+   },
+   "resistance": {
+    "physical": 0,
+    "bleed": 0
+   },
+   "statusImmune": [],
+   "aiDecision": {
+    "enrageHp": 0,
+    "patternCooldown": [
+     5,
+     8
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "horse_archer",
+    "rangeSwitch": true
+   },
+   "pattern": [
+    {
+     "name": "기마 사격",
+     "cd": 5,
+     "effect": "원거리 1.2xATK",
+     "telegraph": "초록 경고선",
+     "counter": "접근 압박"
+    },
+    {
+     "name": "근접 창",
+     "cd": 9,
+     "effect": "1.1xATK",
+     "telegraph": "파란 경고선",
+     "counter": "방어 태세"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     8
+    ],
+    "wave": [
+     "normal"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "하",
+     "중"
+    ],
+    "gold": 120,
+    "exp": 40
+   },
+   "ecology": {
+    "diet": "carnivore",
+    "role": "ambusher",
+    "habitat": [
+     "cave",
+     "forest"
+    ],
+    "activity": "nocturnal",
+    "temperature": {
+     "min": 5,
+     "max": 30
+    },
+    "water_need": 0.3,
+    "food_need": 0.5,
+    "aggression": 0.7,
+    "territoriality": 0.6,
+    "sociality": 0.3,
+    "reproduction": 0.6,
+    "predators": [
+     "mon_spider_queen_01"
+    ],
+    "prey": [
+     "mon_kobold_01",
+     "mon_giant_ant_01"
+    ]
+   }
+  },
+  {
+   "id": "mon_spider_queen_01",
+   "name": "거미 여왕",
+   "category": 4,
+   "aiType": "melee",
+   "tier": 3,
+   "threatBase": 85,
+   "element": "none",
+   "stats": {
+    "hp": 3200,
+    "atk": 95,
+    "def": 30,
+    "aspd": 9,
+    "mdef": 20
+   },
+   "weakness": {
+    "element": [
+     "fire"
+    ],
+    "bonus": 0.2,
+    "note": "화염 +20%"
+   },
+   "resistance": {
+    "physical": 0.1,
+    "bleed": 0.2
+   },
+   "statusImmune": [],
+   "aiDecision": {
+    "enrageHp": 0,
+    "patternCooldown": [
+     6,
+     10
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "tri_head",
+    "headOrder": [
+     "snake",
+     "goat",
+     "lion"
+    ]
+   },
+   "pattern": [
+    {
+     "name": "사자 머리",
+     "cd": 6,
+     "effect": "근접 1.5xATK",
+     "telegraph": "붉은 경고선",
+     "counter": "방어 태세"
+    },
+    {
+     "name": "염소 머리 돌진",
+     "cd": 9,
+     "effect": "돌진 1.2xATK",
+     "telegraph": "붉은 경고선 1초",
+     "counter": "이동"
+    },
+    {
+     "name": "뱀 머리 독",
+     "cd": 12,
+     "effect": "원거리 독",
+     "telegraph": "초록 경고선",
+     "counter": "해독"
+    },
+    {
+     "name": "머리 보상 버프",
+     "cd": 0,
+     "effect": "머리 1개 파괴 시 나머지 ATK +20%",
+     "telegraph": "붉은 오라",
+     "counter": "동시 파괴"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     22,
+     25
+    ],
+    "wave": [
+     "elite"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "중",
+     "상"
+    ],
+    "gold": 500,
+    "exp": 140
+   },
+   "ecology": {
+    "diet": "carnivore",
+    "role": "apex",
+    "habitat": [
+     "cave",
+     "deep"
+    ],
+    "activity": "nocturnal",
+    "temperature": {
+     "min": 5,
+     "max": 25
+    },
+    "water_need": 0.3,
+    "food_need": 0.7,
+    "aggression": 0.8,
+    "territoriality": 0.9,
+    "sociality": 0.4,
+    "reproduction": 0.5,
+    "predators": [],
+    "prey": [
+     "mon_giant_spider_01",
+     "mon_kobold_01"
+    ]
+   }
+  },
+  {
+   "id": "mon_scorpion_01",
+   "name": "전갈",
+   "category": 4,
+   "aiType": "melee",
+   "tier": 1,
+   "threatBase": 25,
+   "element": "none",
+   "stats": {
+    "hp": 150,
+    "atk": 12,
+    "def": 5,
+    "aspd": 14,
+    "mdef": 3
+   },
+   "weakness": {
+    "element": [
+     "fire"
+    ],
+    "bonus": 0.2,
+    "note": "불 +20%"
+   },
+   "resistance": {
+    "physical": 0,
+    "bleed": 0
+   },
+   "statusImmune": [],
+   "aiDecision": {
+    "enrageHp": 0.3,
+    "patternCooldown": [
+     6,
+     10
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "pack_rush",
+    "fleeHp": 0.3
+   },
+   "pattern": [
+    {
+     "name": "무리 돌진",
+     "cd": 8,
+     "effect": "전방 2m 1.2xATK",
+     "telegraph": "초록 경고선",
+     "counter": "이동"
+    },
+    {
+     "name": "함정 연계",
+     "cd": 20,
+     "effect": "코볼드 함정 발동 유도",
+     "telegraph": "바닥 경고판 1초",
+     "counter": "집중공격으로 사전 제거"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     2,
+     3,
+     4
+    ],
+    "wave": [
+     "normal"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "하"
+    ],
+    "gold": 50,
+    "exp": 20
+   },
+   "ecology": {
+    "diet": "carnivore",
+    "role": "ambusher",
+    "habitat": [
+     "desert",
+     "cave"
+    ],
+    "activity": "nocturnal",
+    "temperature": {
+     "min": 20,
+     "max": 50
+    },
+    "water_need": 0.1,
+    "food_need": 0.4,
+    "aggression": 0.6,
+    "territoriality": 0.7,
+    "sociality": 0.2,
+    "reproduction": 0.5,
+    "predators": [
+     "mon_venom_scorpion_01"
+    ],
+    "prey": [
+     "mon_giant_ant_01"
+    ]
+   }
+  },
+  {
+   "id": "mon_venom_scorpion_01",
+   "name": "맹독 전갈",
+   "category": 4,
+   "aiType": "ranged",
+   "tier": 2,
+   "threatBase": 50,
+   "element": "nature",
+   "stats": {
+    "hp": 400,
+    "atk": 30,
+    "def": 10,
+    "aspd": 17,
+    "mdef": 8
+   },
+   "weakness": {
+    "element": [],
+    "bonus": 0,
+    "note": "후방 치명타 취약, 진흙 지형 이동 저하"
+   },
+   "resistance": {
+    "physical": 0,
+    "bleed": 0
+   },
+   "statusImmune": [],
+   "aiDecision": {
+    "enrageHp": 0,
+    "patternCooldown": [
+     5,
+     8
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "horse_archer",
+    "rangeSwitch": true
+   },
+   "pattern": [
+    {
+     "name": "기마 사격",
+     "cd": 5,
+     "effect": "원거리 1.2xATK",
+     "telegraph": "초록 경고선",
+     "counter": "접근 압박"
+    },
+    {
+     "name": "근접 창",
+     "cd": 9,
+     "effect": "1.1xATK",
+     "telegraph": "파란 경고선",
+     "counter": "방어 태세"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     8
+    ],
+    "wave": [
+     "normal"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "하",
+     "중"
+    ],
+    "gold": 120,
+    "exp": 40
+   },
+   "ecology": {
+    "diet": "carnivore",
+    "role": "predator",
+    "habitat": [
+     "desert",
+     "swamp"
+    ],
+    "activity": "nocturnal",
+    "temperature": {
+     "min": 20,
+     "max": 45
+    },
+    "water_need": 0.2,
+    "food_need": 0.5,
+    "aggression": 0.7,
+    "territoriality": 0.8,
+    "sociality": 0.2,
+    "reproduction": 0.4,
+    "predators": [],
+    "prey": [
+     "mon_scorpion_01",
+     "mon_giant_ant_01"
+    ]
+   }
+  },
+  {
+   "id": "mon_giant_ant_01",
+   "name": "거대 개미",
+   "category": 4,
+   "aiType": "ranged",
+   "tier": 2,
+   "threatBase": 50,
+   "element": "nature",
+   "stats": {
+    "hp": 400,
+    "atk": 30,
+    "def": 10,
+    "aspd": 17,
+    "mdef": 8
+   },
+   "weakness": {
+    "element": [],
+    "bonus": 0,
+    "note": "후방 치명타 취약, 진흙 지형 이동 저하"
+   },
+   "resistance": {
+    "physical": 0,
+    "bleed": 0
+   },
+   "statusImmune": [],
+   "aiDecision": {
+    "enrageHp": 0,
+    "patternCooldown": [
+     5,
+     8
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "horse_archer",
+    "rangeSwitch": true
+   },
+   "pattern": [
+    {
+     "name": "기마 사격",
+     "cd": 5,
+     "effect": "원거리 1.2xATK",
+     "telegraph": "초록 경고선",
+     "counter": "접근 압박"
+    },
+    {
+     "name": "근접 창",
+     "cd": 9,
+     "effect": "1.1xATK",
+     "telegraph": "파란 경고선",
+     "counter": "방어 태세"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     8
+    ],
+    "wave": [
+     "normal"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "하",
+     "중"
+    ],
+    "gold": 120,
+    "exp": 40
+   },
+   "ecology": {
+    "diet": "omnivore",
+    "role": "swarm",
+    "habitat": [
+     "forest",
+     "underground"
+    ],
+    "activity": "diurnal",
+    "temperature": {
+     "min": 10,
+     "max": 35
+    },
+    "water_need": 0.4,
+    "food_need": 0.5,
+    "aggression": 0.5,
+    "territoriality": 0.8,
+    "sociality": 0.95,
+    "reproduction": 0.8,
+    "predators": [
+     "mon_venom_scorpion_01"
+    ],
+    "prey": [
+     "plants",
+     "insects"
+    ]
+   }
+  },
+  {
+   "id": "mon_slime_green_01",
+   "name": "슬라임(그린)",
+   "category": 6,
+   "aiType": "melee",
+   "tier": 1,
+   "threatBase": 18,
+   "element": "none",
+   "stats": {
+    "hp": 170,
+    "atk": 11,
+    "def": 4,
+    "aspd": 6,
+    "mdef": 4
+   },
+   "weakness": {
+    "element": [
+     "fire",
+     "water"
+    ],
+    "bonus": 0.3,
+    "note": "화염·수해 +30%, 물리 칼질 저항"
+   },
+   "resistance": {
+    "physical": 0,
+    "bleed": 0.5,
+    "pierce": -0.5
+   },
+   "statusImmune": [
+    "bleed",
+    "poison"
+   ],
+   "aiDecision": {
+    "enrageHp": 0.3,
+    "patternCooldown": [
+     7,
+     10
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "split",
+    "splitHp": 0.3
+   },
+   "pattern": [
+    {
+     "name": "분열",
+     "cd": 0,
+     "effect": "HP 30% 시 2마리로 분열",
+     "telegraph": "초록 이펙트",
+     "counter": "분열 전 처치"
+    },
+    {
+     "name": "산성 튀김",
+     "cd": 9,
+     "effect": "원거리 0.8xATK + 방어구 -3%",
+     "telegraph": "초록 원",
+     "counter": "이동"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     1,
+     2
+    ],
+    "wave": [
+     "normal"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "하"
+    ],
+    "gold": 30,
+    "exp": 15
+   },
+   "ecology": {
+    "diet": "omnivore",
+    "role": "decomposer",
+    "habitat": [
+     "swamp",
+     "cave"
+    ],
+    "activity": "always",
+    "temperature": {
+     "min": 5,
+     "max": 35
+    },
+    "water_need": 0.7,
+    "food_need": 0.4,
+    "aggression": 0.2,
+    "territoriality": 0.2,
+    "sociality": 0.9,
+    "reproduction": 0.9,
+    "predators": [
+     "mon_ooze_01"
+    ],
+    "prey": [
+     "organic_waste"
+    ]
+   }
+  },
+  {
+   "id": "mon_ooze_01",
+   "name": "오우즈",
+   "category": 6,
+   "aiType": "melee",
+   "tier": 1,
+   "threatBase": 18,
+   "element": "none",
+   "stats": {
+    "hp": 170,
+    "atk": 11,
+    "def": 4,
+    "aspd": 6,
+    "mdef": 4
+   },
+   "weakness": {
+    "element": [
+     "fire",
+     "water"
+    ],
+    "bonus": 0.3,
+    "note": "화염·수해 +30%, 물리 칼질 저항"
+   },
+   "resistance": {
+    "physical": 0,
+    "bleed": 0.5,
+    "pierce": -0.5
+   },
+   "statusImmune": [
+    "bleed",
+    "poison"
+   ],
+   "aiDecision": {
+    "enrageHp": 0.3,
+    "patternCooldown": [
+     7,
+     10
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "split",
+    "splitHp": 0.3
+   },
+   "pattern": [
+    {
+     "name": "분열",
+     "cd": 0,
+     "effect": "HP 30% 시 2마리로 분열",
+     "telegraph": "초록 이펙트",
+     "counter": "분열 전 처치"
+    },
+    {
+     "name": "산성 튀김",
+     "cd": 9,
+     "effect": "원거리 0.8xATK + 방어구 -3%",
+     "telegraph": "초록 원",
+     "counter": "이동"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     1,
+     2
+    ],
+    "wave": [
+     "normal"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "하"
+    ],
+    "gold": 30,
+    "exp": 15
+   },
+   "ecology": {
+    "diet": "omnivore",
+    "role": "decomposer",
+    "habitat": [
+     "swamp",
+     "sewer"
+    ],
+    "activity": "always",
+    "temperature": {
+     "min": 10,
+     "max": 30
+    },
+    "water_need": 0.8,
+    "food_need": 0.5,
+    "aggression": 0.3,
+    "territoriality": 0.3,
+    "sociality": 0.6,
+    "reproduction": 0.8,
+    "predators": [],
+    "prey": [
+     "organic_waste"
+    ]
+   }
+  },
+  {
+   "id": "mon_ice_spawn_01",
+   "name": "아이 스폰",
+   "category": 5,
+   "aiType": "melee",
+   "tier": 2,
+   "threatBase": 42,
+   "element": "earth",
+   "stats": {
+    "hp": 450,
+    "atk": 28,
+    "def": 25,
+    "aspd": 6,
+    "mdef": 12
+   },
+   "weakness": {
+    "element": [
+     "fire"
+    ],
+    "bonus": 0.2,
+    "note": "불 +20%, 돌 상태일 때 선제 공격 가능"
+   },
+   "resistance": {
+    "physical": 0.3,
+    "bleed": 0.5,
+    "poison": 0.5
+   },
+   "statusImmune": [
+    "bleed",
+    "poison",
+    "stun"
+   ],
+   "aiDecision": {
+    "enrageHp": 0,
+    "patternCooldown": [
+     6,
+     9
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "stone_ambush",
+    "stealthStart": true
+   },
+   "pattern": [
+    {
+     "name": "석상 위장",
+     "cd": 0,
+     "effect": "전투 시작 전 은신 상태 (감지 시 활성)",
+     "telegraph": "없음",
+     "counter": "집중공격 선제 / 빛 감지"
+    },
+    {
+     "name": "돌진 + 할퀴기",
+     "cd": 7,
+     "effect": "1.3xATK",
+     "telegraph": "붉은 경고선 1초",
+     "counter": "측면 기동"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+     "floors": [
+       16,
+       17,
+       18,
+       19
+     ],
+     "wave": [
+       "normal"
+     ]
+   },
+   "loot": {
+    "soul": [
+     "하",
+     "중"
+    ],
+    "gold": 110,
+    "exp": 38
+   },
+   "ecology": {
+    "diet": "mana",
+    "role": "elemental",
+    "habitat": [
+     "tundra",
+     "ice_cave"
+    ],
+    "activity": "always",
+    "temperature": {
+     "min": -30,
+     "max": 0
+    },
+    "water_need": 1.0,
+    "food_need": 0.3,
+    "aggression": 0.5,
+    "territoriality": 0.6,
+    "sociality": 0.2,
+    "reproduction": 0.3,
+    "predators": [
+     "mon_fire_elemental_01"
+    ],
+    "prey": []
+   }
+  },
+  {
+   "id": "mon_fire_elemental_01",
+   "name": "파이어 엘리멘탈",
+   "category": 5,
+   "aiType": "magic",
+   "tier": 3,
+   "threatBase": 68,
+   "element": "fire",
+   "stats": {
+    "hp": 2400,
+    "atk": 85,
+    "def": 20,
+    "aspd": 10,
+    "mdef": 35
+   },
+   "weakness": {
+    "element": [
+     "water"
+    ],
+    "bonus": 0.5,
+    "note": "역상성 +50%, 동일 원소 면역"
+   },
+   "resistance": {
+    "physical": 0.2,
+    "bleed": 0.5,
+    "poison": 0.5,
+    "fire": -1.0
+   },
+   "statusImmune": [
+    "bleed",
+    "poison",
+    "burn",
+    "freeze"
+   ],
+   "aiDecision": {
+    "enrageHp": 0,
+    "patternCooldown": [
+     6,
+     9
+    ],
+    "crowdAoeRadius": 2,
+    "specialSkill": "elemental_blast",
+    "absorbHeal": true
+   },
+   "pattern": [
+    {
+     "name": "원소 공격",
+     "cd": 6,
+     "effect": "2m 광역 1.3xATK",
+     "telegraph": "붉은 원 1초",
+     "counter": "역상성 파티"
+    },
+    {
+     "name": "균열 회복",
+     "cd": 15,
+     "effect": "주변 같은 원소 흡수 시 HP 회복",
+     "telegraph": "초록 이펙트",
+     "counter": "같은 원소 제거"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     20,
+     23
+    ],
+    "wave": [
+     "normal",
+     "elite"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "중"
+    ],
+    "gold": 260,
+    "exp": 75
+   },
+   "ecology": {
+    "diet": "mana",
+    "role": "elemental",
+    "habitat": [
+     "volcano",
+     "lava"
+    ],
+    "activity": "always",
+    "temperature": {
+     "min": 100,
+     "max": 1000
+    },
+    "water_need": 0.0,
+    "food_need": 0.5,
+    "aggression": 0.7,
+    "territoriality": 0.7,
+    "sociality": 0.2,
+    "reproduction": 0.3,
+    "predators": [
+     "mon_water_elemental_01"
+    ],
+    "prey": []
+   }
+  },
+  {
+   "id": "mon_water_elemental_01",
+   "name": "워터 엘리멘탈",
+   "category": 5,
+   "aiType": "magic",
+   "tier": 3,
+   "threatBase": 68,
+   "element": "water",
+   "stats": {
+    "hp": 2400,
+    "atk": 85,
+    "def": 20,
+    "aspd": 10,
+    "mdef": 35
+   },
+   "weakness": {
+    "element": [
+     "water"
+    ],
+    "bonus": 0.5,
+    "note": "역상성 +50%, 동일 원소 면역"
+   },
+   "resistance": {
+    "physical": 0.2,
+    "bleed": 0.5,
+    "poison": 0.5,
+    "fire": -1.0
+   },
+   "statusImmune": [
+    "bleed",
+    "poison",
+    "burn",
+    "freeze"
+   ],
+   "aiDecision": {
+    "enrageHp": 0,
+    "patternCooldown": [
+     6,
+     9
+    ],
+    "crowdAoeRadius": 2,
+    "specialSkill": "elemental_blast",
+    "absorbHeal": true
+   },
+   "pattern": [
+    {
+     "name": "원소 공격",
+     "cd": 6,
+     "effect": "2m 광역 1.3xATK",
+     "telegraph": "붉은 원 1초",
+     "counter": "역상성 파티"
+    },
+    {
+     "name": "균열 회복",
+     "cd": 15,
+     "effect": "주변 같은 원소 흡수 시 HP 회복",
+     "telegraph": "초록 이펙트",
+     "counter": "같은 원소 제거"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     20,
+     23
+    ],
+    "wave": [
+     "normal",
+     "elite"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "중"
+    ],
+    "gold": 260,
+    "exp": 75
+   },
+   "ecology": {
+    "diet": "mana",
+    "role": "elemental",
+    "habitat": [
+     "ocean",
+     "swamp"
+    ],
+    "activity": "always",
+    "temperature": {
+     "min": 0,
+     "max": 30
+    },
+    "water_need": 1.0,
+    "food_need": 0.3,
+    "aggression": 0.4,
+    "territoriality": 0.5,
+    "sociality": 0.3,
+    "reproduction": 0.4,
+    "predators": [
+     "mon_fire_elemental_01"
+    ],
+    "prey": []
+   }
+  },
+  {
+   "id": "mon_air_elemental_01",
+   "name": "에어 엘리멘탈",
+   "category": 5,
+   "aiType": "magic",
+   "tier": 3,
+   "threatBase": 68,
+   "element": "nature",
+   "stats": {
+    "hp": 2400,
+    "atk": 85,
+    "def": 20,
+    "aspd": 10,
+    "mdef": 35
+   },
+   "weakness": {
+    "element": [
+     "water"
+    ],
+    "bonus": 0.5,
+    "note": "역상성 +50%, 동일 원소 면역"
+   },
+   "resistance": {
+    "physical": 0.2,
+    "bleed": 0.5,
+    "poison": 0.5,
+    "fire": -1.0
+   },
+   "statusImmune": [
+    "bleed",
+    "poison",
+    "burn",
+    "freeze"
+   ],
+   "aiDecision": {
+    "enrageHp": 0,
+    "patternCooldown": [
+     6,
+     9
+    ],
+    "crowdAoeRadius": 2,
+    "specialSkill": "elemental_blast",
+    "absorbHeal": true
+   },
+   "pattern": [
+    {
+     "name": "원소 공격",
+     "cd": 6,
+     "effect": "2m 광역 1.3xATK",
+     "telegraph": "붉은 원 1초",
+     "counter": "역상성 파티"
+    },
+    {
+     "name": "균열 회복",
+     "cd": 15,
+     "effect": "주변 같은 원소 흡수 시 HP 회복",
+     "telegraph": "초록 이펙트",
+     "counter": "같은 원소 제거"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     20,
+     23
+    ],
+    "wave": [
+     "normal",
+     "elite"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "중"
+    ],
+    "gold": 260,
+    "exp": 75
+   },
+   "ecology": {
+    "diet": "mana",
+    "role": "elemental",
+    "habitat": [
+     "mountain",
+     "sky"
+    ],
+    "activity": "always",
+    "temperature": {
+     "min": -10,
+     "max": 40
+    },
+    "water_need": 0.2,
+    "food_need": 0.2,
+    "aggression": 0.5,
+    "territoriality": 0.4,
+    "sociality": 0.3,
+    "reproduction": 0.3,
+    "predators": [
+     "mon_earth_elemental_01"
+    ],
+    "prey": []
+   }
+  },
+  {
+   "id": "mon_earth_elemental_01",
+   "name": "어스 엘리멘탈",
+   "category": 5,
+   "aiType": "magic",
+   "tier": 3,
+   "threatBase": 68,
+   "element": "earth",
+   "stats": {
+    "hp": 2400,
+    "atk": 85,
+    "def": 20,
+    "aspd": 10,
+    "mdef": 35
+   },
+   "weakness": {
+    "element": [
+     "water"
+    ],
+    "bonus": 0.5,
+    "note": "역상성 +50%, 동일 원소 면역"
+   },
+   "resistance": {
+    "physical": 0.2,
+    "bleed": 0.5,
+    "poison": 0.5,
+    "fire": -1.0
+   },
+   "statusImmune": [
+    "bleed",
+    "poison",
+    "burn",
+    "freeze"
+   ],
+   "aiDecision": {
+    "enrageHp": 0,
+    "patternCooldown": [
+     6,
+     9
+    ],
+    "crowdAoeRadius": 2,
+    "specialSkill": "elemental_blast",
+    "absorbHeal": true
+   },
+   "pattern": [
+    {
+     "name": "원소 공격",
+     "cd": 6,
+     "effect": "2m 광역 1.3xATK",
+     "telegraph": "붉은 원 1초",
+     "counter": "역상성 파티"
+    },
+    {
+     "name": "균열 회복",
+     "cd": 15,
+     "effect": "주변 같은 원소 흡수 시 HP 회복",
+     "telegraph": "초록 이펙트",
+     "counter": "같은 원소 제거"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     20,
+     23
+    ],
+    "wave": [
+     "normal",
+     "elite"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "중"
+    ],
+    "gold": 260,
+    "exp": 75
+   },
+   "ecology": {
+    "diet": "mineral",
+    "role": "elemental",
+    "habitat": [
+     "mountain",
+     "cave"
+    ],
+    "activity": "always",
+    "temperature": {
+     "min": 5,
+     "max": 40
+    },
+    "water_need": 0.1,
+    "food_need": 0.4,
+    "aggression": 0.6,
+    "territoriality": 0.8,
+    "sociality": 0.2,
+    "reproduction": 0.2,
+    "predators": [
+     "mon_air_elemental_01"
+    ],
+    "prey": []
+   }
+  },
+  {
+   "id": "mon_lightning_elemental_01",
+   "name": "라이트닝 엘리멘탈",
+   "category": 5,
+   "aiType": "magic",
+   "tier": 3,
+   "threatBase": 68,
+   "element": "none",
+   "stats": {
+    "hp": 2400,
+    "atk": 85,
+    "def": 20,
+    "aspd": 10,
+    "mdef": 35
+   },
+   "weakness": {
+    "element": [
+     "water"
+    ],
+    "bonus": 0.5,
+    "note": "역상성 +50%, 동일 원소 면역"
+   },
+   "resistance": {
+    "physical": 0.2,
+    "bleed": 0.5,
+    "poison": 0.5,
+    "fire": -1.0
+   },
+   "statusImmune": [
+    "bleed",
+    "poison",
+    "burn",
+    "freeze"
+   ],
+   "aiDecision": {
+    "enrageHp": 0,
+    "patternCooldown": [
+     6,
+     9
+    ],
+    "crowdAoeRadius": 2,
+    "specialSkill": "elemental_blast",
+    "absorbHeal": true
+   },
+   "pattern": [
+    {
+     "name": "원소 공격",
+     "cd": 6,
+     "effect": "2m 광역 1.3xATK",
+     "telegraph": "붉은 원 1초",
+     "counter": "역상성 파티"
+    },
+    {
+     "name": "균열 회복",
+     "cd": 15,
+     "effect": "주변 같은 원소 흡수 시 HP 회복",
+     "telegraph": "초록 이펙트",
+     "counter": "같은 원소 제거"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     20,
+     23
+    ],
+    "wave": [
+     "normal",
+     "elite"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "중"
+    ],
+    "gold": 260,
+    "exp": 75
+   },
+   "ecology": {
+    "diet": "mana",
+    "role": "elemental",
+    "habitat": [
+     "storm",
+     "mountain"
+    ],
+    "activity": "always",
+    "temperature": {
+     "min": -5,
+     "max": 50
+    },
+    "water_need": 0.3,
+    "food_need": 0.4,
+    "aggression": 0.8,
+    "territoriality": 0.6,
+    "sociality": 0.2,
+    "reproduction": 0.2,
+    "predators": [
+     "mon_earth_elemental_01"
+    ],
+    "prey": []
+   }
+  },
+  {
+   "id": "mon_imp_01",
+   "name": "임프",
+   "category": 6,
+   "aiType": "melee",
+   "tier": 2,
+   "threatBase": 65,
+   "element": "none",
+   "stats": {
+    "hp": 375,
+    "atk": 29,
+    "def": 10,
+    "aspd": 9,
+    "mdef": 4
+   },
+   "weakness": {
+    "element": [
+     "water"
+    ],
+    "bonus": 0.2,
+    "note": "수해 +20%, M.DEF 낮음"
+   },
+   "resistance": {
+    "physical": 0,
+    "bleed": 0
+   },
+   "statusImmune": [],
+   "aiDecision": {
+    "enrageHp": 0.5,
+    "patternCooldown": [
+     7,
+     11
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "triple_strike",
+    "enrageAtkBonus": 0.3
+   },
+   "pattern": [
+    {
+     "name": "근접 돌진",
+     "cd": 5,
+     "effect": "이동 후 1xATK",
+     "telegraph": "돌진 경고선",
+     "counter": "측면 기동"
+    },
+    {
+     "name": "3연타",
+     "cd": 9,
+     "effect": "3회 0.8xATK (마지막 타 경직)",
+     "telegraph": "파란 경고선",
+     "counter": "방어 태세"
+    },
+    {
+     "name": "광폭화",
+     "cd": 0,
+     "effect": "HP 50% 이하 시 ATK +30%",
+     "telegraph": "붉은 오라",
+     "counter": "스킬 봉인"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     9,
+     10
+    ],
+    "wave": [
+     "normal",
+     "elite"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "하"
+    ],
+    "gold": 120,
+    "exp": 40
+   },
+   "ecology": {
+    "diet": "omnivore",
+    "role": "scavenger",
+    "habitat": [
+     "hellscape",
+     "ruins"
+    ],
+    "activity": "nocturnal",
+    "temperature": {
+     "min": 20,
+     "max": 80
+    },
+    "water_need": 0.1,
+    "food_need": 0.5,
+    "aggression": 0.6,
+    "territoriality": 0.4,
+    "sociality": 0.7,
+    "reproduction": 0.6,
+    "predators": [
+     "mon_balrog_01",
+     "mon_lesser_demon_01"
+    ],
+    "prey": [
+     "soul"
+    ]
+   }
+  },
+  {
+   "id": "mon_lesser_demon_01",
+   "name": "레서 데몬",
+   "category": 6,
+   "aiType": "assassin",
+   "tier": 3,
+   "threatBase": 78,
+   "element": "dark",
+   "stats": {
+    "hp": 2600,
+    "atk": 88,
+    "def": 25,
+    "aspd": 13,
+    "mdef": 18
+   },
+   "weakness": {
+    "element": [
+     "light"
+    ],
+    "bonus": 0.3,
+    "note": "빛 +30%, 은 계열 +50%"
+   },
+   "resistance": {
+    "physical": 0.1,
+    "bleed": 0.3
+   },
+   "statusImmune": [],
+   "aiDecision": {
+    "enrageHp": 0,
+    "patternCooldown": [
+     6,
+     9
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "transform",
+    "transformSpdMult": 2.0,
+    "transformMdefPenalty": -0.3
+   },
+   "pattern": [
+    {
+     "name": "인간형 근접",
+     "cd": 6,
+     "effect": "1xATK",
+     "telegraph": "초록 경고선",
+     "counter": "방어 태세"
+    },
+    {
+     "name": "변신",
+     "cd": 0,
+     "effect": "3초 경고 후 공속·이속 2배 (M.DEF -30%)",
+     "telegraph": "붉은 오라 3초",
+     "counter": "방어 태세로 버티기"
+    },
+    {
+     "name": "발톱 4연타",
+     "cd": 8,
+     "effect": "변신 후 4회 0.7xATK",
+     "telegraph": "붉은 경고선",
+     "counter": "은 무기 반격"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     23,
+     26
+    ],
+    "wave": [
+     "normal",
+     "elite"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "중"
+    ],
+    "gold": 380,
+    "exp": 105
+   },
+   "ecology": {
+    "diet": "soul",
+    "role": "predator",
+    "habitat": [
+     "hellscape",
+     "abyss"
+    ],
+    "activity": "nocturnal",
+    "temperature": {
+     "min": 30,
+     "max": 100
+    },
+    "water_need": 0.0,
+    "food_need": 0.7,
+    "aggression": 0.8,
+    "territoriality": 0.7,
+    "sociality": 0.4,
+    "reproduction": 0.3,
+    "predators": [
+     "mon_balrog_01"
+    ],
+    "prey": [
+     "mon_imp_01",
+     "soul"
+    ]
+   }
+  },
+  {
+   "id": "mon_hell_hound_01",
+   "name": "헬 하운드",
+   "category": 6,
+   "aiType": "assassin",
+   "tier": 3,
+   "threatBase": 78,
+   "element": "dark",
+   "stats": {
+    "hp": 2600,
+    "atk": 88,
+    "def": 25,
+    "aspd": 13,
+    "mdef": 18
+   },
+   "weakness": {
+    "element": [
+     "light"
+    ],
+    "bonus": 0.3,
+    "note": "빛 +30%, 은 계열 +50%"
+   },
+   "resistance": {
+    "physical": 0.1,
+    "bleed": 0.3
+   },
+   "statusImmune": [],
+   "aiDecision": {
+    "enrageHp": 0,
+    "patternCooldown": [
+     6,
+     9
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "transform",
+    "transformSpdMult": 2.0,
+    "transformMdefPenalty": -0.3
+   },
+   "pattern": [
+    {
+     "name": "인간형 근접",
+     "cd": 6,
+     "effect": "1xATK",
+     "telegraph": "초록 경고선",
+     "counter": "방어 태세"
+    },
+    {
+     "name": "변신",
+     "cd": 0,
+     "effect": "3초 경고 후 공속·이속 2배 (M.DEF -30%)",
+     "telegraph": "붉은 오라 3초",
+     "counter": "방어 태세로 버티기"
+    },
+    {
+     "name": "발톱 4연타",
+     "cd": 8,
+     "effect": "변신 후 4회 0.7xATK",
+     "telegraph": "붉은 경고선",
+     "counter": "은 무기 반격"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     23,
+     26
+    ],
+    "wave": [
+     "normal",
+     "elite"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "중"
+    ],
+    "gold": 380,
+    "exp": 105
+   },
+   "ecology": {
+    "diet": "carnivore",
+    "role": "hunter",
+    "habitat": [
+     "hellscape",
+     "volcano"
+    ],
+    "activity": "nocturnal",
+    "temperature": {
+     "min": 30,
+     "max": 80
+    },
+    "water_need": 0.1,
+    "food_need": 0.7,
+    "aggression": 0.9,
+    "territoriality": 0.8,
+    "sociality": 0.6,
+    "reproduction": 0.4,
+    "predators": [
+     "mon_balrog_01"
+    ],
+    "prey": [
+     "mon_wolf_01",
+     "mon_imp_01"
+    ]
+   }
+  },
+  {
+   "id": "mon_balrog_01",
+   "name": "발록",
+   "category": 6,
+   "aiType": "magic",
+   "tier": 4,
+   "threatBase": 115,
+   "element": "dark",
+   "stats": {
+    "hp": 16000,
+    "atk": 260,
+    "def": 45,
+    "aspd": 7,
+    "mdef": 80
+   },
+   "weakness": {
+    "element": [
+     "light"
+    ],
+    "bonus": 0.2,
+    "note": "중앙 눈 봉인 시 눈자루 무력화"
+   },
+   "resistance": {
+    "physical": 0.2,
+    "bleed": 0.4
+   },
+   "statusImmune": [
+    "stun",
+    "charm",
+    "fear"
+   ],
+   "aiDecision": {
+    "enrageHp": 0,
+    "patternCooldown": [
+     8,
+     12
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "disintegrate",
+    "randomSkill": true,
+    "partPriority": "mainEye"
+   },
+   "pattern": [
+    {
+     "name": "해체 광선",
+     "cd": 14,
+     "effect": "중앙 눈 5초 시전 후 3xATK",
+     "telegraph": "붉은 원 5초",
+     "counter": "스킬 봉인 / 시야 차단"
+    },
+    {
+     "name": "눈자루 광선",
+     "cd": 6,
+     "effect": "화염·빙결·마비 광선 무작위",
+     "telegraph": "랜덤 색 원",
+     "counter": "방어 태세"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+     "floors": [
+       20,
+       46,
+       50
+     ],
+     "wave": [
+       "elite",
+       "boss"
+     ],
+     "bossScaleRefFloor": 46
+   },
+   "loot": {
+    "soul": [
+     "상"
+    ],
+    "gold": 4500,
+    "exp": 1100
+   },
+   "ecology": {
+    "diet": "mana",
+    "role": "apex",
+    "habitat": [
+     "volcano",
+     "hellscape"
+    ],
+    "activity": "nocturnal",
+    "temperature": {
+     "min": 100,
+     "max": 500
+    },
+    "water_need": 0.0,
+    "food_need": 0.9,
+    "aggression": 0.95,
+    "territoriality": 1.0,
+    "sociality": 0.1,
+    "reproduction": 0.1,
+    "predators": [],
+    "prey": [
+     "mon_fire_elemental_01",
+     "mon_imp_01"
+    ]
+   }
+  },
+  {
+   "id": "mon_dreadnought_01",
+   "name": "드레드노트",
+   "category": 5,
+   "aiType": "melee",
+   "tier": 4,
+   "threatBase": 85,
+   "element": "earth",
+   "stats": {
+    "hp": 12000,
+    "atk": 220,
+    "def": 90,
+    "aspd": 4,
+    "mdef": 70
+   },
+   "weakness": {
+    "element": [],
+    "bonus": 0,
+    "note": "물리 타격 효율적, 코어 파괴 시 정지"
+   },
+   "resistance": {
+    "physical": 0.1,
+    "bleed": 0.8,
+    "poison": 0.8
+   },
+   "statusImmune": [
+    "bleed",
+    "poison",
+    "burn",
+    "freeze",
+    "stun",
+    "charm",
+    "fear"
+   ],
+   "aiDecision": {
+    "enrageHp": 0,
+    "patternCooldown": [
+     6,
+     10
+    ],
+    "crowdAoeRadius": 3,
+    "specialSkill": "fist_quake",
+    "corePart": true
+   },
+   "pattern": [
+    {
+     "name": "주먹 2연타",
+     "cd": 6,
+     "effect": "2회 1.2xATK",
+     "telegraph": "파란 경고선 1.5초",
+     "counter": "방어 태세"
+    },
+    {
+     "name": "지진 발동",
+     "cd": 12,
+     "effect": "전방 광역 3m 1.5xATK",
+     "telegraph": "붉은 원 2초",
+     "counter": "이동"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+     "floors": [
+       15
+     ],
+     "wave": [
+       "boss"
+     ],
+     "bossScaleRefFloor": 16
+   },
+   "loot": {
+    "soul": [
+     "중"
+    ],
+    "gold": 450,
+    "exp": 130
+   },
+   "ecology": {
+    "diet": "mana",
+    "role": "guardian",
+    "habitat": [
+     "fortress",
+     "deep"
+    ],
+    "activity": "always",
+    "temperature": {
+     "min": -10,
+     "max": 40
+    },
+    "water_need": 0.2,
+    "food_need": 0.6,
+    "aggression": 0.7,
+    "territoriality": 0.9,
+    "sociality": 0.2,
+    "reproduction": 0.1,
+    "predators": [],
+    "prey": []
+   }
+  },
+  {
+   "id": "mon_mindflayer_01",
+   "name": "마인드 플레이어",
+   "category": 6,
+   "aiType": "magic",
+   "tier": 4,
+   "threatBase": 115,
+   "element": "dark",
+   "stats": {
+    "hp": 16000,
+    "atk": 260,
+    "def": 45,
+    "aspd": 7,
+    "mdef": 80
+   },
+   "weakness": {
+    "element": [
+     "light"
+    ],
+    "bonus": 0.2,
+    "note": "중앙 눈 봉인 시 눈자루 무력화"
+   },
+   "resistance": {
+    "physical": 0.2,
+    "bleed": 0.4
+   },
+   "statusImmune": [
+    "stun",
+    "charm",
+    "fear"
+   ],
+   "aiDecision": {
+    "enrageHp": 0,
+    "patternCooldown": [
+     8,
+     12
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "disintegrate",
+    "randomSkill": true,
+    "partPriority": "mainEye"
+   },
+   "pattern": [
+    {
+     "name": "해체 광선",
+     "cd": 14,
+     "effect": "중앙 눈 5초 시전 후 3xATK",
+     "telegraph": "붉은 원 5초",
+     "counter": "스킬 봉인 / 시야 차단"
+    },
+    {
+     "name": "눈자루 광선",
+     "cd": 6,
+     "effect": "화염·빙결·마비 광선 무작위",
+     "telegraph": "랜덤 색 원",
+     "counter": "방어 태세"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     46,
+     50
+    ],
+    "wave": [
+     "elite",
+     "boss"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "상"
+    ],
+    "gold": 4500,
+    "exp": 1100
+   },
+   "ecology": {
+    "diet": "brain",
+    "role": "predator",
+    "habitat": [
+     "deep",
+     "city"
+    ],
+    "activity": "nocturnal",
+    "temperature": {
+     "min": 5,
+     "max": 25
+    },
+    "water_need": 0.3,
+    "food_need": 0.7,
+    "aggression": 0.8,
+    "territoriality": 0.8,
+    "sociality": 0.5,
+    "reproduction": 0.2,
+    "predators": [],
+    "prey": [
+     "mon_goblin_01",
+     "mon_kobold_01"
+    ]
+   }
+  },
+  {
+   "id": "mon_doppelganger_01",
+   "name": "도플갱어",
+   "category": 6,
+   "aiType": "magic",
+   "tier": 4,
+   "threatBase": 115,
+   "element": "dark",
+   "stats": {
+    "hp": 16000,
+    "atk": 260,
+    "def": 45,
+    "aspd": 7,
+    "mdef": 80
+   },
+   "weakness": {
+    "element": [
+     "light"
+    ],
+    "bonus": 0.2,
+    "note": "중앙 눈 봉인 시 눈자루 무력화"
+   },
+   "resistance": {
+    "physical": 0.2,
+    "bleed": 0.4
+   },
+   "statusImmune": [
+    "stun",
+    "charm",
+    "fear"
+   ],
+   "aiDecision": {
+    "enrageHp": 0,
+    "patternCooldown": [
+     8,
+     12
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "disintegrate",
+    "randomSkill": true,
+    "partPriority": "mainEye"
+   },
+   "pattern": [
+    {
+     "name": "해체 광선",
+     "cd": 14,
+     "effect": "중앙 눈 5초 시전 후 3xATK",
+     "telegraph": "붉은 원 5초",
+     "counter": "스킬 봉인 / 시야 차단"
+    },
+    {
+     "name": "눈자루 광선",
+     "cd": 6,
+     "effect": "화염·빙결·마비 광선 무작위",
+     "telegraph": "랜덤 색 원",
+     "counter": "방어 태세"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+     "floors": [
+       5,
+       46,
+       50
+     ],
+     "wave": [
+       "elite",
+       "boss"
+     ],
+     "bossScaleRefFloor": 46
+   },
+   "loot": {
+    "soul": [
+     "상"
+    ],
+    "gold": 4500,
+    "exp": 1100
+   },
+   "ecology": {
+    "diet": "carnivore",
+    "role": "mimic",
+    "habitat": [
+     "city",
+     "ruins"
+    ],
+    "activity": "nocturnal",
+    "temperature": {
+     "min": 5,
+     "max": 30
+    },
+    "water_need": 0.3,
+    "food_need": 0.6,
+    "aggression": 0.6,
+    "territoriality": 0.5,
+    "sociality": 0.3,
+    "reproduction": 0.3,
+    "predators": [],
+    "prey": [
+     "mon_goblin_01"
+    ]
+   }
+  },
+  {
+   "id": "mon_githyanki_01",
+   "name": "기스양키",
+   "category": 1,
+   "aiType": "melee",
+   "tier": 3,
+   "threatBase": 95,
+   "element": "none",
+   "stats": {
+    "hp": 3125,
+    "atk": 88,
+    "def": 24,
+    "aspd": 6,
+    "mdef": 8
+   },
+   "weakness": {
+    "element": [
+     "fire"
+    ],
+    "bonus": 0.5,
+    "note": "불 +50%, 산성(화염 계열) +50% — 재생 억제, 재생 중 화염 피해 2배"
+   },
+   "resistance": {
+    "physical": 0,
+    "bleed": 0.5
+   },
+   "statusImmune": [
+    "bleed"
+   ],
+   "aiDecision": {
+    "enrageHp": 0,
+    "patternCooldown": [
+     12,
+     16
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "boulder_throw",
+    "regenPerSec": 0.015
+   },
+   "pattern": [
+    {
+     "name": "신체 재생",
+     "cd": 0,
+     "effect": "초당 1.5% HP 회복 (상시)",
+     "telegraph": "초록 이펙트",
+     "counter": "화염 집중공격으로 재생 차단"
+    },
+    {
+     "name": "바위 던지기",
+     "cd": 12,
+     "effect": "원거리 1.4xATK",
+     "telegraph": "붉은 원",
+     "counter": "이동"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+     "floors": [
+       11,
+       13,
+       14
+     ],
+     "wave": [
+       "normal",
+       "elite"
+     ]
+   },
+   "loot": {
+    "soul": [
+     "중"
+    ],
+    "gold": 300,
+    "exp": 80
+   },
+   "ecology": {
+    "diet": "carnivore",
+    "role": "warrior",
+    "habitat": [
+     "astral",
+     "ruins"
+    ],
+    "activity": "diurnal",
+    "temperature": {
+     "min": -5,
+     "max": 30
+    },
+    "water_need": 0.3,
+    "food_need": 0.6,
+    "aggression": 0.7,
+    "territoriality": 0.7,
+    "sociality": 0.6,
+    "reproduction": 0.3,
+    "predators": [],
+    "prey": [
+     "mon_mindflayer_01"
+    ]
+   }
+  },
+  {
+   "id": "mon_dracolich_01",
+   "name": "드라콜리치",
+   "category": 3,
+   "aiType": "magic",
+   "tier": 5,
+   "threatBase": 145,
+   "element": "fire",
+   "stats": {
+    "hp": 36000,
+    "atk": 480,
+    "def": 100,
+    "aspd": 8,
+    "mdef": 60
+   },
+   "weakness": {
+    "element": [
+     "water"
+    ],
+    "bonus": 0.5,
+    "note": "속성 역상성 (화염 드래곤 = 수해 약점)"
+   },
+   "resistance": {
+    "physical": 0.3,
+    "bleed": 0.4,
+    "fire": -0.5
+   },
+   "statusImmune": [
+    "bleed",
+    "poison",
+    "burn",
+    "stun"
+   ],
+   "aiDecision": {
+    "enrageHp": 0.3,
+    "patternCooldown": [
+     12,
+     16
+    ],
+    "crowdAoeRadius": 5,
+    "specialSkill": "breath",
+    "flyState": true
+   },
+   "pattern": [
+    {
+     "name": "브레스",
+     "cd": 12,
+     "effect": "전방 5m 광역 2xATK (속성)",
+     "telegraph": "붉은 원뿔 2초",
+     "counter": "측면 기동"
+    },
+    {
+     "name": "비행/착지",
+     "cd": 20,
+     "effect": "비행 시 원거리, 착지 시 근접 전환",
+     "telegraph": "날개 이펙트",
+     "counter": "날개 부위 파괴"
+    },
+    {
+     "name": "꼬리 휘두르기",
+     "cd": 9,
+     "effect": "후방 3m 1.3xATK",
+     "telegraph": "파란 경고선",
+     "counter": "이동"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     51,
+     60
+    ],
+    "wave": [
+     "boss",
+     "world"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "상"
+    ],
+    "gold": 8000,
+    "exp": 2000
+   },
+   "ecology": {
+    "diet": "mana",
+    "role": "apex",
+    "habitat": [
+     "volcano",
+     "dragon_lair"
+    ],
+    "activity": "nocturnal",
+    "temperature": {
+     "min": 30,
+     "max": 100
+    },
+    "water_need": 0.1,
+    "food_need": 0.9,
+    "aggression": 0.95,
+    "territoriality": 1.0,
+    "sociality": 0.1,
+    "reproduction": 0.05,
+    "predators": [],
+    "prey": [
+     "mon_fire_elemental_01"
+    ]
+   }
+  },
+  {
+   "id": "mon_beholder_01",
+   "name": "비홀더",
+   "category": 6,
+   "aiType": "magic",
+   "tier": 4,
+   "threatBase": 115,
+   "element": "dark",
+   "stats": {
+    "hp": 16000,
+    "atk": 260,
+    "def": 45,
+    "aspd": 7,
+    "mdef": 80
+   },
+   "weakness": {
+    "element": [
+     "light"
+    ],
+    "bonus": 0.2,
+    "note": "중앙 눈 봉인 시 눈자루 무력화"
+   },
+   "resistance": {
+    "physical": 0.2,
+    "bleed": 0.4
+   },
+   "statusImmune": [
+    "stun",
+    "charm",
+    "fear"
+   ],
+   "aiDecision": {
+    "enrageHp": 0,
+    "patternCooldown": [
+     8,
+     12
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "disintegrate",
+    "randomSkill": true,
+    "partPriority": "mainEye"
+   },
+   "pattern": [
+    {
+     "name": "해체 광선",
+     "cd": 14,
+     "effect": "중앙 눈 5초 시전 후 3xATK",
+     "telegraph": "붉은 원 5초",
+     "counter": "스킬 봉인 / 시야 차단"
+    },
+    {
+     "name": "눈자루 광선",
+     "cd": 6,
+     "effect": "화염·빙결·마비 광선 무작위",
+     "telegraph": "랜덤 색 원",
+     "counter": "방어 태세"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+     "floors": [
+       10,
+       46,
+       50
+     ],
+     "wave": [
+       "elite",
+       "boss"
+     ],
+     "bossScaleRefFloor": 46
+   },
+   "loot": {
+    "soul": [
+     "상"
+    ],
+    "gold": 4500,
+    "exp": 1100
+   },
+   "ecology": {
+    "diet": "omnivore",
+    "role": "apex",
+    "habitat": [
+     "deep",
+     "lair"
+    ],
+    "activity": "nocturnal",
+    "temperature": {
+     "min": 5,
+     "max": 30
+    },
+    "water_need": 0.3,
+    "food_need": 0.8,
+    "aggression": 0.9,
+    "territoriality": 1.0,
+    "sociality": 0.1,
+    "reproduction": 0.1,
+    "predators": [],
+    "prey": [
+     "mon_mindflayer_01",
+     "mon_imp_01"
+    ]
+   }
+  },
+  {
+   "id": "mon_kraken_tentacle_01",
+   "name": "크라켄 촉수",
+   "category": 3,
+   "aiType": "magic",
+   "tier": 5,
+   "threatBase": 145,
+   "element": "fire",
+   "stats": {
+    "hp": 36000,
+    "atk": 480,
+    "def": 100,
+    "aspd": 8,
+    "mdef": 60
+   },
+   "weakness": {
+    "element": [
+     "water"
+    ],
+    "bonus": 0.5,
+    "note": "속성 역상성 (화염 드래곤 = 수해 약점)"
+   },
+   "resistance": {
+    "physical": 0.3,
+    "bleed": 0.4,
+    "fire": -0.5
+   },
+   "statusImmune": [
+    "bleed",
+    "poison",
+    "burn",
+    "stun"
+   ],
+   "aiDecision": {
+    "enrageHp": 0.3,
+    "patternCooldown": [
+     12,
+     16
+    ],
+    "crowdAoeRadius": 5,
+    "specialSkill": "breath",
+    "flyState": true
+   },
+   "pattern": [
+    {
+     "name": "브레스",
+     "cd": 12,
+     "effect": "전방 5m 광역 2xATK (속성)",
+     "telegraph": "붉은 원뿔 2초",
+     "counter": "측면 기동"
+    },
+    {
+     "name": "비행/착지",
+     "cd": 20,
+     "effect": "비행 시 원거리, 착지 시 근접 전환",
+     "telegraph": "날개 이펙트",
+     "counter": "날개 부위 파괴"
+    },
+    {
+     "name": "꼬리 휘두르기",
+     "cd": 9,
+     "effect": "후방 3m 1.3xATK",
+     "telegraph": "파란 경고선",
+     "counter": "이동"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     51,
+     60
+    ],
+    "wave": [
+     "boss",
+     "world"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "상"
+    ],
+    "gold": 8000,
+    "exp": 2000
+   },
+   "ecology": {
+    "diet": "carnivore",
+    "role": "apex",
+    "habitat": [
+     "deep",
+     "ocean"
+    ],
+    "activity": "always",
+    "temperature": {
+     "min": 0,
+     "max": 10
+    },
+    "water_need": 1.0,
+    "food_need": 0.9,
+    "aggression": 0.9,
+    "territoriality": 1.0,
+    "sociality": 0.1,
+    "reproduction": 0.1,
+    "predators": [],
+    "prey": [
+     "mon_water_elemental_01"
+    ]
+   }
+  },
+  {
+   "id": "mon_storm_giant_01",
+   "name": "스톰 자이언트",
+   "category": 1,
+   "aiType": "melee",
+   "tier": 5,
+   "threatBase": 140,
+   "element": "light",
+   "stats": {
+    "hp": 28000,
+    "atk": 420,
+    "def": 55,
+    "aspd": 12,
+    "mdef": 45
+   },
+   "weakness": {
+    "element": [
+     "earth"
+    ],
+    "bonus": 0.2,
+    "note": "대지 +20%"
+   },
+   "resistance": {
+    "physical": 0.1,
+    "bleed": 0
+   },
+   "statusImmune": [],
+   "aiDecision": {
+    "enrageHp": 0.3,
+    "patternCooldown": [
+     8,
+     12
+    ],
+    "crowdAoeRadius": 3,
+    "specialSkill": "thunder_aura"
+   },
+   "pattern": [
+    {
+     "name": "번개 오라",
+     "cd": 10,
+     "effect": "범위 3m 1.3xATK 감전",
+     "telegraph": "노랑 원",
+     "counter": "대지 집중"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     80,
+     85,
+     90
+    ],
+    "wave": [
+     "elite",
+     "boss"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "상"
+    ],
+    "gold": 3000,
+    "exp": 800
+   },
+   "ecology": {
+    "diet": "carnivore",
+    "role": "apex",
+    "habitat": [
+     "mountain",
+     "sky"
+    ],
+    "activity": "diurnal",
+    "temperature": {
+     "min": -10,
+     "max": 40
+    },
+    "water_need": 0.5,
+    "food_need": 0.9,
+    "aggression": 0.6,
+    "territoriality": 0.9,
+    "sociality": 0.3,
+    "reproduction": 0.1,
+    "predators": [],
+    "prey": [
+     "mon_air_elemental_01"
+    ]
+   }
+  },
+  {
+   "id": "mon_aasimar_01",
+   "name": "아아시마르",
+   "category": 1,
+   "aiType": "magic",
+   "tier": 5,
+   "threatBase": 130,
+   "element": "light",
+   "stats": {
+    "hp": 24000,
+    "atk": 380,
+    "def": 45,
+    "aspd": 14,
+    "mdef": 55
+   },
+   "weakness": {
+    "element": [
+     "dark"
+    ],
+    "bonus": 0.3,
+    "note": "어둠 +30%"
+   },
+   "resistance": {
+    "physical": 0,
+    "bleed": 0
+   },
+   "statusImmune": [],
+   "aiDecision": {
+    "enrageHp": 0.4,
+    "patternCooldown": [
+     6,
+     10
+    ],
+    "crowdAoeRadius": 2,
+    "specialSkill": "holy_beam"
+   },
+   "pattern": [
+    {
+     "name": "성광선",
+     "cd": 8,
+     "effect": "직선 4m 1.5xATK",
+     "telegraph": "금빛 선",
+     "counter": "측면 이동"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     75,
+     85
+    ],
+    "wave": [
+     "elite",
+     "boss"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "상"
+    ],
+    "gold": 2800,
+    "exp": 750
+   },
+   "ecology": {
+    "diet": "omnivore",
+    "role": "guardian",
+    "habitat": [
+     "temple",
+     "sky"
+    ],
+    "activity": "always",
+    "temperature": {
+     "min": -10,
+     "max": 40
+    },
+    "water_need": 0.4,
+    "food_need": 0.5,
+    "aggression": 0.4,
+    "territoriality": 0.6,
+    "sociality": 0.5,
+    "reproduction": 0.2,
+    "predators": [],
+    "prey": []
+   }
+  },
+  {
+   "id": "mon_sea_serpent_01",
+   "name": "바다 뱀",
+   "category": 4,
+   "aiType": "melee",
+   "tier": 3,
+   "threatBase": 45,
+   "element": "water",
+   "stats": {
+    "hp": 400,
+    "atk": 50,
+    "def": 15,
+    "aspd": 18,
+    "mdef": 10
+   },
+   "weakness": {
+    "element": [
+     "lightning"
+    ],
+    "bonus": 0.3,
+    "note": "감전 취약"
+   },
+   "resistance": {
+    "physical": 0.1,
+    "bleed": 0.3
+   },
+   "statusImmune": [
+    "poison"
+   ],
+   "aiDecision": {
+    "enrageHp": 0.3,
+    "patternCooldown": [
+     8,
+     12
+    ],
+    "crowdAoeRadius": 0,
+    "specialSkill": "constrict"
+   },
+   "pattern": [
+    {
+     "name": "감김",
+     "cd": 10,
+     "effect": "1.5xATK + 구속",
+     "telegraph": "@Xml",
+     "counter": "화염"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     76,
+     90
+    ],
+    "wave": [
+     "elite"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "하"
+    ],
+    "gold": 120,
+    "exp": 50
+   },
+   "ecology": {
+    "diet": "carnivore",
+    "role": "predator",
+    "habitat": [
+     "ocean",
+     "deep"
+    ],
+    "activity": "nocturnal",
+    "temperature": {
+     "min": 5,
+     "max": 25
+    },
+    "water_need": 1.0,
+    "food_need": 0.7,
+    "aggression": 0.8,
+    "territoriality": 0.8,
+    "sociality": 0.2,
+    "reproduction": 0.3,
+    "predators": [
+     "mon_kraken_tentacle_01"
+    ],
+    "prey": [
+     "mon_fish_01",
+     "mon_crab_01",
+     "mon_jellyfish_01"
+    ]
+   }
+  },
+  {
+   "id": "mon_leviathan_01",
+   "name": "레비아탄",
+   "category": 3,
+   "aiType": "magic",
+   "tier": 5,
+   "threatBase": 160,
+   "element": "water",
+   "stats": {
+    "hp": 45000,
+    "atk": 520,
+    "def": 80,
+    "aspd": 10,
+    "mdef": 70
+   },
+   "weakness": {
+    "element": [
+     "lightning"
+    ],
+    "bonus": 0.4,
+    "note": "감전 치명적"
+   },
+   "resistance": {
+    "physical": 0.3,
+    "bleed": 0.4,
+    "fire": -0.5
+   },
+   "statusImmune": [
+    "bleed",
+    "poison",
+    "burn",
+    "stun"
+   ],
+   "aiDecision": {
+    "enrageHp": 0.2,
+    "patternCooldown": [
+     12,
+     18
+    ],
+    "crowdAoeRadius": 5,
+    "specialSkill": "tidal_wave"
+   },
+   "pattern": [
+    {
+     "name": "조수 파도",
+     "cd": 14,
+     "effect": "전방 8m 2.5xATK + 밀치기",
+     "telegraph": "거대한 물결",
+     "counter": "높은 지대"
+    },
+    {
+     "name": "심해 압력",
+     "cd": 20,
+     "effect": "전체 1.5xATK + 둔화",
+     "telegraph": "화면 푸르스름",
+     "counter": "보호막"
+    }
+   ],
+   "parts": [],
+   "spawn": {
+    "floors": [
+     96,
+     100
+    ],
+    "wave": [
+     "boss"
+    ]
+   },
+   "loot": {
+    "soul": [
+     "상"
+    ],
+    "gold": 12000,
+    "exp": 3000
+   },
+   "ecology": {
+    "diet": "carnivore",
+    "role": "apex",
+    "habitat": [
+     "deep_ocean",
+     "abyss"
+    ],
+    "activity": "always",
+    "temperature": {
+     "min": 1,
+     "max": 8
+    },
+    "water_need": 1.0,
+    "food_need": 1.0,
+    "aggression": 0.9,
+    "territoriality": 1.0,
+    "sociality": 0.05,
+    "reproduction": 0.05,
+    "predators": [],
+    "prey": [
+     "mon_kraken_tentacle_01",
+     "mon_sea_serpent_01",
+     "mon_jellyfish_01"
+    ]
+   }
+  }
+ ],
+ "meta": {
+  "v80": "54 combat (world-only 16 -> ambient, slime 3 folded to green, lizardman removed -> playable only)",
+  "prevCount": 74
+ }
+}

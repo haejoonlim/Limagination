@@ -1,0 +1,301 @@
+{
+ "meta": {
+  "v80": "ecology codex v1.0 - ambient 19 + floor mapping",
+  "source": "ambient.json ecology/spawn + habitat_weights"
+ },
+ "entries": [
+  {
+   "id": "mon_rabbit_01",
+   "name": "토끼",
+   "floors": [
+    1,
+    10
+   ],
+   "habitat": [
+    "grassland",
+    "forest"
+   ],
+   "diet": "herbivore",
+   "role": "prey",
+   "note": "모든 포식자의 먹이"
+  },
+  {
+   "id": "mon_rat_01",
+   "name": "쥐",
+   "floors": [
+    1,
+    30
+   ],
+   "habitat": [
+    "cave",
+    "ruins",
+    "mine"
+   ],
+   "diet": "omnivore",
+   "role": "scavenger",
+   "note": "치명적 약점"
+  },
+  {
+   "id": "mon_fish_01",
+   "name": "물고기",
+   "floors": [
+    1,
+    100
+   ],
+   "habitat": [
+    "ocean",
+    "river",
+    "swamp"
+   ],
+   "diet": "omnivore",
+   "role": "prey",
+   "note": "물속 유일 자원"
+  },
+  {
+   "id": "mon_frog_01",
+   "name": "개구리",
+   "floors": [
+    1,
+    30
+   ],
+   "habitat": [
+    "swamp",
+    "river",
+    "forest"
+   ],
+   "diet": "carnivore",
+   "role": "prey",
+   "note": "독성 피부"
+  },
+  {
+   "id": "mon_bee_01",
+   "name": "독蜂",
+   "floors": [
+    1,
+    20
+   ],
+   "habitat": [
+    "forest",
+    "meadow"
+   ],
+   "diet": "herbivore",
+   "role": "swarm",
+   "note": "불에 약함"
+  },
+  {
+   "id": "mon_moth_01",
+   "name": "박쥐나방",
+   "floors": [
+    1,
+    30
+   ],
+   "habitat": [
+    "forest",
+    "cave"
+   ],
+   "diet": "herbivore",
+   "role": "prey",
+   "note": "빛에 끌림"
+  },
+  {
+   "id": "mon_beetle_01",
+   "name": "장수풍뎅이",
+   "floors": [
+    1,
+    25
+   ],
+   "habitat": [
+    "forest",
+    "grassland"
+   ],
+   "diet": "herbivore",
+   "role": "prey",
+   "note": "갑각 강함"
+  },
+  {
+   "id": "mon_jellyfish_01",
+   "name": "마녀 해파리",
+   "floors": [
+    76,
+    85
+   ],
+   "habitat": [
+    "ocean",
+    "deep"
+   ],
+   "diet": "carnivore",
+   "role": "predator",
+   "note": "불에 취약"
+  },
+  {
+   "id": "mon_crab_01",
+   "name": "거대 게",
+   "floors": [
+    76,
+    85
+   ],
+   "habitat": [
+    "ocean",
+    "coral",
+    "trench"
+   ],
+   "diet": "omnivore",
+   "role": "scavenger",
+   "note": "물에 약함"
+  },
+  {
+   "id": "mon_hawk_01",
+   "name": "매",
+   "floors": [
+    1,
+    30
+   ],
+   "habitat": [
+    "mountain",
+    "plains",
+    "forest"
+   ],
+   "diet": "carnivore",
+   "role": "hunter",
+   "note": "깃털 화염 취약"
+  },
+  {
+   "id": "mon_crow_01",
+   "name": "까마귀",
+   "floors": [
+    1,
+    40
+   ],
+   "habitat": [
+    "ruins",
+    "graveyard",
+    "forest"
+   ],
+   "diet": "omnivore",
+   "role": "scavenger",
+   "note": "빛에 약함"
+  },
+  {
+   "id": "mon_vine_01",
+   "name": "독덩굴",
+   "floors": [
+    11,
+    25
+   ],
+   "habitat": [
+    "forest",
+    "swamp"
+   ],
+   "diet": "none",
+   "role": "predator",
+   "note": "불에 타버림"
+  },
+  {
+   "id": "mon_fungus_01",
+   "name": "포자 버섯",
+   "floors": [
+    16,
+    25
+   ],
+   "habitat": [
+    "cave",
+    "fungus",
+    "swamp"
+   ],
+   "diet": "none",
+   "role": "decomposer",
+   "note": "불에 타버림"
+  },
+  {
+   "id": "mon_coral_01",
+   "name": "산호초",
+   "floors": [
+    81,
+    85
+   ],
+   "habitat": [
+    "coral",
+    "ocean"
+   ],
+   "diet": "none",
+   "role": "guardian",
+   "note": "백화 현상"
+  },
+  {
+   "id": "mon_snake_01",
+   "name": "독사",
+   "floors": [
+    1,
+    30
+   ],
+   "habitat": [
+    "desert",
+    "forest",
+    "swamp"
+   ],
+   "diet": "carnivore",
+   "role": "ambusher",
+   "note": "추위에 약함"
+  },
+  {
+   "id": "mon_mongoose_01",
+   "name": "몽구스",
+   "floors": [
+    1,
+    20
+   ],
+   "habitat": [
+    "grassland",
+    "forest"
+   ],
+   "diet": "carnivore",
+   "role": "hunter",
+   "note": "작은 체구"
+  },
+  {
+   "id": "mon_slime_blue_01",
+   "name": "슬라임(블루)",
+   "floors": [
+    1,
+    2
+   ],
+   "habitat": [
+    "ocean",
+    "cave"
+   ],
+   "diet": "omnivore",
+   "role": "decomposer",
+   "note": "화염·수해 +30%, 물리 칼질 저항"
+  },
+  {
+   "id": "mon_slime_red_01",
+   "name": "슬라임(레드)",
+   "floors": [
+    1,
+    2
+   ],
+   "habitat": [
+    "volcano",
+    "lava"
+   ],
+   "diet": "omnivore",
+   "role": "decomposer",
+   "note": "화염·수해 +30%, 물리 칼질 저항"
+  },
+  {
+   "id": "mon_slime_black_01",
+   "name": "블랙 슬라임",
+   "floors": [
+    1,
+    2
+   ],
+   "habitat": [
+    "abyss",
+    "deep"
+   ],
+   "diet": "mana",
+   "role": "corruptor",
+   "note": "화염·수해 +30%, 물리 칼질 저항"
+  }
+ ]
+}

@@ -1,0 +1,10 @@
+*.png filter=lfs diff=lfs merge=text -text
+*.jpg filter=lfs diff=lfs merge=text -text
+*.wav filter=lfs diff=lfs merge=text -text
+*.ogg filter=lfs diff=lfs merge=text -text
+*.mp3 filter=lfs diff=lfs merge=text -text
+*.ttf filter=lfs diff=lfs merge=text -text
+*.otf filter=lfs diff=lfs merge=text -text
+*.unity merge=unityyamlmerge
+*.prefab merge=unityyamlmerge
+*.asset merge=unityyamlmerge

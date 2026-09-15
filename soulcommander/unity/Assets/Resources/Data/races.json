@@ -1,0 +1,344 @@
+{
+  "$schema": "설계 카탈로그 — 플레이어블 종족 15종 · 계열 6종 · 아종 34종 (정본: design-docs/GDD_v8.0_00_확정사항.md #11·#12 + GDD_v8.0_01_등급_전투력.md §1)",
+  "meta": {
+    "docVersion": "GDD v8.0 (#11·#12 · 01 §1 기준)",
+    "updated": "2026-09-14",
+    "decision": "D-180 (플레이어블 13→15 — 오크·뱀파이어 부분 복귀)",
+    "capRules": {
+      "combatStatCapPct": 15,
+      "spdCapPct": 10,
+      "note": "동일 스탯 보정은 가산되되 전투 보정 스탯당 +15% 상한 (SPD +10%) — 출처: 구 Bestiary §7.1-6 (v8.0 정본 미등재, 수치 확인 필요). 일시 버프(전투 개시 X초)는 상한 제외."
+    },
+    "heroBaseStats": {
+      "hp": 500, "atk": 45, "def": 20, "aspd": 10, "mag": 20,
+      "mdef": 0, "pen": 0, "eva": 0, "cdmg": 0, "cri": 0,
+      "mana": 100, "spd_cast": 30, "sta": 80,
+      "status": "가안",
+      "note": "05 §7 13종 기준스탯 (2026-09-14). 필드스탯 = 기준 × (1+statMods%) × 직업계수(05 §4) × 등급계수(01 §2) × 레벨계수. ASPD/CRI/PEN/EVA/CDMG/SPD_CAST/STA는 등급계수 미적용. 플탐 튜닝."
+    }
+  },
+  "lineages": [
+    { "code": 0, "key": "human", "name": "인간 계열", "passive5": { "name": "적응력", "desc": "레벨업 경험치 +10% (비전투형 — 계정 전체 적용)" }, "members": ["race_human", "race_genasi"] },
+    { "code": 1, "key": "elf", "name": "엘프 계열", "passive5": { "name": "마력·감각", "desc": "궁극기 게이지 충전 +10%" }, "members": ["race_highelf", "race_woodelf", "race_darkelf", "race_seaelve"] },
+    { "code": 2, "key": "dwarf", "name": "드워프 계열", "passive5": { "name": "기술·제련", "desc": "제작 품질 +10% (영지 시너지 — 비전투형, 계정 전체 적용)" }, "members": ["race_dwarf", "race_gnome", "race_halfling"] },
+    { "code": 3, "key": "beast", "name": "짐승 계열", "passive5": { "name": "감각·근력", "desc": "SPD +5%" }, "members": ["race_felid", "race_houndkin", "race_tengu", "race_lizardman"] },
+    { "code": 4, "key": "warrior", "name": "전사 계열", "passive5": { "name": "근력·전투", "desc": "ATK +5%" }, "members": ["race_orc"], "note": "★2026-09-03 오크 부분 복귀로 1종 보유 (홉고블린·버그베어·고블린은 몬스터 유지)" },
+    { "code": 5, "key": "abyss", "name": "심연 계열", "passive5": { "name": "차원·비정상", "desc": "적 처치 시 HP 2% 회복" }, "members": ["race_vampire"], "note": "★2026-09-03 뱀파이어 부분 복귀로 1종 보유 (도플갱어·마인드 플레이어·기스양키는 몬스터 유지)" }
+  ],
+  "resonance": {
+    "tier3": { "condition": "동계열 영웅 3명 보유", "effect": "파티에 편성된 해당 계열 영웅 전원 HP/ATK +5%" },
+    "tier5": { "condition": "동계열 영웅 5명 보유", "effect": "계열 고유 패시브 해금 (lineages[].passive5)" },
+    "tier7": { "condition": "동계열 영웅 7명 보유", "effect": "해당 계열 영웅 궁극기 피해량 +20%" },
+    "note": "판정은 보유(소유) 기준, 버프 적용은 출격 멤버 기준 · 전투 중 사망 시 재계산 (v7.11 5.4)"
+  },
+  "races": [
+    {
+      "id": "race_human",
+      "name": "인간",
+      "lineage": "human",
+      "statMods": {},
+      "aptitude": null,
+      "racePassive": { "name": "만능 재능", "desc": "모든 스탯 +3% (버시틸리티)", "type": "combat" },
+      "elemental": null,
+      "elementAffinity": null,
+      "visual": { "dcssSource": "player/base/human_male.png", "tintRGB": [220, 205, 185], "scale": 1.0, "traits": ["둥근 귀", "M/F 변형"] },
+      "namePool": { "dir": "보편적 2음절", "examples": ["시온", "유진", "카이"] },
+      "relations": "전 종족과 친구·연인 가능 (세계의 다리)",
+      "unlock": { "code": 1, "window": "런칭" },
+      "rankGate": null,
+      "subraces": [
+        { "name": "초원의 인간", "statMods": { "aspd": 3 }, "passive": { "name": "투지", "desc": "HP 20%↓ 시 5초 ATK/DEF +10%" }, "ref": "PoE Meadow (Thyrtan)" },
+        { "name": "바다의 인간", "statMods": { "hp": 3 }, "passive": { "name": "항해사", "desc": "수해 상성 불리 70→75% 완화 · 물가 회복 +10%" }, "ref": "PoE Ocean (Calbandra)" },
+        { "name": "황야의 인간", "statMods": { "atk": 3 }, "passive": { "name": "생존 본능", "desc": "야생 지형 회피 +5%" }, "ref": "PoE Savannah (Natlan)" }
+      ]
+    },
+    {
+      "id": "race_genasi",
+      "name": "정령족",
+      "lineage": "human",
+      "statMods": {},
+      "aptitude": "연구 +",
+      "racePassive": { "name": "원소 혈통", "desc": "아종별 원소 패시브 (서브레이스 참조)", "type": "combat" },
+      "elemental": { "favorablePct": 155, "unfavorablePct": 65, "note": "5.3 매트릭스 예외 — 유리 150%→155% · 불리 70%→65% (고정 수치 조정)" },
+      "elementAffinity": { "weighted": ["fire", "water", "air", "earth", "moon"] },
+      "visual": { "dcssSource": "monster/nonliving/fire_elemental_new.png", "tintRGB": [230, 160, 80], "scale": 1.0, "traits": ["원소별 피부/머리 (불=주황 물=파랑 바람=보라 대지=초록 달=은빛)", "뿔 (curled)", "발광오라/룬문양 서브"] },
+      "namePool": { "dir": "원소 감성", "examples": ["이그나", "템페스트", "아쿠아"] },
+      "relations": "무소속 성향 (원소 정령 친화)",
+      "unlock": { "code": 1, "window": "런칭" },
+      "rankGate": null,
+      "subraces": [
+        { "name": "불의 정령족", "statMods": { "atk": 3 }, "passive": { "name": "전장의 제련", "desc": "HP 20%↓ 시 ATK +15% (화염)" }, "ref": "NWN2 Fire Genasi × PoE Fire Godlike" },
+        { "name": "대지의 정령족", "statMods": { "def": 5 }, "passive": { "name": "돌의 심장", "desc": "상태이상 저항 +10%" }, "ref": "NWN2 Earth Genasi × PoE Nature" },
+        { "name": "물의 정령족", "statMods": { "hp": 3 }, "passive": { "name": "파도와 함께", "desc": "수해 상성 유리 유지 · 물가 회복 +10%" }, "ref": "NWN2 Water Genasi × PoE Marine" },
+        { "name": "바람의 정령족", "statMods": { "aspd": 5 }, "passive": { "name": "바람의 걸음", "desc": "이동 중 회피 +5%" }, "ref": "NWN2 Air Genasi × PoE Avian" },
+        { "name": "달의 정령족", "statMods": { "hpRegenPer4sPct": 1 }, "passive": { "name": "은빛 파도", "desc": "회복 스킬 효과 +10%" }, "ref": "PoE Moon Godlike (Silver Tide)" }
+      ]
+    },
+    {
+      "id": "race_highelf",
+      "name": "하이 엘프",
+      "lineage": "elf",
+      "statMods": { "mag": 10 },
+      "aptitude": "연구 +",
+      "racePassive": { "name": "비전 유산", "desc": "스킬 쿨타임 -5%", "type": "combat" },
+      "elemental": null,
+      "elementAffinity": null,
+      "visual": { "dcssSource": "player/base/elf_male.png", "tintRGB": [210, 200, 130], "scale": 1.0, "traits": ["긴 뾰족 귀 (위로)", "금발", "보라 눈"] },
+      "namePool": { "dir": "부드러운 ㄹ·ㄴ", "examples": ["리안", "엘라린"] },
+      "relations": "드워프와 원수 (앙숙)",
+      "unlock": { "code": 1, "window": "런칭" },
+      "rankGate": null,
+      "subraces": [
+        { "name": "태양 엘프", "statMods": { "mag": 3 }, "passive": { "name": "일광의 주문", "desc": "빛 속성 피해 +10%" }, "ref": "NWN2 Sun Elf" },
+        { "name": "달 엘프", "statMods": { "cool": -3 }, "passive": { "name": "월광의 은신", "desc": "야간 은신 +5%" }, "ref": "NWN2 Moon Elf" }
+      ]
+    },
+    {
+      "id": "race_woodelf",
+      "name": "우드 엘프",
+      "lineage": "elf",
+      "statMods": { "aspd": 10 },
+      "aptitude": "요리 +",
+      "racePassive": { "name": "원거리 우위", "desc": "5m 이상 원거리 CRI +5% (PoE Distant Advantage)", "type": "combat" },
+      "elemental": null,
+      "elementAffinity": null,
+      "visual": { "dcssSource": "monster/elf_new.png", "tintRGB": [90, 150, 80], "scale": 1.0, "traits": ["뾰족 귀 (약간 위)", "초록 머리/눈"] },
+      "namePool": { "dir": "자연 친화", "examples": ["리프", "실바", "아리아"] },
+      "relations": "드워프와 원수 (앙숙)",
+      "unlock": { "code": 1, "window": "런칭" },
+      "rankGate": null,
+      "subraces": [
+        { "name": "심림 엘프", "statMods": { "cri": 3 }, "passive": { "name": "숲의 은신", "desc": "식생 지형 은신 +5%" }, "ref": "PoE Wood (Sceltrfolc)" },
+        { "name": "초원 엘프", "statMods": { "hp": 3 }, "passive": { "name": "야생 추적", "desc": "야생 지형 이동 속도 +10%" }, "ref": "Solasta Sylvan" }
+      ]
+    },
+    {
+      "id": "race_darkelf",
+      "name": "다크 엘프",
+      "lineage": "elf",
+      "statMods": { "cri": 5, "mag": 5 },
+      "aptitude": "연구 +",
+      "racePassive": { "name": "암흑 시야", "desc": "어둠 지형 치명타 +5%", "type": "combat" },
+      "elemental": null,
+      "elementAffinity": null,
+      "visual": { "dcssSource": "player/base/deep_elf_male.png", "tintRGB": [120, 90, 160], "scale": 1.0, "traits": ["뾰족 귀 (아래로)", "보라 피부", "보라/빨강 눈"] },
+      "namePool": { "dir": "어두운 감성", "examples": ["벨리안", "드레아"] },
+      "relations": "하이 엘프와 원수 (분파)",
+      "unlock": { "code": 1, "window": "런칭" },
+      "rankGate": null,
+      "subraces": [
+        { "name": "지하 엘프 (드로우)", "statMods": { "cri": 2 }, "passive": { "name": "마법 저항", "desc": "마법 피해 -5%" }, "ref": "NWN2 Drow" },
+        { "name": "심연 엘프", "statMods": { "mag": 3 }, "passive": { "name": "심연의 속삭임", "desc": "정신 공격 저항 +10%" }, "ref": "NWN2 Drow (심연 분파)" }
+      ]
+    },
+    {
+      "id": "race_seaelve",
+      "name": "시 엘프",
+      "lineage": "elf",
+      "statMods": { "hp": 5, "mag": 5 },
+      "aptitude": "요리 +",
+      "racePassive": { "name": "해양 적응", "desc": "수중/물가 전투 회피 +5%", "type": "combat" },
+      "elemental": null,
+      "elementAffinity": null,
+      "visual": { "dcssSource": "player/base/merfolk_male.png", "tintRGB": [80, 150, 180], "scale": 1.0, "traits": ["푸른 지느러미 귀", "청록 피부", "지느러미 (fin)", "롱이어 (long ears)"] },
+      "namePool": { "dir": "물결 감성", "examples": ["마린", "리아네"] },
+      "relations": "인어족과 친구",
+      "unlock": { "code": 2, "window": "업데이트 1~4" },
+      "rankGate": null,
+      "subraces": [
+        { "name": "산호 엘프", "statMods": { "hp": 3 }, "passive": { "name": "산호 방패", "desc": "수해 피해 -10%" }, "ref": "해양 적응 (PoE Aumaua 영감)" },
+        { "name": "폭풍 엘프", "statMods": { "mag": 3 }, "passive": { "name": "폭풍 항해", "desc": "이동 속도 +5%" }, "ref": "폭풍 추종자 (고유 설계)" }
+      ]
+    },
+    {
+      "id": "race_dwarf",
+      "name": "드워프",
+      "lineage": "dwarf",
+      "statMods": { "def": 10, "hp": 5 },
+      "aptitude": "대장 ++",
+      "racePassive": { "name": "강인한 체질", "desc": "독·질병 저항 +20% (PoE Hale and Hardy)", "type": "combat" },
+      "elemental": null,
+      "elementAffinity": null,
+      "visual": { "dcssSource": "player/base/dwarf_male.png", "tintRGB": [150, 110, 70], "scale": 0.92, "traits": ["작고 둥근 귀 (투구 아래)", "긴 수염", "땋은 머리"] },
+      "namePool": { "dir": "강한 자음", "examples": ["그림", "브론", "토르빈"] },
+      "relations": "엘프와 원수 (앙숙)",
+      "unlock": { "code": 1, "window": "런칭" },
+      "rankGate": null,
+      "subraces": [
+        { "name": "산악 드워프", "statMods": { "def": 5 }, "passive": { "name": "요새의 뿌리", "desc": "기절 저항 +15%" }, "ref": "PoE Mountain × Solasta Hill" },
+        { "name": "빙원 드워프", "statMods": { "hp": 5 }, "passive": { "name": "사냥꾼의 본능", "desc": "야생 지형 ATK +5%" }, "ref": "PoE Boreal × Solasta Snow" }
+      ]
+    },
+    {
+      "id": "race_gnome",
+      "name": "노움",
+      "lineage": "dwarf",
+      "statMods": { "mag": 5, "cool": -5 },
+      "aptitude": "연금 ++, 연구 +",
+      "racePassive": { "name": "기계 직감", "desc": "제작(연금/대장) 시간 -10%", "type": "noncombat" },
+      "elemental": null,
+      "elementAffinity": null,
+      "visual": { "dcssSource": "player/base/gnome_male.png", "tintRGB": [180, 160, 90], "scale": 0.85, "traits": ["크고 둥근 귀", "갈색 머리"] },
+      "namePool": { "dir": "경쾌한", "examples": ["핀", "틴커", "밉"] },
+      "relations": "하프링과 친구",
+      "unlock": { "code": 1, "window": "런칭" },
+      "rankGate": null,
+      "subraces": [
+        { "name": "바위 노움", "statMods": { "mag": 3 }, "passive": { "name": "발명가", "desc": "제작 성공률 +5%" }, "ref": "Solasta Rock × NWN2 Rock" },
+        { "name": "그림자 노움", "statMods": { "eva": 3 }, "passive": { "name": "은신 재주", "desc": "은신 감지 내성 +10%" }, "ref": "Solasta Shadow × NWN2 Svirfneblin" }
+      ]
+    },
+    {
+      "id": "race_halfling",
+      "name": "하프링",
+      "lineage": "dwarf",
+      "statMods": { "aspd": 8, "eva": 5 },
+      "aptitude": "요리 ++",
+      "racePassive": { "name": "행운의 발걸음", "desc": "함정 회피 +10%", "type": "combat" },
+      "elemental": null,
+      "elementAffinity": null,
+      "visual": { "dcssSource": "player/base/halfling_male.png", "tintRGB": [190, 150, 110], "scale": 0.88, "traits": ["크고 둥근 귀", "갈색 곱슬머리", "샌들"] },
+      "namePool": { "dir": "소박한", "examples": ["샘", "피피", "로니"] },
+      "relations": "노움과 친구",
+      "unlock": { "code": 1, "window": "런칭" },
+      "rankGate": null,
+      "subraces": [
+        { "name": "섬 하프링", "statMods": { "hp": 3 }, "passive": { "name": "항해의 재주", "desc": "물가/선박 이벤트 보너스" }, "ref": "Solasta Island" },
+        { "name": "습지 하프링", "statMods": { "eva": 3 }, "passive": { "name": "습지 은신", "desc": "은신 +5%" }, "ref": "Solasta Marsh" }
+      ]
+    },
+    {
+      "id": "race_felid",
+      "name": "묘인족",
+      "lineage": "beast",
+      "statMods": { "aspd": 8, "cri": 3 },
+      "aptitude": "요리 +",
+      "racePassive": { "name": "9개의 생명", "desc": "치명 피해 시 1회 HP 10% 생존 (쿨 3분)", "type": "combat" },
+      "elemental": null,
+      "elementAffinity": null,
+      "visual": { "dcssSource": "player/felids/cat_6.png", "tintRGB": [210, 140, 60], "scale": 0.95, "traits": ["삼각형 고양이 귀 + 내부 분홍", "주황 털", "꼬리"] },
+      "namePool": { "dir": "야수 감성", "examples": ["나비", "미로", "사야"] },
+      "relations": "견인족과 원수 (천적)",
+      "unlock": { "code": 1, "window": "런칭" },
+      "rankGate": null,
+      "subraces": [
+        { "name": "표범 묘인족", "statMods": { "cri": 2 }, "passive": { "name": "매복", "desc": "전투 시작 첫 공격 CRI +10%" }, "ref": "Felid (사냥 분파)" },
+        { "name": "살쾡이 묘인족", "statMods": { "eva": 3 }, "passive": { "name": "사뿐한 걸음", "desc": "이동 속도 +5%" }, "ref": "Felid (경량 분파)" }
+      ]
+    },
+    {
+      "id": "race_houndkin",
+      "name": "견인족",
+      "lineage": "beast",
+      "statMods": { "hp": 5, "atk": 5 },
+      "aptitude": "간호 +",
+      "racePassive": { "name": "충성의 수호", "desc": "아군 HP 30%↓ 시 주변 아군 DEF +5%", "type": "combat" },
+      "elemental": null,
+      "elementAffinity": null,
+      "visual": { "dcssSource": "monster/animals/hound.png", "tintRGB": [140, 130, 120], "scale": 1.0, "traits": ["처진 개 귀 (아래로)", "갈색 털", "꼬리"] },
+      "namePool": { "dir": "충성 감성", "examples": ["루트", "바크", "하운드"] },
+      "relations": "묘인족과 원수 (천적)",
+      "unlock": { "code": 1, "window": "런칭" },
+      "rankGate": null,
+      "subraces": [
+        { "name": "사냥개 견인족", "statMods": { "atk": 3 }, "passive": { "name": "냄새 추적", "desc": "은신 적 감지 +10%" }, "ref": "Hound (사냥 분파)" },
+        { "name": "경비견 견인족", "statMods": { "def": 3 }, "passive": { "name": "영토 경계", "desc": "전투 시작 위협도 +20%" }, "ref": "Hound (수호 분파)" }
+      ]
+    },
+    {
+      "id": "race_tengu",
+      "name": "조인족",
+      "lineage": "beast",
+      "statMods": { "aspd": 10 },
+      "aptitude": null,
+      "racePassive": { "name": "상승 기류", "desc": "전투 개시 5초 SPD +10%", "type": "combat" },
+      "elemental": null,
+      "elementAffinity": null,
+      "visual": { "dcssSource": "player/base/tengu_wingless_brown_male.png", "tintRGB": [120, 140, 170], "scale": 1.0, "traits": ["깃털 귀 (위로)", "회색 깃털", "날개"] },
+      "namePool": { "dir": "하늘 감성", "examples": ["에일", "윙", "페더"] },
+      "relations": "자유 성향, 고립",
+      "unlock": { "code": 3, "window": "업데이트 5~8" },
+      "rankGate": null,
+      "subraces": [
+        { "name": "독수리 조인족", "statMods": { "atk": 3 }, "passive": { "name": "급강하", "desc": "원거리→근접 전환 첫 공격 +20%" }, "ref": "Tengu (맹금 분파)" },
+        { "name": "까마귀 조인족", "statMods": { "mag": 3 }, "passive": { "name": "악운의 울음", "desc": "적 CRI -3% (오라)" }, "ref": "Tengu (지혜 분파)" }
+      ]
+    },
+    {
+      "id": "race_lizardman",
+      "name": "리자드맨",
+      "lineage": "beast",
+      "statMods": { "def": 8, "hp": 5 },
+      "aptitude": "연구 +",
+      "racePassive": { "name": "비늘 갑옷", "desc": "물리 피해 -5%", "type": "combat" },
+      "elemental": null,
+      "elementAffinity": null,
+      "visual": { "dcssSource": "monster/animals/giant_lizard.png", "tintRGB": [110, 160, 90], "scale": 1.0, "traits": ["뿔 (머리 양옆)", "초록 비늘", "노란 눈", "꼬리"] },
+      "namePool": { "dir": "냉철한", "examples": ["스케일", "크록", "바실"] },
+      "relations": "냉철 성향, 원수 없음",
+      "unlock": { "code": 1, "window": "런칭" },
+      "rankGate": null,
+      "subraces": [
+        { "name": "늪지 리자드맨", "statMods": { "hp": 3 }, "passive": { "name": "수중 잠복", "desc": "수중 이동 +10%" }, "ref": "Yuan-Ti 영감 (늪지)" },
+        { "name": "사막 리자드맨", "statMods": { "atk": 3 }, "passive": { "name": "내열 비늘", "desc": "화염 피해 -10%" }, "ref": "Yuan-Ti 영감 (사막)" }
+      ]
+    },
+    {
+      "id": "race_orc",
+      "name": "오크",
+      "lineage": "warrior",
+      "promoted": "2026-09-03",
+      "promotionNote": "D-180 — 몬스터 mon_orc('타락한 분파')와 분파 분리 · 플레이어블은 '비타락 부족'. 해금 ④ 이후 소환 가능.",
+      "statMods": { "hp": 8, "atk": 8 },
+      "aptitude": "대장 +",
+      "racePassive": { "name": "포악한 맹공", "desc": "근접(1m 이내) 공격 피해 +8%", "type": "combat" },
+      "elemental": null,
+      "elementAffinity": { "up": ["earth", "fire"], "down": ["water", "light"], "note": "몬스터판 '수해(물) +20% 취약'과 정합 — 물 공격에 취약 성향" },
+      "visual": { "dcssSource": "player/base/orc_male.png (후보)", "tintRGB": [90, 140, 75], "scale": 1.05, "traits": ["녹색 피부", "하단 송곳니(엄니)", "대형 체형 (파티 프레임 한도 1.10)", "흉터/전쟁 문신 서브"] },
+      "namePool": { "dir": "부족 전사 2음절", "examples": ["그로크", "카르그", "우락"] },
+      "relations": "엘프와 원수 (앙숙) · 인간/드워프와 '전장의 형제' 이벤트 재활성 · 고블린노이드 지배는 몬스터 유지",
+      "unlock": { "code": 4, "window": "업데이트 9~12" },
+      "rankGate": null,
+      "jobAffinity": { "up": ["전사", "수호자"], "note": "v7.11 5.2 '오크→전사 ↑' 어필리티 정식화" },
+      "subraces": [
+        { "name": "산악 오크", "statMods": { "def": 3 }, "passive": { "name": "무쇠 의지", "desc": "공포·매혹 저항 +10%" }, "ref": "D&D 오크 부족 (산악 요새 분파)" },
+        { "name": "대초원 오크", "statMods": { "atk": 3 }, "passive": { "name": "부족의 함성", "desc": "전투 개시 5초 파티 ATK +3%" }, "ref": "D&D 오크 부족 (평원 이동 분파)" }
+      ]
+    },
+    {
+      "id": "race_vampire",
+      "name": "뱀파이어",
+      "lineage": "abyss",
+      "promoted": "2026-09-03",
+      "promotionNote": "D-180 — 몬스터 mon_vampire(야생 개체)와 분리 · 플레이어블은 '고귀 혈족'. 등급 게이트 없음 (GDD v8.0 #8 등급×종족 완전 독립).",
+      "statMods": { "mag": 8, "cri": 3 },
+      "aptitude": "연구 +",
+      "racePassive": { "name": "어둠의 포옹", "desc": "어둠 속성 피해 +10%", "type": "combat" },
+      "elemental": { "lightWeaknessPct": 10, "note": "종족 예외 — 언데드의 대가로 신성(빛) 공격 +10% 추가 피해 (정령족 상성 예외와 같은 '종족 예외' 패밀리)" },
+      "elementAffinity": { "up": ["dark"], "down": ["light"] },
+      "undeadException": {
+        "healNormal": true,
+        "reviveOk": true,
+        "noStatusImmunity": true,
+        "lightWeaknessPct": 10,
+        "note": "몬스터 언데드 규칙(힐 역전) 미적용 — 힐·부활·시너지 정상 작동. 출혈/독 면역 없음(표준 적용). Permadeath 동일."
+      },
+      "visual": { "dcssSource": "monster/undead/vampire_mage_new.png (후보 — 휴머노이드)", "tintRGB": [205, 190, 215], "scale": 1.0, "traits": ["창백한 피부", "붉은 눈", "날카로운 송곳니", "하이칼라 망토/혈석 장신구 서브"] },
+      "namePool": { "dir": "고귀 귀족", "examples": ["세바스찬", "루크레치아", "아드리안"] },
+      "relations": "인간과 스승(제자 양성) · 다크 엘프와 동업(추출소 재활성) · 언데드 몬스터와 동족 성향",
+      "unlock": { "code": 5, "window": "업데이트 13~16" },
+      "rankGate": null,
+      "jobAffinity": { "up": ["마법사", "암살자"], "note": "다크 엘프(암살자 우선)와 다른 '혈마법 캐스터' 우선" },
+      "subraces": [
+        { "name": "고귀한 뱀파이어", "statMods": { "mag": 3 }, "passive": { "name": "피의 포옹", "desc": "흡혈 효과 +20%" }, "ref": "고유 설계 (언데드 귀족 — 혈족 가문)" },
+        { "name": "야행 뱀파이어", "statMods": { "atk": 3 }, "passive": { "name": "야행 포식", "desc": "어둠 지형 ATK +5%" }, "ref": "고유 설계 (혈족 사냥 분파)" }
+      ]
+    }
+  ],
+  "subraceCount": 34,
+  "notes": [
+    "표기 변경 (D-183, 2026-09-03): 제나시 → 정령족 — 설계 문서·데이터 name 필드 한정. 슬러그 race_genasi · 에셋 키 · 영문 레퍼런스 Genasi는 유지.",
+    "오크·뱀파이어 DCSS 소스는 후보 — 최종 스프라이트는 아트 트랙 확정 (art/map_dcss.py RACES 15 반영 후속).",
+    "subrace_code 범위: 0~29 → 0~33 (설계 선반영 — DDL 반영은 기존 규칙대로 후속)."
+  ]
+}
