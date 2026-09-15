@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -137,9 +138,10 @@ namespace SoulCommander.Core
 
         private void OnEnterHub()
         {
-            // 보유 영웅 전멸 → 신규 세이브 + 신규 영웅 (00 L13 #4 부활금지 · L12 #3 교체불가)
+            // 보유 영웅 전멸 → 신규 세이브 + 신규 영웅 (00 L13 #4 부활금지 · L12 #3 교첵불가)
             if (Permadeath.IsRunOver(_data)) StartNewRun();
             Party.Sanitize(_data);
+            EstateSystem.AdvanceTime(_data, DateTime.UtcNow);
             RefreshHub();
         }
 
@@ -160,6 +162,8 @@ namespace SoulCommander.Core
             _statusLine.text = $"보유 영웅 {_data.roster.Count}명 · 출격 {partyCount}/{Party.MaxSize}  |  현재층 {floor}{gkTag}\n" +
                                $"파티 {HeroPower.Format(partyCp)}  ·  {floor}층 권장 CP {HeroPower.N(recommendedCp)} (입장 제한 없음)\n" +
                                $"AP {_data.ap}/{GameRules.MaxAp}  ·  골드 {_data.gold}  ·  영혼석(하) {_data.soulStones}  ·  경험치 {_data.expPool}\n" +
+                               $"영지: 인구 {_data.estate.population}/{EstateSystem.MaxPopulation(_data)} · 식량 {_data.estate.food} · 민심 {_data.estate.morale} · 주택 {_data.estate.housingCount}동\n" +
+                               $"재료: 약초 {_data.estate.herb} · 목재 {_data.estate.wood} · 광석 {_data.estate.ore} · 채집대 {EstateSystem.MaxGatheringTeams(_data)}팀\n" +
                                $"통계: 도전 {_data.runsStarted}회 · 패배 {_data.runsLost}회 · 추모 {_data.memorial.Count}명";
             _hpBar.text = ResonanceSummary();
 
@@ -642,6 +646,8 @@ namespace SoulCommander.Core
             string jackpotNote = _lastReward.Jackpot > 0 ? $" · 잭팟 +{_lastReward.Jackpot}" : "";
             _statusLine.text = $"{_runFloor}층 {result}{advance}  ·  보상: 골드 +{_lastReward.Gold} · 영혼석(하) +{_lastReward.SoulStones}{jackpotNote} · 경험치 +{_lastReward.Exp}\n" +
                                $"보유: 골드 {_data.gold} · 영혼석(하) {_data.soulStones} · 경험치 {_data.expPool} · AP {_data.ap}/{GameRules.MaxAp}\n" +
+                               $"영지: 인구 {_data.estate.population}/{EstateSystem.MaxPopulation(_data)} · 식량 {_data.estate.food} · 민심 {_data.estate.morale} · 주택 {_data.estate.housingCount}동\n" +
+                               $"재료: 약초 {_data.estate.herb} · 목재 {_data.estate.wood} · 광석 {_data.estate.ore} · 채집대 {EstateSystem.MaxGatheringTeams(_data)}팀\n" +
                                $"통계: 도전 {_data.runsStarted}회 · 패배 {_data.runsLost}회  |  세이브: {_save.FilePath}";
 
             var sb = new System.Text.StringBuilder();

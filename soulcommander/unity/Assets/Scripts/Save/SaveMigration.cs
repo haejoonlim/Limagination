@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using SoulCommander.Core;
+using SoulCommander.Data;
 
 namespace SoulCommander.Save
 {
@@ -30,6 +32,11 @@ namespace SoulCommander.Save
             if (d.schemaVersion == 4)
             {
                 MigrateV4ToV5(d);
+                migrated = true;
+            }
+            if (d.schemaVersion == 5)
+            {
+                MigrateV5ToV6(d);
                 migrated = true;
             }
             EnsureCollections(d);
@@ -107,6 +114,39 @@ namespace SoulCommander.Save
             Debug.Log("[SaveMigration] schemaVersion 4 → 5");
         }
 
+        private static void MigrateV5ToV6(SaveData d)
+        {
+            var estateData = DataLoader.LoadEstate();
+            var pop = estateData?.population;
+            var morale = estateData?.morale;
+            d.estate = new EstateState
+            {
+                population = pop?.initial ?? 30,
+                food = 0,
+                morale = morale?.initial ?? 50,
+                housingCount = 3,
+                currentStageId = "S1",
+                lastTickUtc = DateTime.UtcNow.ToString("o"),
+                facilities = new List<FacilityState>(),
+                activeEdicts = new List<string>()
+            };
+            if (estateData?.facilities != null)
+            {
+                foreach (var f in estateData.facilities)
+                {
+                    d.estate.facilities.Add(new FacilityState
+                    {
+                        id = f.id,
+                        level = f.initial_level,
+                        built = f.initial_level > 0,
+                        operatorHeroId = null
+                    });
+                }
+            }
+            d.schemaVersion = 6;
+            Debug.Log("[SaveMigration] schemaVersion 5 → 6");
+        }
+
         private static void EnsureCollections(SaveData d)
         {
             if (d.log == null) d.log = new List<string>();
@@ -114,6 +154,37 @@ namespace SoulCommander.Save
             if (d.memorial == null) d.memorial = new List<MemorialEntry>();
             if (d.party == null) d.party = new List<string>();
             if (d.inventory == null) d.inventory = new List<EquipmentItem>();
+            if (d.estate == null)
+            {
+                MigrateV5ToV6(d);
+            }
+            else
+            {
+                var estateData = DataLoader.LoadEstate();
+                if (d.estate.facilities == null || d.estate.facilities.Count == 0)
+                {
+                    if (estateData?.facilities != null)
+                    {
+                        foreach (var f in estateData.facilities)
+                        {
+                            d.estate.facilities.Add(new FacilityState
+                            {
+                                id = f.id,
+                                level = f.initial_level,
+                                built = f.initial_level > 0,
+                                operatorHeroId = null
+                            });
+                        }
+                    }
+                }
+                if (d.estate.morale <= 0 && estateData?.morale?.initial > 0) d.estate.morale = estateData.morale.initial;
+                if (d.estate.population <= 0 && estateData?.population?.initial > 0) d.estate.population = estateData.population.initial;
+                if (d.estate.housingCount <= 0) d.estate.housingCount = 3;
+                if (string.IsNullOrEmpty(d.estate.lastTickUtc)) d.estate.lastTickUtc = DateTime.UtcNow.ToString("o");
+                if (d.estate.gatheringTeams == null) d.estate.gatheringTeams = new List<GatheringTeamState>();
+                if (d.estate.activeEdicts == null) d.estate.activeEdicts = new List<string>();
+                if (string.IsNullOrEmpty(d.estate.currentStageId)) d.estate.currentStageId = "S1";
+            }
             foreach (var h in d.roster)
             {
                 if (h.skillRarities == null) h.skillRarities = new List<int>();

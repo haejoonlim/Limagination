@@ -65,6 +65,17 @@ namespace SoulCommander.Tests
             Assert.AreEqual(0, d.inventory.Count);
             // v5: 직업 기본값 전사
             Assert.AreEqual(Job.Warrior, d.roster[0].job);
+            // v6: 영지 상태 초기화
+            Assert.IsNotNull(d.estate);
+            Assert.AreEqual(30, d.estate.population);
+            Assert.AreEqual(50, d.estate.morale);
+            Assert.AreEqual(3, d.estate.housingCount);
+            Assert.AreEqual("S1", d.estate.currentStageId);
+            Assert.IsNotNull(d.estate.facilities);
+            Assert.AreEqual(12, d.estate.facilities.Count);
+            Assert.IsTrue(d.estate.facilities.Exists(f => f.id == "summon_altar" && f.built));
+            Assert.IsTrue(d.estate.facilities.Exists(f => f.id == "hospital" && f.built));
+            Assert.IsFalse(string.IsNullOrEmpty(d.estate.lastTickUtc));
 
             // 재저장 후 다시 로드해도 v2 그대로
             sm.Save(d);

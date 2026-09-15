@@ -10,6 +10,7 @@ namespace SoulCommander.Data
         private static RacesRoot _racesCache;
         private static MonstersRoot _monstersCache;
         private static EquipmentRoot _equipmentCache;
+        private static EstateRoot _estateCache;
 
         public static RacesRoot LoadRaces()
         {
@@ -57,6 +58,36 @@ namespace SoulCommander.Data
             return _equipmentCache;
         }
 
+        public static EstateRoot LoadEstate()
+        {
+            if (_estateCache != null) return _estateCache;
+            var ta = Resources.Load<TextAsset>("Data/estate");
+            if (ta == null)
+            {
+                Debug.LogError("[DataLoader] Resources/Data/estate.json missing");
+                _estateCache = new EstateRoot
+                {
+                    meta = new EstateMeta { schema_version = "0.0" },
+                    facilities = new List<EstateFacilityEntry>(),
+                    population = new EstatePopulation(),
+                    food = new EstateFood(),
+                    morale = new EstateMorale(),
+                    tax = new EstateTax(),
+                    stages = new List<EstateStage>()
+                };
+                return _estateCache;
+            }
+            _estateCache = JsonUtility.FromJson<EstateRoot>(ta.text);
+            if (_estateCache == null) _estateCache = new EstateRoot();
+            if (_estateCache.facilities == null) _estateCache.facilities = new List<EstateFacilityEntry>();
+            if (_estateCache.population == null) _estateCache.population = new EstatePopulation();
+            if (_estateCache.food == null) _estateCache.food = new EstateFood();
+            if (_estateCache.morale == null) _estateCache.morale = new EstateMorale();
+            if (_estateCache.tax == null) _estateCache.tax = new EstateTax();
+            if (_estateCache.stages == null) _estateCache.stages = new List<EstateStage>();
+            return _estateCache;
+        }
+
         // 영웅 공통 기준스탯 (races.json meta.heroBaseStats — 가안). 없거나 0 이면 null.
         public static HeroBaseStats GetHeroBaseStats()
         {
@@ -93,6 +124,7 @@ namespace SoulCommander.Data
             _racesCache = null;
             _monstersCache = null;
             _equipmentCache = null;
+            _estateCache = null;
         }
     }
 }

@@ -216,4 +216,94 @@ namespace SoulCommander.Data
 
         private static int Round(float v) => (int)System.Math.Round(v);
     }
+
+    // estate.json — 영지 시설 12종 + 인구·식량·민심·세금 상수 (GDD_v8.0_04_영지.md §3)
+    [Serializable]
+    public class EstateMeta
+    {
+        public string schema_version;
+    }
+
+    [Serializable]
+    public class EstateFacilityEntry
+    {
+        public string id;
+        public string name_ko;
+        public int unlock_floor;
+        public int build_cost;
+        public bool operate_required;
+        public int initial_level;
+        public int max_level;
+    }
+
+    [Serializable]
+    public class EstatePopulation
+    {
+        public int initial;
+        public List<int> max_by_stage;
+        public float natural_growth_rate_per_island_day;
+        public int housing_beds_per_building;
+    }
+
+    [Serializable]
+    public class EstateFood
+    {
+        public int consumption_per_pop_per_island_day;
+    }
+
+    [Serializable]
+    public class EstateMorale
+    {
+        public int initial;
+        public int min;
+        public int max;
+        public float production_bonus_factor;
+    }
+
+    [Serializable]
+    public class EstateTax
+    {
+        public int gold_per_pop_per_island_day;
+    }
+
+    [Serializable]
+    public class EstateGatheringYield
+    {
+        public int food;
+        public int herb;
+        public int wood;
+        public int ore;
+    }
+
+    [Serializable]
+    public class EstateGathering
+    {
+        public int team_size;
+        public List<int> max_teams_by_altar_level;
+        public int cooldown_island_hours;
+        public EstateGatheringYield base_yield;
+        public string floor_multiplier_formula;
+    }
+
+    [Serializable]
+    public class EstateStage
+    {
+        public string id;
+        public int unlock_floor;
+        public int expansion_cost;
+        public int max_population;
+    }
+
+    [Serializable]
+    public class EstateRoot
+    {
+        public EstateMeta meta;
+        public List<EstateFacilityEntry> facilities;
+        public EstatePopulation population;
+        public EstateFood food;
+        public EstateMorale morale;
+        public EstateTax tax;
+        public EstateGathering gathering;
+        public List<EstateStage> stages;
+    }
 }
