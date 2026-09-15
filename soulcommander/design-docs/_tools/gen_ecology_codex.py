@@ -520,11 +520,21 @@ html = """<!DOCTYPE html>
     <div class="empty hidden" id="dexempty">검색 결과가 없습니다 — 다른 표제어로 찾아보세요.</div>
   </section>
 
-  <!-- ② 바이옴 -->
+  <!-- ② 바이옴 (사전형) -->
   <section id="panel-biome" class="panel hidden">
-    <h2>바이옴 생태 카드 <span class="sub">근원자원 → 먹이사슬 3계층 · 실선=현행종 / 점선=예정종</span></h2>
-    <p class="lead">각 카드는 한 바이옴의 "생태 머리말"이다. 근원자원(맨 아래층)이 수용력 K를 정하고, K가 개체수를 정하고, 개체수가 사슬 전체를 정한다.</p>
-    <div id="cards"></div>
+    <h2>바이옴 사전 <span class="sub">20항목 · 표제어 검색 · 상세 팝업 — 종사전과 같은 방식</span></h2>
+    <p class="lead">각 항목은 한 바이옴의 "생태 머리말"이다. 근원자원이 수용력 K를 정하고, K가 개체수를 정하고, 개체수가 사슬 전체를 정한다. 카드를 <b>클릭</b>하면 사전 항목(기후·계수·서식종 전원·시뮬 연동)이 열린다.</p>
+    <div class="dexbar">
+      <input id="bioQ" placeholder="표제어 검색 (이름·서식종·근원자원…)">
+      <select id="bioG"><option value="all">전체 그룹</option><option value="g1">G1 하부 (1~50)</option><option value="g2">G2 중부 (51~95)</option><option value="g3">G3 정점 (96~100)</option></select>
+      <span class="dim" id="bioCount"></span>
+    </div>
+    <div id="bioGrid" class="dexgrid"></div>
+    <div class="empty hidden" id="bioEmpty">검색 결과가 없습니다 — 다른 표제어로 찾아보세요.</div>
+    <div style="margin-top:22px">
+      <div class="dexbar" style="margin-bottom:8px"><span class="dim">📋 전체 보기 (그룹 헤더 + 사슬 칩)</span></div>
+      <div id="cards"></div>
+    </div>
   </section>
 
   <!-- ③ 개념 -->
@@ -988,6 +998,7 @@ const SIM=(()=>{
     s.tl=s.temp[0]+(s.temp[1]-s.temp[0])*0.5;  /* 최적온도 = 밴드 중심 */
     s.tw=Math.max(2,(s.temp[1]-s.temp[0])/2);  /* 밴드 반경 */
     s.pred_=TIER_PRED.has(s.r);
+    if(s.temp[1]-s.temp[0]>=45)s.hardy=true; /* 넓은 밴드 내성종 — 계절에 둔감 (audit 검증 기준) */
   }
   const byId={};sp.forEach(s=>byId[s.id]=s);
   /* 2) 바이옴별 출연 종 + K 배분(10% 법칙 — 하위층 위주, 최상위 포식자는 전체의 약 10%를 나눠 가짐) */
@@ -1110,7 +1121,7 @@ document.addEventListener('click',e=>{
     sel.value=e.target.dataset.b;
     document.querySelector('[data-p="sim"]').click();
     preset();}});
-renderCho();renderDex();preset();
+renderCho();renderDex();renderBioDex();preset();
 </script>
 </body>
 </html>"""

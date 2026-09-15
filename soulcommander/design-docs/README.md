@@ -17,7 +17,7 @@
 | 9 | [GDD_v8.0_07_통합생태계.md](GDD_v8.0_07_통합생태계.md) | 20바이옴을 하나의 먹이사슬로 — 생태 완결 · 신규 서식종 (가안) |
 
 데이터 정본은 코드 쪽에 있음 — `../unity/Assets/Resources/Data/`:
-`monsters.json`(전투 54종) · `ambient.json`(비전투 53종) · `races.json`(플레이어블 15종) · `ecology_codex.json`(53종) · `biomes.json`(바이옴 20종+기후)
+`monsters.json`(전투 50종) · `ambient.json`(비전투 53종) · `races.json`(플레이어블 15종) · `ecology_codex.json`(53종) · `biomes.json`(바이옴 20종+기후)
 
 ## 폴더 구조
 

@@ -32,7 +32,7 @@ try:
     a = json.load(open(os.path.join(DATA, "ambient.json")))["ambient"]
     r = json.load(open(os.path.join(DATA, "races.json")))["races"]
     e = json.load(open(os.path.join(DATA, "ecology_codex.json")))["entries"]
-    for name, got, want in [("monsters", len(m), 54), ("ambient", len(a), 53),
+    for name, got, want in [("monsters", len(m), 50), ("ambient", len(a), 53),
                             ("races", len(r), 15), ("codex", len(e), 53)]:
         if got != want:
             fail(f"{name}.json 개수 {got} (기대 {want})")
@@ -110,4 +110,5 @@ if errors:
     for e in errors:
         print(f"  - {e}")
     sys.exit(1)
-print("OK — v8.0 정합 (JSON 54/53/15/53/20 · biomes 1~50/51~95/96~100 · 온도 107종 정합 · 필수문서 · 구수치/구경로 0건)")
+n_all = len(m) + len(a)
+print(f"OK — v8.0 정합 (JSON {len(m)}/{len(a)}/15/{len(e)}/{len(biomes)} · biomes 1~50/51~95/96~100 · 온도 {n_all}종 정합 · 필수문서 · 구수치/구경로 0건)")
