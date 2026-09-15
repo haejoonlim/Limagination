@@ -1,0 +1,39 @@
+name: gdd-checks
+
+# design-docs(정본 GDD)·Unity 데이터 JSON 변경 시 문서↔데이터 정합 검사 + 재화 시뮬 실행.
+# check_docs.py: JSON 카운트·biomes·온도 교차·구수치/구경로 0건 (exit 0 = 준수)
+# sim_economy.py: 재화 흐름 시뮬 (exit 0 = 정상 실행 · 미정G 튜닝 후 재실행용)
+on:
+  pull_request:
+    paths:
+      - "soulcommander/design-docs/**"
+      - "soulcommander/unity/Assets/Resources/Data/**"
+      - ".github/workflows/gdd-checks.yml"
+  push:
+    branches: [main]
+    paths:
+      - "soulcommander/design-docs/**"
+      - "soulcommander/unity/Assets/Resources/Data/**"
+      - ".github/workflows/gdd-checks.yml"
+
+concurrency:
+  group: gdd-checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: check_docs + sim_economy
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: check_docs.py (문서↔데이터 정합)
+        run: python3 soulcommander/design-docs/_tools/check_docs.py
+
+      - name: sim_economy.py (재화 시뮬 정상 실행)
+        run: python3 soulcommander/design-docs/_tools/sim_economy.py > /dev/null

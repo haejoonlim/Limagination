@@ -79,6 +79,9 @@ SCENARIOS = {
     "jp_A10":      dict(winter=False, famine_every=0, bandit_every=0, morale=50, jp_every=10, jp_coeff=75),  # 현행: 10층 단위 ×75
     "jp_B5_naive": dict(winter=False, famine_every=0, bandit_every=0, morale=50, jp_every=5,  jp_coeff=75),  # 5층 GK 전면 (계수 무보정)
     "jp_B5_rebal": dict(winter=False, famine_every=0, bandit_every=0, morale=50, jp_every=5,  jp_coeff=40),  # 5층 GK + 계수 40 (총액 보정 — 71,750×40=287만)
+    # 5→10층 공백 소형 보상 검증 (D-252 후속 — 2026-09-15): 잭팟 미지급 GK층(5·15·25…)에 소형 지급
+    "jp_small_lin": dict(winter=False, famine_every=0, bandit_every=0, morale=50, gate_small=("lin", 5)),  # 게이트층 ×5·f (제안 원안 — 총 2,500)
+    "jp_small_sq":  dict(winter=False, famine_every=0, bandit_every=0, morale=50, gate_small=("sq", 5)),   # 게이트층 ×5·f² (잭팟 동일 곡선족 — 총 33,250)
 }
 
 def pop_at(f):
@@ -166,6 +169,9 @@ def run_sim(name, scn):
             jp_every = scn.get("jp_every", 10)   # 게이트잭팟 주기 (10 = 문서 현행 · 5 = GK 전면 후보)
             jp_coeff = scn.get("jp_coeff", 75)   # 게이트층² 계수 (§3.9 — 75 = 2026-09-14 재계산치)
             mana += 30 * f + (jp_coeff * f * f if f % jp_every == 0 and f >= jp_every else 0)
+            gs = scn.get("gate_small")           # 소형 게이트 보상 (D-252 5→10층 공백 검증) — ("lin",계수)·f | ("sq",계수)·f² · 5·15·25…층(잭팟 미지급층)만
+            if gs and f % 10 == 5:
+                mana += gs[1] * f if gs[0] == "lin" else gs[1] * f * f
             # 확장 (해금 층수·분할 지급 시나리오별 — B안 지연·클러스터 완화 검증용)
             s2f = scn.get("s2_floor", 10)
             s3f = scn.get("s3_floor", 25)
