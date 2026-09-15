@@ -1,18 +1,18 @@
 {
   "meta": { "schema_version": "1.0" },
   "facilities": [
-    { "id": "summon_altar", "name_ko": "소환제단", "unlock_floor": 1, "build_cost": 0, "operate_required": true, "initial_level": 1, "max_level": 7 },
-    { "id": "hospital", "name_ko": "병원", "unlock_floor": 1, "build_cost": 0, "operate_required": true, "initial_level": 1, "max_level": 7 },
-    { "id": "tactics_office", "name_ko": "전술소", "unlock_floor": 4, "build_cost": 1000, "operate_required": true, "initial_level": 0, "max_level": 7 },
-    { "id": "training_ground", "name_ko": "훈련장", "unlock_floor": 10, "build_cost": 0, "operate_required": true, "initial_level": 0, "max_level": 7 },
-    { "id": "dining_hall", "name_ko": "식당", "unlock_floor": 10, "build_cost": 0, "operate_required": true, "initial_level": 0, "max_level": 7 },
-    { "id": "lodging", "name_ko": "숙소", "unlock_floor": 10, "build_cost": 0, "operate_required": true, "initial_level": 0, "max_level": 7 },
-    { "id": "research_lab", "name_ko": "연구소", "unlock_floor": 20, "build_cost": 0, "operate_required": true, "initial_level": 0, "max_level": 7 },
-    { "id": "alchemy_lab", "name_ko": "연금술소", "unlock_floor": 20, "build_cost": 0, "operate_required": true, "initial_level": 0, "max_level": 7 },
-    { "id": "synthesis_lab", "name_ko": "합성소", "unlock_floor": 30, "build_cost": 0, "operate_required": true, "initial_level": 0, "max_level": 7 },
-    { "id": "extraction_lab", "name_ko": "추출소", "unlock_floor": 30, "build_cost": 0, "operate_required": true, "initial_level": 0, "max_level": 7 },
-    { "id": "housing", "name_ko": "주택", "unlock_floor": 1, "build_cost": 0, "operate_required": false, "initial_level": 1, "max_level": 7 },
-    { "id": "hall_of_heroes", "name_ko": "영웅의 전당", "unlock_floor": 100, "build_cost": 0, "operate_required": false, "initial_level": 0, "max_level": 1 }
+    { "id": "summon_altar", "name_ko": "소환제단", "unlock_floor": 1, "build_cost": 0, "operate_required": true, "initial_level": 1, "max_level": 7, "upgrade_costs": [3000, 8000, 20000, 40000, 80000, 150000] },
+    { "id": "hospital", "name_ko": "병원", "unlock_floor": 1, "build_cost": 0, "operate_required": true, "initial_level": 1, "max_level": 7, "upgrade_costs": [3000, 8000, 20000, 40000, 80000, 150000] },
+    { "id": "tactics_office", "name_ko": "전술소", "unlock_floor": 4, "build_cost": 1000, "operate_required": true, "initial_level": 0, "max_level": 7, "upgrade_costs": [3000, 8000, 20000, 40000, 80000, 150000] },
+    { "id": "training_ground", "name_ko": "훈련장", "unlock_floor": 10, "build_cost": 3000, "operate_required": true, "initial_level": 0, "max_level": 7, "upgrade_costs": [3000, 8000, 20000, 40000, 80000, 150000] },
+    { "id": "dining_hall", "name_ko": "식당", "unlock_floor": 10, "build_cost": 3000, "operate_required": true, "initial_level": 0, "max_level": 7, "upgrade_costs": [3000, 8000, 20000, 40000, 80000, 150000] },
+    { "id": "lodging", "name_ko": "숙소", "unlock_floor": 10, "build_cost": 3000, "operate_required": true, "initial_level": 0, "max_level": 7, "upgrade_costs": [3000, 8000, 20000, 40000, 80000, 150000] },
+    { "id": "research_lab", "name_ko": "연구소", "unlock_floor": 20, "build_cost": 3000, "operate_required": true, "initial_level": 0, "max_level": 7, "upgrade_costs": [3000, 8000, 20000, 40000, 80000, 150000] },
+    { "id": "alchemy_lab", "name_ko": "연금술소", "unlock_floor": 20, "build_cost": 3000, "operate_required": true, "initial_level": 0, "max_level": 7, "upgrade_costs": [3000, 8000, 20000, 40000, 80000, 150000] },
+    { "id": "synthesis_lab", "name_ko": "합성소", "unlock_floor": 30, "build_cost": 3000, "operate_required": true, "initial_level": 0, "max_level": 7, "upgrade_costs": [3000, 8000, 20000, 40000, 80000, 150000] },
+    { "id": "extraction_lab", "name_ko": "추출소", "unlock_floor": 30, "build_cost": 3000, "operate_required": true, "initial_level": 0, "max_level": 7, "upgrade_costs": [3000, 8000, 20000, 40000, 80000, 150000] },
+    { "id": "housing", "name_ko": "주택", "unlock_floor": 1, "build_cost": 0, "operate_required": false, "initial_level": 1, "max_level": 7, "upgrade_costs": [3000, 8000, 20000, 40000, 80000, 150000] },
+    { "id": "hall_of_heroes", "name_ko": "영웅의 전당", "unlock_floor": 100, "build_cost": 0, "operate_required": false, "initial_level": 0, "max_level": 1, "upgrade_costs": [] }
   ],
   "population": {
     "initial": 30,
@@ -71,6 +71,7 @@
       { "id": "gathering_order", "name_ko": "채집장려", "tax_mul": 1.0, "morale_delta": -5, "gathering_yield_mul": 1.2, "natural_growth_mul": 1.0 }
     ]
   },
+  "maintenance_gold_per_level_per_island_day": 10,
   "stages": [
     { "id": "S1", "unlock_floor": 1, "expansion_cost": 0, "max_population": 60 },
     { "id": "S2", "unlock_floor": 12, "expansion_cost": 3000, "max_population": 150 },

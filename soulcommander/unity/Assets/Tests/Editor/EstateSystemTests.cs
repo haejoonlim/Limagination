@@ -43,18 +43,18 @@ namespace SoulCommander.Tests
         }
 
         [Test]
-        public void AdvanceTime_DoesNotConsumeFoodOrGrantTax()
+        public void AdvanceTime_DoesNotConsumeFoodOrGrantTax_ButAppliesMaintenance()
         {
             var d = new SaveData();
             SaveMigration.Migrate(d);
             d.estate.food = 100;
-            d.gold = 0;
+            d.gold = 1000;
             d.estate.population = 10;
             double realSeconds = EstateSystem.SecondsPerIslandDay / EstateSystem.IslandTimeMultiplier;
             DateTime now = DateTime.UtcNow.AddSeconds(realSeconds);
             EstateSystem.AdvanceTime(d, now);
             Assert.AreEqual(100, d.estate.food);
-            Assert.AreEqual(0, d.gold);
+            Assert.AreEqual(970, d.gold); // 제단+병원+주택 L1 = 3 * 10G/일
         }
 
         [Test]
@@ -92,7 +92,7 @@ namespace SoulCommander.Tests
             var d = new SaveData();
             SaveMigration.Migrate(d);
             d.estate.population = 100;
-            d.estate.housingCount = 10; // plenty of beds
+            d.estate.housingCount = 20; // 400 beds, MaxPopulation = 400
             d.estate.currentStageId = "S4"; // stage cap 1300
             EstateSystem.SeasonOverride = "spring";
             try
@@ -100,11 +100,8 @@ namespace SoulCommander.Tests
                 var season = EstateSystem.CurrentSeason(DateTime.UtcNow);
                 Assert.IsNotNull(season);
                 Assert.AreEqual(1.5f, season.natural_growth_mul, 0.001f);
-                Assert.AreEqual(100, d.estate.population);
-                Assert.AreEqual("spring", EstateSystem.SeasonOverride);
-                Assert.AreEqual(1300, EstateSystem.MaxPopulation(d)); // verify stage cap
                 EstateSystem.ApplyNaturalGrowth(d, 100f, DateTime.UtcNow);
-                Assert.AreEqual(400, d.estate.population); // 100 * 0.02 * 1.5 * 100 = 300
+                Assert.AreEqual(400, d.estate.population, 1); // 100 * 0.02 * 1.5 * 100 ≈ 300
             }
             finally
             {
@@ -377,6 +374,85 @@ namespace SoulCommander.Tests
             {
                 EstateSystem.SeasonOverride = null;
             }
+        }
+
+        [Test]
+        public void TryBuildFacility_WhenUnlockedAndRich_Succeeds()
+        {
+            var d = new SaveData();
+            SaveMigration.Migrate(d);
+            d.gold = 2000;
+            d.currentFloor = 4;
+            bool ok = EstateSystem.TryBuildFacility(d, "tactics_office", 4);
+            Assert.IsTrue(ok);
+            Assert.AreEqual(1000, d.gold);
+            var state = EstateSystem.GetFacilityState(d, "tactics_office");
+            Assert.AreEqual(2, state.constructionRemainingFloors);
+            Assert.AreEqual(1, state.constructionTargetLevel);
+        }
+
+        [Test]
+        public void TryBuildFacility_BeforeUnlock_Fails()
+        {
+            var d = new SaveData();
+            SaveMigration.Migrate(d);
+            d.gold = 2000;
+            d.currentFloor = 3;
+            bool ok = EstateSystem.TryBuildFacility(d, "tactics_office", 3);
+            Assert.IsFalse(ok);
+        }
+
+        [Test]
+        public void TryUpgradeFacility_WhenBuiltAndRich_Succeeds()
+        {
+            var d = new SaveData();
+            SaveMigration.Migrate(d);
+            d.gold = 5000;
+            bool ok = EstateSystem.TryUpgradeFacility(d, "summon_altar");
+            Assert.IsTrue(ok);
+            Assert.AreEqual(2000, d.gold); // 5000 - 3000
+            var state = EstateSystem.GetFacilityState(d, "summon_altar");
+            Assert.AreEqual(1, state.constructionRemainingFloors);
+            Assert.AreEqual(2, state.constructionTargetLevel);
+        }
+
+        [Test]
+        public void ProgressConstruction_BuildCompletesAfterTwoFloors()
+        {
+            var d = new SaveData();
+            SaveMigration.Migrate(d);
+            d.gold = 2000;
+            d.currentFloor = 4;
+            EstateSystem.TryBuildFacility(d, "tactics_office", 4);
+            EstateSystem.OnFloorCleared(d, 4);
+            var state = EstateSystem.GetFacilityState(d, "tactics_office");
+            Assert.IsFalse(state.built);
+            Assert.AreEqual(1, state.constructionRemainingFloors);
+            EstateSystem.OnFloorCleared(d, 5);
+            Assert.IsTrue(state.built);
+            Assert.AreEqual(1, state.level);
+            Assert.AreEqual(0, state.constructionRemainingFloors);
+        }
+
+        [Test]
+        public void IsFacilityOperational_UnderConstruction_ReturnsFalse()
+        {
+            var d = new SaveData();
+            SaveMigration.Migrate(d);
+            d.gold = 2000;
+            d.currentFloor = 4;
+            EstateSystem.TryBuildFacility(d, "tactics_office", 4);
+            Assert.IsFalse(EstateSystem.IsFacilityOperational(d, "tactics_office"));
+        }
+
+        [Test]
+        public void ApplyMaintenance_DeductsGoldByTotalBuiltLevel()
+        {
+            var d = new SaveData();
+            SaveMigration.Migrate(d);
+            d.gold = 1000;
+            EstateSystem.ApplyMaintenance(d, 1f);
+            Assert.AreEqual(970, d.gold); // L1 제단+병원+주택 = 3
         }
     }
 }

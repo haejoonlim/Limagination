@@ -73,6 +73,8 @@ namespace SoulCommander.Save
         public int level;
         public string operatorHeroId; // null/empty = 미배치
         public bool built;
+        public int constructionRemainingFloors; // 0 = 공사 중 아님. 건설 2층 · 업글 1층 (04 §3.12)
+        public int constructionTargetLevel;     // 완료 시 설정될 레벨. 1이면 L1 건설, 2~7은 업그레이드
     }
 
     [Serializable]

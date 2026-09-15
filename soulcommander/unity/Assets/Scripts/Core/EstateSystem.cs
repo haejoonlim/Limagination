@@ -64,6 +64,7 @@ namespace SoulCommander.Core
             double elapsedRealSeconds = (nowUtc - last).TotalSeconds;
             if (elapsedRealSeconds <= 0) return;
             float islandDays = (float)(elapsedRealSeconds * IslandTimeMultiplier / SecondsPerIslandDay);
+            ApplyMaintenance(d, islandDays);
             ApplyNaturalGrowth(d, islandDays, nowUtc);
             AutoHarvestMatureCrops(d, nowUtc);
             d.estate.lastTickUtc = nowUtc.ToString("o");
@@ -82,6 +83,7 @@ namespace SoulCommander.Core
             if (d?.estate == null) return;
             ApplyFloorTax(d);
             ApplyFloorFoodConsumption(d);
+            ProgressConstruction(d);
         }
 
         private static void ApplyFloorFoodConsumption(SaveData d)
@@ -128,9 +130,88 @@ namespace SoulCommander.Core
             var state = GetFacilityState(d, id);
             var data = GetFacilityData(id);
             if (state == null || data == null) return false;
+            if (state.constructionRemainingFloors > 0) return false;
             if (!state.built || state.level <= 0) return false;
             if (!data.operate_required) return true;
             return !string.IsNullOrEmpty(state.operatorHeroId);
+        }
+
+        // ============ 건설·업그레이드 (04 §3.1 · §3.10 · §3.12) ============
+
+        public static bool CanBuildFacility(SaveData d, string id, int currentFloor)
+        {
+            var data = GetFacilityData(id);
+            var state = GetFacilityState(d, id);
+            if (data == null || state == null) return false;
+            if (currentFloor < data.unlock_floor) return false;
+            if (state.built) return false;
+            if (state.constructionRemainingFloors > 0) return false;
+            return d.gold >= data.build_cost;
+        }
+
+        public static bool TryBuildFacility(SaveData d, string id, int currentFloor)
+        {
+            if (!CanBuildFacility(d, id, currentFloor)) return false;
+            var data = GetFacilityData(id);
+            var state = GetFacilityState(d, id);
+            d.gold -= data.build_cost;
+            state.constructionRemainingFloors = 2; // 건설 2층
+            state.constructionTargetLevel = 1;
+            return true;
+        }
+
+        public static bool CanUpgradeFacility(SaveData d, string id)
+        {
+            var data = GetFacilityData(id);
+            var state = GetFacilityState(d, id);
+            if (data == null || state == null) return false;
+            if (!state.built) return false;
+            if (state.level >= data.max_level) return false;
+            if (state.constructionRemainingFloors > 0) return false;
+            int idx = state.level - 1; // upgrade_costs[0] = L1->L2
+            if (data.upgrade_costs == null || idx < 0 || idx >= data.upgrade_costs.Count) return false;
+            return d.gold >= data.upgrade_costs[idx];
+        }
+
+        public static bool TryUpgradeFacility(SaveData d, string id)
+        {
+            if (!CanUpgradeFacility(d, id)) return false;
+            var data = GetFacilityData(id);
+            var state = GetFacilityState(d, id);
+            int cost = data.upgrade_costs[state.level - 1];
+            d.gold -= cost;
+            state.constructionRemainingFloors = 1; // 업그레이드 1층
+            state.constructionTargetLevel = state.level + 1;
+            return true;
+        }
+
+        public static void ProgressConstruction(SaveData d)
+        {
+            if (d?.estate?.facilities == null) return;
+            foreach (var s in d.estate.facilities)
+            {
+                if (s.constructionRemainingFloors <= 0) continue;
+                s.constructionRemainingFloors--;
+                if (s.constructionRemainingFloors == 0)
+                {
+                    s.level = s.constructionTargetLevel;
+                    s.built = s.level > 0;
+                    s.constructionTargetLevel = 0;
+                }
+            }
+        }
+
+        public static void ApplyMaintenance(SaveData d, float islandDays)
+        {
+            if (d?.estate == null || islandDays <= 0) return;
+            var root = DataLoader.LoadEstate();
+            int rate = root?.maintenance_gold_per_level_per_island_day ?? 10;
+            int totalLevel = 0;
+            foreach (var s in d.estate.facilities)
+                if (s.built && s.level > 0) totalLevel += s.level;
+            int cost = (int)Math.Floor(totalLevel * rate * islandDays);
+            d.gold -= cost;
+            if (d.gold < 0) d.gold = 0;
         }
 
         // ============ 계절 (04 §3.13) ============

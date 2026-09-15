@@ -136,10 +136,12 @@ namespace SoulCommander.Save
                 {
                     d.estate.facilities.Add(new FacilityState
                     {
-                        id = f.id,
-                        level = f.initial_level,
-                        built = f.initial_level > 0,
-                        operatorHeroId = null
+                            id = f.id,
+                            level = f.initial_level,
+                            built = f.initial_level > 0,
+                            operatorHeroId = null,
+                            constructionRemainingFloors = 0,
+                            constructionTargetLevel = 0
                     });
                 }
             }

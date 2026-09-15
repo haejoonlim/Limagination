@@ -167,7 +167,7 @@ namespace SoulCommander.Core
                                $"농사: 경작지 {_data.estate.farmPlots.Count}/{EstateSystem.MaxFarmPlots(_data)} · 작물 {(EstateSystem.CurrentSeason(DateTime.UtcNow)?.id ?? "-")}\n" +
                                $"칙령: {FormatActiveEdicts(_data.estate.activeEdicts)} (슬롯 {EstateSystem.MaxEdictSlots(_data)})\n" +
                                $"통계: 도전 {_data.runsStarted}회 · 패배 {_data.runsLost}회 · 추모 {_data.memorial.Count}명";
-            _hpBar.text = ResonanceSummary();
+             _hpBar.text = ResonanceSummary() + "\n\n" + FacilitySummary(_data);
 
             int pages = Mathf.Max(1, (_data.roster.Count + RosterPageSize - 1) / RosterPageSize);
             _rosterPage = Mathf.Clamp(_rosterPage, 0, pages - 1);
@@ -706,6 +706,28 @@ namespace SoulCommander.Core
                 sb.Append(ed?.name_ko ?? id);
             }
             return sb.Length > 0 ? sb.ToString() : "없음";
+        }
+
+        private static string FacilitySummary(SaveData d)
+        {
+            var sb = new System.Text.StringBuilder("<b>시설</b>\n");
+            foreach (var s in d.estate.facilities)
+            {
+                var data = EstateSystem.GetFacilityData(s.id);
+                string name = data?.name_ko ?? s.id;
+                string status;
+                if (s.constructionRemainingFloors > 0)
+                    status = $"공사 중 ({s.constructionRemainingFloors}층)";
+                else if (!s.built)
+                    status = "미건설";
+                else
+                    status = $"Lv{s.level}";
+                string op = "";
+                if (s.built && data != null && data.operate_required)
+                    op = string.IsNullOrEmpty(s.operatorHeroId) ? " [미배치]" : " [가동]";
+                sb.AppendLine($"{name}: {status}{op}");
+            }
+            return sb.ToString();
         }
 
         // ============ UI 구성 ============

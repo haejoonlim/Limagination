@@ -234,6 +234,7 @@ namespace SoulCommander.Data
         public bool operate_required;
         public int initial_level;
         public int max_level;
+        public List<int> upgrade_costs;
     }
 
     [Serializable]
@@ -362,5 +363,6 @@ namespace SoulCommander.Data
         public EstateFarming farming;
         public EstateEdicts edicts;
         public List<EstateStage> stages;
+        public int maintenance_gold_per_level_per_island_day;
     }
 }
