@@ -526,6 +526,121 @@ document.getElementById('btn1').onclick=()=>pull(1);
 document.getElementById('btn10').onclick=()=>pull(10);
 document.getElementById('btn100').onclick=()=>pull(100);
 
+// ───────── 숙련도 시뮬 (proficiency_test.py 미러 — 05 §6-2 · 도구 정합성) ─────────
+// Python 도구와 동일 규칙: 은닉 플랫 10 → 견습4 직행 · 등급 게이트 보류 누적 → 승급 시 반영 ·
+// 만렙 초과분 소멸 · 성실 +5% · 증축 미중복(영웅 1인 상한). RNG 스트림이 달라 분포만 비교 — 불변식(보존·게이트)은 동일.
+const XP_PROMOTE={4:20,5:50,6:120};                    // 승급 필요 XP (05 §6-2 가안)
+const XP_GOLD={6:2000,7:10000};                        // 5→6 장인 · 6→7 명장
+const XP_DAILY={'요리':5,'간호':5,'조제':5,'대장':5,'연구':1.5,
+                '채집':1,'벌목':1,'광부':1,'농부':1/3,'목수':1};  // 표준 1일 XP (연구 3XP/2일 · 농부 3일 주기)
+const XP_MINING_GATE=4;                                // 채굴은 티어 4+ (04 §3.3)
+const XP_GRADE_UP_DAYS={1:7,2:21,3:45,4:90};           // 합성소 등급 승급 주기 (가안)
+const XP_DILIGENT=1.05;                                // 성실 XP +5% (§6-2 성격 준용)
+const XP_TIER_NAME={4:'견습',5:'숙련',6:'장인',7:'명장'};
+function xpGateCap(g){ return g<=2?4:(g===3?5:(g===4?6:7)); }
+function xpBand(g){ return g<=2?'★1~2':(g>=5?'★5+':'★'+g); }
+function xpBuildState(heroes){
+  const slots={}, usedIdx=new Set();
+  FACILITY_APT.forEach(apt=>{                          // 시설 5슬롯 = 최고 티어 영웅
+    let best=-1, bt=0;
+    heroes.forEach((h,i)=>{ if(usedIdx.has(i)) return; const t=h.apt[apt]||0; if(t>bt){best=i; bt=t;} });
+    if(best>=0){ slots[best]=apt; usedIdx.add(best); }
+  });
+  return heroes.map((h,i)=>{
+    const full=h.apt, g=parseInt(h.grade[1]);
+    let track, kind;
+    if(i in slots){ track=slots[i]; kind='시설'; }
+    else{
+      const avail=LIFE_APT.filter(a=>!(a==='광부'&&(full[a]||0)<XP_MINING_GATE));
+      track=avail[0]; avail.forEach(a=>{ if((full[a]||0)>(full[track]||0)) track=a; }); // 동률 → LIFE_APT 순
+      kind='생활';
+    }
+    const tier=full[track]||1, reached={};
+    for(let t=4;t<=tier;t++) reached[t]=0;
+    return {startG:g, g, track, kind, startTier:tier, tier, xpIn:0, pending:0, peak:0, reached,
+            bonus:(h.pers==='성실')?XP_DILIGENT:1,
+            nextUp:(XP_GRADE_UP_DAYS[g]!==undefined)?XP_GRADE_UP_DAYS[g]:null};
+  });
+}
+function xpFeed(st, amount, day, acc){
+  if(st.tier>=7) return;                               // 명장 XP 정지
+  const cap=xpGateCap(st.g);
+  if(st.tier>=cap){ st.pending+=amount; if(st.pending>st.peak) st.peak=st.pending; return; }
+  st.xpIn+=amount;
+  while(st.tier<7 && st.tier<cap){
+    let need, nxt;
+    if(st.tier<4){ need=10; nxt=4; }                   // 은닉권 — 플랫 10 → 견습4 직행
+    else{ need=XP_PROMOTE[st.tier]; nxt=st.tier+1; }
+    if(st.xpIn<need) break;
+    st.xpIn-=need; st.tier=nxt;
+    acc.consumed+=need; acc.promotions[st.tier]=(acc.promotions[st.tier]||0)+1;
+    if(st.tier>=4 && !(st.tier in st.reached)) st.reached[st.tier]=day;
+    if(XP_GOLD[st.tier]){ acc.gold+=XP_GOLD[st.tier]; acc.goldN[st.tier]=(acc.goldN[st.tier]||0)+1;
+      acc.goldEvents.push([day, XP_GOLD[st.tier], st.kind]); }
+  }
+  if(st.tier>=7){ acc.voided+=st.xpIn; st.xpIn=0; return; }  // 만렙 초과분 소멸
+  if(st.tier>=cap && st.xpIn>0){ st.pending+=st.xpIn; if(st.pending>st.peak) st.peak=st.pending; st.xpIn=0; }
+}
+function xpSimulate(n, days, floor, simSeed){
+  const savedFloor=floorState; floorState=floor;       // makeHero 게이트용 — 종료 시 복원
+  const savedOwned={...owned}, savedUsed=new Set(used);
+  const r=rngClass(simSeed), heroes=[];
+  usedPers.clear();
+  for(let i=0;i<n;i++){ const h=makeHero(r,null); usedPers.add(h.pers); heroes.push(h); }
+  const st=xpBuildState(heroes);
+  const acc={earned:0, consumed:0, voided:0, gold:0, goldN:{}, goldEvents:[], promotions:{}, gradeUps:{}, viol:0};
+  for(let day=1; day<=days; day++){
+    st.forEach(s=>{                                    // ① 합성소 등급 승급 → 보류 XP 즉시 반영
+      if(s.nextUp!==null){ s.nextUp--;
+        if(s.nextUp<=0){ s.g++; s.nextUp=(XP_GRADE_UP_DAYS[s.g]!==undefined)?XP_GRADE_UP_DAYS[s.g]:null;
+          acc.gradeUps[s.g]=(acc.gradeUps[s.g]||0)+1;
+          if(s.pending>0){ const amt=s.pending; s.pending=0; xpFeed(s, amt, day, acc); } } }
+    });
+    st.forEach(s=>{ if(s.tier<7){ const gain=XP_DAILY[s.track]*s.bonus; acc.earned+=gain; xpFeed(s, gain, day, acc); } }); // ② 활동 XP
+    st.forEach(s=>{ if(s.tier>xpGateCap(s.g)) acc.viol++; });                    // ③ 게이트 위반
+  }
+  floorState=savedFloor;
+  Object.keys(owned).forEach(k=>delete owned[k]); Object.assign(owned, savedOwned);
+  used.clear(); savedUsed.forEach(x=>used.add(x));
+  return {heroes:n, st, acc};
+}
+function xpMedian(xs){ if(!xs.length) return null; const s=[...xs].sort((a,b)=>a-b); return s[Math.floor(s.length/2)]; }
+function xpReport(res, days, floor, simSeed){
+  const {st, acc}=res, label=t=>t>=4?XP_TIER_NAME[t]:'은닉', order=['은닉','견습','숙련','장인','명장'];
+  console.log(`═══ 숙련도 시뮬 [JS 미러] (${res.heroes}명 · ${days}일 · 층 ${floor} · 시드 ${simSeed}) ═══`);
+  const ops=FACILITY_APT.map(a=>{ const o=st.find(s=>s.kind==='시설'&&s.track===a); return `${a} t${o?o.tier:'—'}`; }).join(' · ');
+  const lifeC={}; st.forEach(s=>{ if(s.kind==='생활') lifeC[s.track]=(lifeC[s.track]||0)+1; });
+  console.log('운영자:', ops, '+ 생활', st.filter(s=>s.kind==='생활').length+'명',
+    '('+LIFE_APT.map(a=>a+':'+(lifeC[a]||0)).join(' · ')+')');
+  const dist=tag=>{ const c={}; st.forEach(s=>c[label(s[tag])]=(c[label(s[tag])]||0)+1);
+    return order.map(k=>`${k} ${c[k]||0}`).join(' · '); };
+  console.log('티어 분포: 시작', dist('startTier'), '→ 종료', dist('tier'));
+  ['시설','생활'].forEach(kind=>{
+    const cells=[4,5,6,7].map(T=>{ const xs=st.filter(s=>s.kind===kind&&s.startTier<T&&s.reached[T]>0).map(s=>s.reached[T]);
+      const m=xpMedian(xs); return m!==null?`${XP_TIER_NAME[T]} ${m}일(n=${xs.length})`:`${XP_TIER_NAME[T]} —`; });
+    console.log((kind==='시설'?'시설계 (5/일)':'생활계 (1/일)')+':', cells.join(' · '));
+  });
+  console.log('  (참고) 순수 XP 곡선: 은닉→명장 200 XP = 시설 40일 · 생활 200일');
+  const nost=st.filter(s=>s.startTier<7&&!(s.reached[7]>0)).length;
+  console.log(`미도달 ${nost}명 (${days}일 호라이즌 내)`);
+  ['★1~2','★3','★4'].forEach(b=>{ const grp=st.filter(s=>xpBand(s.startG)===b&&s.peak>0);
+    if(grp.length) console.log(`보류 ${b} 시작: ${grp.length}명 · 피크 중간 ${xpMedian(grp.map(s=>s.peak))} / 최대 ${Math.max(...grp.map(s=>s.peak))} XP`); });
+  const held=st.reduce((a,s)=>a+s.xpIn+s.pending,0);
+  const delta=acc.earned-(acc.consumed+held+acc.voided);
+  console.log(`검증: XP 보존 Δ ${delta.toFixed(1)} ${Math.abs(delta)<1?'✓':'✗'} · 게이트 위반 ${acc.viol}건 ${acc.viol===0?'✓':'✗'}`);
+  console.log(`골드: 장인 ×${acc.goldN[6]||0} + 명장 ×${acc.goldN[7]||0} = ${(acc.gold||0).toLocaleString()}G · `,
+    '승급:', [4,5,6,7].map(t=>`${XP_TIER_NAME[t]} ${acc.promotions[t]||0}`).join(' · '));
+  console.log('Python 동일 시드 대조: python3 proficiency_test.py 150 365 --seed '+simSeed+' (RNG 스트림 차이 — 분포·불변식 비교)');
+}
+function xpRun(){
+  const days=365, floor=parseInt(document.getElementById('floor').value)||50;
+  const res=xpSimulate(150, days, floor, seed+42);
+  xpReport(res, days, floor, seed+42);
+  return res;
+}
+window.xpSim=xpRun;                                    // 콘솔에서 window.xpSim() 재실행 가능
+if(location.protocol.startsWith('http')){ console.groupCollapsed('숙련도 시뮬 (개발자용 — proficiency_test.py 미러)'); xpRun(); console.groupEnd(); }
+
 // ───────── 자동 새로고침 (gacha_server.py 사용 시) ─────────
 // file:// 로 직접 열면 fetch가 조용히 실패해 스킵 — http.server/gacha_server 어느 쪽이든 동작.
 (function(){

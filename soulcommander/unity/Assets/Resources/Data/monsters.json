@@ -1,55 +1,4 @@
 {
-  "schemaVersion": "1.0",
-  "gddRef": {
-    "gdd": "SoulCommander_GDD_v7.11",
-    "sections": [
-      "5.3 속성 상성",
-      "9.7 몬스터 곡선",
-      "17.1 AI 유형",
-      "17.2 위협도 공식",
-      "17.3 AI 의사결정",
-      "19.2 보스 기믹"
-    ],
-    "monsterIndex": "Anokolisa 54종 + Tier1 T5/보스 5종 추가 (59종)"
-  },
-  "enums": {
-    "category": {
-      "1": "인류형 & 이종족",
-      "2": "언데드",
-      "3": "용족",
-      "4": "신화 & 합성수",
-      "5": "정령 & 구동체",
-      "6": "외계 & 변형체"
-    },
-    "aiType": [
-      "melee",
-      "ranged",
-      "magic",
-      "assassin"
-    ],
-    "element": [
-      "fire",
-      "water",
-      "nature",
-      "earth",
-      "light",
-      "dark"
-    ],
-    "tier": {
-      "1": "일반",
-      "2": "정예",
-      "3": "미니보스",
-      "4": "보스",
-      "5": "월드/최종보스"
-    },
-    "threatGrade": {
-      "weak": "<30 약함",
-      "normal": "30~60 보통",
-      "danger": "60~90 위험",
-      "critical": "90~120 심각",
-      "doom": "120+ 파멸"
-    }
-  },
   "monsters": [
     {
       "id": "mon_goblin_01",
@@ -142,11 +91,17 @@
         "reproduction": 0.7,
         "predators": [
           "mon_ogre_01",
-          "mon_wolf_01"
+          "mon_wolf_01",
+          "mon_hobgoblin_01",
+          "mon_bugbear_01",
+          "mon_raider_01",
+          "mon_mindflayer_01",
+          "mon_doppelganger_01"
         ],
         "prey": [
           "mon_slime_green_01",
-          "mon_kobold_01"
+          "mon_kobold_01",
+          "corpse"
         ]
       }
     },
@@ -244,7 +199,11 @@
         "reproduction": 0.3,
         "predators": [],
         "prey": [
-          "mon_bear_01"
+          "mon_bear_01",
+          "mon_ogre_01",
+          "mon_wolf_01",
+          "mon_dire_wolf_01",
+          "mon_dire_boar_01"
         ]
       }
     },
@@ -349,7 +308,8 @@
         ],
         "prey": [
           "mon_goblin_01",
-          "mon_boar_01"
+          "mon_boar_01",
+          "mon_wolf_01"
         ]
       }
     },
@@ -443,10 +403,16 @@
         "sociality": 0.9,
         "reproduction": 0.8,
         "predators": [
-          "mon_goblin_01"
+          "mon_goblin_01",
+          "mon_hobgoblin_01",
+          "mon_raider_01",
+          "mon_giant_spider_01",
+          "mon_spider_queen_01",
+          "mon_mindflayer_01"
         ],
         "prey": [
-          "mon_slime_green_01"
+          "mon_slime_green_01",
+          "corpse"
         ]
       }
     },
@@ -757,7 +723,8 @@
         "predators": [],
         "prey": [
           "mon_rat_01",
-          "mon_giant_spider_01"
+          "mon_giant_spider_01",
+          "mon_junglemonkey_01"
         ]
       }
     },
@@ -957,7 +924,9 @@
         "sociality": 0.7,
         "reproduction": 0.0,
         "predators": [],
-        "prey": []
+        "prey": [
+          "corpse"
+        ]
       }
     },
     {
@@ -1053,7 +1022,9 @@
         "sociality": 0.6,
         "reproduction": 0.0,
         "predators": [],
-        "prey": []
+        "prey": [
+          "corpse"
+        ]
       }
     },
     {
@@ -1148,7 +1119,10 @@
         "sociality": 0.3,
         "reproduction": 0.0,
         "predators": [],
-        "prey": []
+        "prey": [
+          "corpse",
+          "soul"
+        ]
       }
     },
     {
@@ -1243,7 +1217,9 @@
         "sociality": 0.6,
         "reproduction": 0.0,
         "predators": [],
-        "prey": []
+        "prey": [
+          "corpse"
+        ]
       }
     },
     {
@@ -1338,7 +1314,10 @@
         "sociality": 0.3,
         "reproduction": 0.0,
         "predators": [],
-        "prey": []
+        "prey": [
+          "soul",
+          "mana"
+        ]
       }
     },
     {
@@ -1440,7 +1419,8 @@
         "predators": [],
         "prey": [
           "mon_goblin_01",
-          "mon_kobold_01"
+          "mon_kobold_01",
+          "corpse"
         ]
       }
     },
@@ -1536,7 +1516,9 @@
         "sociality": 0.2,
         "reproduction": 0.0,
         "predators": [],
-        "prey": []
+        "prey": [
+          "soul"
+        ]
       }
     },
     {
@@ -1636,7 +1618,9 @@
         "sociality": 0.2,
         "reproduction": 0.0,
         "predators": [],
-        "prey": []
+        "prey": [
+          "mana"
+        ]
       }
     },
     {
@@ -1748,7 +1732,11 @@
         "sociality": 0.2,
         "reproduction": 0.0,
         "predators": [],
-        "prey": []
+        "prey": [
+          "soul",
+          "mana",
+          "mon_slime_black_01"
+        ]
       }
     },
     {
@@ -1842,10 +1830,18 @@
         "reproduction": 0.6,
         "predators": [
           "mon_troll_01",
-          "mon_ogre_01"
+          "mon_ogre_01",
+          "mon_bugbear_01",
+          "mon_lycanthrope_01",
+          "mon_dire_wolf_01",
+          "mon_dire_bear_01",
+          "mon_hell_hound_01"
         ],
         "prey": [
-          "mon_boar_01"
+          "mon_boar_01",
+          "mon_goblin_01",
+          "mon_rabbit_01",
+          "mon_rat_01"
         ]
       }
     },
@@ -1940,7 +1936,9 @@
         ],
         "prey": [
           "mon_wolf_01",
-          "mon_bear_01"
+          "mon_bear_01",
+          "mon_dire_boar_01",
+          "mon_beetle_01"
         ]
       }
     },
@@ -2031,10 +2029,15 @@
         "sociality": 0.3,
         "reproduction": 0.4,
         "predators": [
-          "mon_troll_01"
+          "mon_troll_01",
+          "mon_dire_wolf_01",
+          "mon_dire_bear_01"
         ],
         "prey": [
-          "mon_boar_01"
+          "mon_boar_01",
+          "mon_bugbear_01",
+          "mon_bee_01",
+          "mon_beetle_01"
         ]
       }
     },
@@ -2148,7 +2151,8 @@
         "predators": [],
         "prey": [
           "mon_bear_01",
-          "mon_wolf_01"
+          "mon_wolf_01",
+          "mon_rockmoss_01"
         ]
       }
     },
@@ -2242,7 +2246,9 @@
         "sociality": 0.5,
         "reproduction": 0.7,
         "predators": [
-          "mon_wolf_01"
+          "mon_wolf_01",
+          "mon_ogre_01",
+          "mon_bear_01"
         ],
         "prey": [
           "grass",
@@ -2433,11 +2439,13 @@
         "sociality": 0.3,
         "reproduction": 0.6,
         "predators": [
-          "mon_spider_queen_01"
+          "mon_spider_queen_01",
+          "mon_yuan_ti_01"
         ],
         "prey": [
           "mon_kobold_01",
-          "mon_giant_ant_01"
+          "mon_giant_ant_01",
+          "mon_moth_01"
         ]
       }
     },
@@ -2551,7 +2559,9 @@
         "predators": [],
         "prey": [
           "mon_giant_spider_01",
-          "mon_kobold_01"
+          "mon_kobold_01",
+          "mon_dustbug_01",
+          "mon_rat_01"
         ]
       }
     },
@@ -2648,7 +2658,8 @@
           "mon_venom_scorpion_01"
         ],
         "prey": [
-          "mon_giant_ant_01"
+          "mon_giant_ant_01",
+          "mon_desertrat_01"
         ]
       }
     },
@@ -2741,7 +2752,8 @@
         "predators": [],
         "prey": [
           "mon_scorpion_01",
-          "mon_giant_ant_01"
+          "mon_giant_ant_01",
+          "mon_desertrat_01"
         ]
       }
     },
@@ -2832,7 +2844,9 @@
         "sociality": 0.95,
         "reproduction": 0.8,
         "predators": [
-          "mon_venom_scorpion_01"
+          "mon_venom_scorpion_01",
+          "mon_giant_spider_01",
+          "mon_scorpion_01"
         ],
         "prey": [
           "plants",
@@ -2934,10 +2948,13 @@
         "sociality": 0.9,
         "reproduction": 0.9,
         "predators": [
-          "mon_ooze_01"
+          "mon_ooze_01",
+          "mon_goblin_01",
+          "mon_kobold_01"
         ],
         "prey": [
-          "organic_waste"
+          "organic_waste",
+          "corpse"
         ]
       }
     },
@@ -3034,9 +3051,13 @@
         "territoriality": 0.3,
         "sociality": 0.6,
         "reproduction": 0.8,
-        "predators": [],
+        "predators": [
+          "mon_fungus_01"
+        ],
         "prey": [
-          "organic_waste"
+          "organic_waste",
+          "corpse",
+          "mon_slime_green_01"
         ]
       }
     },
@@ -3239,9 +3260,17 @@
         "sociality": 0.2,
         "reproduction": 0.3,
         "predators": [
-          "mon_water_elemental_01"
+          "mon_water_elemental_01",
+          "mon_balrog_01",
+          "mon_dracolich_01"
         ],
-        "prey": []
+        "prey": [
+          "mon_ice_spawn_01",
+          "mon_water_elemental_01",
+          "mon_vine_01",
+          "mon_fungus_01",
+          "mon_slime_red_01"
+        ]
       }
     },
     {
@@ -3341,9 +3370,13 @@
         "sociality": 0.3,
         "reproduction": 0.4,
         "predators": [
-          "mon_fire_elemental_01"
+          "mon_fire_elemental_01",
+          "mon_kraken_tentacle_01"
         ],
-        "prey": []
+        "prey": [
+          "mon_fire_elemental_01",
+          "mon_slime_blue_01"
+        ]
       }
     },
     {
@@ -3443,9 +3476,12 @@
         "sociality": 0.3,
         "reproduction": 0.3,
         "predators": [
-          "mon_earth_elemental_01"
+          "mon_earth_elemental_01",
+          "mon_storm_giant_01"
         ],
-        "prey": []
+        "prey": [
+          "mon_earth_elemental_01"
+        ]
       }
     },
     {
@@ -3547,7 +3583,10 @@
         "predators": [
           "mon_air_elemental_01"
         ],
-        "prey": []
+        "prey": [
+          "mon_air_elemental_01",
+          "mon_lightning_elemental_01"
+        ]
       }
     },
     {
@@ -3750,10 +3789,13 @@
         "reproduction": 0.6,
         "predators": [
           "mon_balrog_01",
-          "mon_lesser_demon_01"
+          "mon_lesser_demon_01",
+          "mon_hell_hound_01",
+          "mon_beholder_01"
         ],
         "prey": [
-          "soul"
+          "soul",
+          "corpse"
         ]
       }
     },
@@ -3965,7 +4007,8 @@
         ],
         "prey": [
           "mon_wolf_01",
-          "mon_imp_01"
+          "mon_imp_01",
+          "mon_fireberry_01"
         ]
       }
     },
@@ -4068,7 +4111,10 @@
         "predators": [],
         "prey": [
           "mon_fire_elemental_01",
-          "mon_imp_01"
+          "mon_imp_01",
+          "mon_brimstonefly_01",
+          "mon_lesser_demon_01",
+          "mon_hell_hound_01"
         ]
       }
     },
@@ -4168,7 +4214,9 @@
         "sociality": 0.2,
         "reproduction": 0.1,
         "predators": [],
-        "prey": []
+        "prey": [
+          "mana"
+        ]
       }
     },
     {
@@ -4265,7 +4313,9 @@
         "territoriality": 0.8,
         "sociality": 0.5,
         "reproduction": 0.2,
-        "predators": [],
+        "predators": [
+          "mon_beholder_01"
+        ],
         "prey": [
           "mon_goblin_01",
           "mon_kobold_01"
@@ -4370,7 +4420,8 @@
         "reproduction": 0.3,
         "predators": [],
         "prey": [
-          "mon_goblin_01"
+          "mon_goblin_01",
+          "mon_alleyrat_01"
         ],
         "note": "전투층 중보스 (T4 모방형) — 도시에서 지나가는 사람으로 위장하는 전투 설계 존재. 생태 개체수 시뮬레이션 대상이 아니며, 고블린 사냥 관계만 참조용으로 표기."
       }
@@ -4688,9 +4739,14 @@
         "territoriality": 1.0,
         "sociality": 0.1,
         "reproduction": 0.1,
-        "predators": [],
+        "predators": [
+          "mon_leviathan_01"
+        ],
         "prey": [
-          "mon_water_elemental_01"
+          "mon_water_elemental_01",
+          "mon_sea_serpent_01",
+          "mon_jellyfish_01",
+          "mon_crab_01"
         ]
       }
     },
@@ -4778,7 +4834,8 @@
         "reproduction": 0.1,
         "predators": [],
         "prey": [
-          "mon_air_elemental_01"
+          "mon_air_elemental_01",
+          "mana"
         ]
       }
     },
@@ -4864,7 +4921,9 @@
         "sociality": 0.5,
         "reproduction": 0.2,
         "predators": [],
-        "prey": []
+        "prey": [
+          "mana"
+        ]
       }
     },
     {
@@ -4950,7 +5009,8 @@
         "sociality": 0.2,
         "reproduction": 0.3,
         "predators": [
-          "mon_kraken_tentacle_01"
+          "mon_kraken_tentacle_01",
+          "mon_leviathan_01"
         ],
         "prey": [
           "mon_fish_01",
@@ -5060,9 +5120,5 @@
         ]
       }
     }
-  ],
-  "meta": {
-    "v80": "54 combat (world-only 16 -> ambient, slime 3 folded to green, lizardman removed -> playable only)",
-    "prevCount": 74
-  }
+  ]
 }
