@@ -44,9 +44,36 @@
     },
     "floor_multiplier_formula": "1+floor/50"
   },
+  "farming": {
+    "plots_per_housing": 1,
+    "crops": [
+      { "id": "grain", "name_ko": "곡물", "yield_food": 30, "yield_herb": 0, "growth_island_days": 2 },
+      { "id": "herb", "name_ko": "약초", "yield_food": 0, "yield_herb": 3, "growth_island_days": 3 }
+    ],
+    "seasons": [
+      { "id": "spring", "months": [3, 4, 5], "food_yield_mul": 1.0, "natural_growth_mul": 1.5, "growth_mul": 1.0 },
+      { "id": "summer", "months": [6, 7, 8], "food_yield_mul": 1.0, "natural_growth_mul": 1.0, "growth_mul": 1.0 },
+      { "id": "autumn", "months": [9, 10, 11], "food_yield_mul": 1.1, "natural_growth_mul": 1.0, "growth_mul": 1.0 },
+      { "id": "winter", "months": [12, 1, 2], "food_yield_mul": 0.7, "natural_growth_mul": 1.0, "growth_mul": 0.0 }
+    ]
+  },
+  "edicts": {
+    "unlock_floor": 10,
+    "slot_count_by_floor": [
+      { "floor": 1, "slots": 0 },
+      { "floor": 10, "slots": 1 },
+      { "floor": 30, "slots": 2 }
+    ],
+    "change_cooldown_floors": 5,
+    "list": [
+      { "id": "mercantilism", "name_ko": "중상주의", "tax_mul": 1.30, "morale_delta": -15, "gathering_yield_mul": 1.0, "natural_growth_mul": 1.0 },
+      { "id": "distributism", "name_ko": "분배주의", "tax_mul": 0.80, "morale_delta": 15, "gathering_yield_mul": 1.0, "natural_growth_mul": 1.5 },
+      { "id": "gathering_order", "name_ko": "채집장려", "tax_mul": 1.0, "morale_delta": -5, "gathering_yield_mul": 1.2, "natural_growth_mul": 1.0 }
+    ]
+  },
   "stages": [
     { "id": "S1", "unlock_floor": 1, "expansion_cost": 0, "max_population": 60 },
-    { "id": "S2", "unlock_floor": 10, "expansion_cost": 3000, "max_population": 150 },
+    { "id": "S2", "unlock_floor": 12, "expansion_cost": 3000, "max_population": 150 },
     { "id": "S3", "unlock_floor": 25, "expansion_cost": 10000, "max_population": 400 },
     { "id": "S4", "unlock_floor": 50, "expansion_cost": 30000, "max_population": 1300 }
   ]

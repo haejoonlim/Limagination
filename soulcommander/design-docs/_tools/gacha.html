@@ -189,22 +189,56 @@ const ST_DESC = {
   'CRI':'치명타 확률','MANA':'스킬 자원 — ASPD 비율 회복',
   'SPD_CAST':'시전속도 — 스킬 캐스팅 완료 시간','STA':'스태미너 — 전투 지속 시 감소, 낮으면 전 스탯 -10%'
 };
-const COMMON_APT = ['근접','원거리','마법','방어','공속','채집','벌목','농부','목수','광부'];
-// 안A — 직업 프로필: 전투 적성 (기준값 ±1)
+// 적성 공통 10 — 생활 5 + 시설 운영 5 (05 §6 5차 · B+C 합산 2026-09-14)
+// 전투 5종(근접·원거리·마법·방어·공속)은 표시 전용이라 삭제 — 전투 정체성은 역할 태그로 대체
+// 적성 7티어 (2026-09-15 7차): 1~3 은닉 · 4 견습 · 5 숙련 · 6 장인 · 7 명장 — 등급 게이트(명장=★5+ · 장인=★4+ · 숙련=★3+)
+const APT_TIER = {1:1.00,2:1.02,3:1.06,4:1.10,5:1.30,6:1.65,7:2.30};
+const APT_TIER_NAME = {4:'견습',5:'숙련',6:'장인',7:'명장'};
+const APT_W = [26,23,20,17,9,4,1]; // 4+ 표시권 31% · 명장은 ★5+에서만 확률 등장
+const LIFE_APT = ['채집','벌목','농부','목수','광부'];
+const FACILITY_APT = ['요리','간호','연구','조제','대장'];
+const COMMON_APT = [...LIFE_APT, ...FACILITY_APT];
+// 시설 5종 ↔ 영지 시설 1:1 (04 §3.2) · races.json aptitude 토큰과 동일 이름
+const FACILITY_DESC = {
+  '요리':'식당 — 버프 요리 (4:+10% · 5:+30% · 6:+65% · 7:+130%)','간호':'병원 — Sanity 요양 (4:+10% · 5:+30% · 6:+65% · 7:+130%)',
+  '연구':'연구소 — 연구 속도 (4:+10% · 5:+30% · 6:+65% · 7:+130%)','조제':'연금술소 — 포션 제작 (4:+10% · 5:+30% · 6:+65% · 7:+130%)',
+  '대장':'합성소 — 합성·강화 (4:+10% · 5:+30% · 6:+65% · 7:+130%)'
+};
+// 직업 ↔ 시설·생활 프로필 (기준값 ±1 · 7스케일) — 특화직(광산기사·현자·질풍사냥꾼)은 5~7 상시 표시
 const JOB_APT = {
-  '전사':{'근접':4,'방어':3,'공속':3}, '수호자':{'방어':5,'근접':3,'공속':2},
-  '암살자':{'공속':5,'원거리':3,'근접':3}, '궁수':{'원거리':5,'공속':3,'근접':2},
-  '마법사':{'마법':5,'공속':2,'방어':2}, '지원가':{'마법':4,'방어':3,'근접':2},
-  '성기사':{'방어':4,'근접':3,'마법':3}, '드루이드':{'마법':4,'방어':3,'근접':2},
-  '광전사':{'근접':5,'공속':4,'방어':1}, '심연술사':{'마법':5,'방어':3,'원거리':3},
-  '광산기사':{'방어':4,'근접':3,'광부':4}, '질풍사냥꾼':{'공속':5,'근접':4,'방어':2},
-  '현자':{'마법':4,'공속':3,'원거리':3}
+  '전사':{'대장':3,'목수':2}, '수호자':{'대장':4,'목수':2},
+  '암살자':{'채집':4}, '궁수':{'채집':4,'벌목':3},
+  '마법사':{'연구':4,'조제':3}, '지원가':{'간호':4,'요리':3},
+  '성기사':{'간호':4,'대장':3}, '드루이드':{'농부':4,'채집':3},
+  '광전사':{'광부':3,'대장':3}, '심연술사':{'조제':4,'연구':3},
+  '광산기사':{'광부':6,'대장':4}, '질풍사냥꾼':{'채집':5,'벌목':4},
+  '현자':{'연구':6,'조제':4}
+};
+// 종족 시설·생활 보정 (races.json aptitude 정본 → 시작 등급 +1/+2, 롤 후 clamp 1~7)
+const RACE_APT_BONUS = {
+  '인간':{}, '정령족':{'연구':1}, '하이 엘프':{'연구':1}, '우드 엘프':{'요리':1},
+  '다크 엘프':{'연구':1}, '시 엘프':{'요리':1},
+  '드워프':{'대장':2}, '노움':{'조제':2,'연구':1}, '하프링':{'요리':2},
+  '묘인족':{'요리':1}, '견인족':{'간호':1}, '조인족':{},
+  '리자드맨':{'연구':1}, '오크':{'대장':1}, '뱀파이어':{'연구':1}
+};
+// 전투 역할 태그 — 직업 자동 산출 (RNG 낭비 0, 카드 1줄 표시)
+const ROLE_TAG = {
+  '전사':'선봉', '수호자':'수호', '암살자':'암살', '궁수':'후방',
+  '마법사':'포격', '지원가':'지원', '성기사':'수호', '드루이드':'지원',
+  '광전사':'선봉', '심연술사':'포격', '광산기사':'수호', '질풍사냥꾼':'암살',
+  '현자':'포격'
+};
+const ROLE_DESC = {
+  '선봉':'근접 주력 — 전열 최전선','수호':'아군 보호 — 피해 흡수·도발',
+  '암살':'속공 약살 — 후방 저격형 돌파','후방':'원거리 지속 화력',
+  '포격':'마법 광역·폭발 피해','지원':'치유·버프 — 아군 유지'
 };
 const APT_DESC = {
-  '근접':'접근전 효율·근접 무기 치명 보정','원거리':'사거리 유지·원거리 무기 정확도',
-  '마법':'시전 위력·마법 계열 효율','방어':'피해 경감·방어 태세 유지','공속':'초당 공격·행동 개시 속도',
-  '채집':'식량·약초 수확 ×20%/등급','벌목':'목재 채집 ×20%/등급','농부':'농사 수확 ×20%/등급',
-  '목수':'건설·수리 시간 -10%/등급','광부':'광석 채굴 가능(필수)·효율 ×20%/등급',
+  '채집':'식량·약초 수확 효율 — 티어 배율 적용','벌목':'목재 채집 효율 — 티어 배율 적용','농부':'농사 수확 효율 — 티어 배율 적용',
+  '목수':'건설·수리 시간 경감 — 티어 배율 적용','광부':'광석 채굴 가능(필수)·효율 — 티어 배율 적용',
+  '요리':'식당 — 버프 요리 (4:+10% · 5:+30% · 6:+65% · 7:+130%)','간호':'병원 — Sanity 요양 (4:+10% · 5:+30% · 6:+65% · 7:+130%)',
+  '연구':'연구소 — 연구 속도 (4:+10% · 5:+30% · 6:+65% · 7:+130%)','조제':'연금술소 — 포션 제작 (4:+10% · 5:+30% · 6:+65% · 7:+130%)','대장':'합성소 — 합성·강화 (4:+10% · 5:+30% · 6:+65% · 7:+130%)',
   '용광로':'[드워프 희귀] 합성·제작 효율 ×25%/등급','야생심':'[짐승 희귀] 짐승계열 아군 사기 +2%/등급',
   '심연감각':'[심연 희귀] 어둠 지형 전 스탯 +2%/등급','왕의 혈맥':'[인간 희귀] 영지 세금 +5%/등급',
   '정령 조화':'[공용 희귀] 원소 상성 +5%/등급',
@@ -246,12 +280,12 @@ const PERS_DESC = {
   '광폭':'ATK +8% / DEF -3%','헌신':'치유 +10% (MAG)','교활':'회피 +5%',
   '무자비':'치명타 피해 +10%p (P 1.03) — 약점을 순서 없이 찌른다 (2026-09-14 중립 대체 신규)',
   '불굴':'HP30%↓ 시 방어 +10%','낭만':'사기 +20%','고집':'스트레스 -20%',
-  '성실':'경험치 +5% · 생활 적성 효율 +5% — 성장 균형형 (2026-09-14 신규)',
+  '성실':'경험치 +5% · 생활·시설 적성 효율 +5% — 성장 균형형 (2026-09-14 신규)',
   '천애':'★희귀 — 성장 +15% (★4+)','백전노장':'★희귀 — 경험치 +10% (Lv30+)'
 };
 const APT_ICON = { // 카테고리 아이콘 (시각 구분)
-  '근접':'⚔','원거리':'🏹','마법':'✨','방어':'🛡','공속':'⚡',
   '채집':'🌿','벌목':'🪓','농부':'🌾','목수':'🔨','광부':'⛏',
+  '요리':'🍳','간호':'⚕','연구':'📖','조제':'⚗','대장':'⚒',
   '용광로':'🔥','야생심':'🌙','심연감각':'🌑','왕의 혈맥':'👑','정령 조화':'✨',
   '전쟁의 기억':'🗡','산맥의 뼈':'🦴','달의 심장':'🌙','숲의 언어':'🍃',
   '무리의 본능':'🐾','폭풍의 날개':'🌪','피의 기억':'🩸','타천의 근육':'💪'
@@ -371,16 +405,20 @@ function makeHero(r, pickup){
   let pers = rollPers(r, grade);
   const apt={};
   const prof = JOB_APT[job]||{};
-  COMMON_APT.forEach(k=>{
-    if(k in prof) apt[k] = Math.min(5, Math.max(1, prof[k] + (r.int(3)-1))); // ±1
-    else if(['근접','원거리','마법','방어','공속'].includes(k)) apt[k] = 1 + r.int(2); // 직업 외 전투 적성 1~2 캡 — 마법사 근접 5 방지 (05 §6 3차)
-    else apt[k] = 1 + r.int(5);
+  const raceBonus = RACE_APT_BONUS[race]||{};
+  const gnum = parseInt(grade[1]);
+  const tierCap = gnum>=5?7:(gnum===4?6:(gnum===3?5:4)); // 등급 게이트 — 명장=★5+ · 장인=★4+ · 숙련=★3+ · 견습=전등급 (05 §6 7차)
+  const rollTier = r=>{ const x=r.int(100)+1; let acc=0; for(let t=0;t<APT_W.length;t++){acc+=APT_W[t]; if(x<=acc) return t+1;} return 7; };
+  COMMON_APT.forEach(k=>{ // 생활 5 + 시설 5 — 7티어 · 프로필 ±1 · 종족 보정 · 등급 게이트 clamp (05 §6 7차)
+    let v = (k in prof) ? prof[k] + (r.int(3)-1) : rollTier(r);
+    apt[k] = Math.min(tierCap, Math.max(1, v + (raceBonus[k]||0)));
   });
-  let rareApt = null;
-  if(r.f()<0.05){ // 희귀 — 13종 풀(공용6+종족전용1) 중 1개 확정
+  const rareApts = [];
+  if(gnum>=3){ // 희귀 — ★3+ 5% · ★4+ +3% 재롤(독립 — 최대 2개) · 티어 5~7 · 게이트 clamp
     const pool = COMMON_RARE.concat(RACE_RARE[race]?[RACE_RARE[race]]:[]);
-    rareApt = r.pick(pool);
-    apt[rareApt] = 3+r.int(3);
+    const tryRare = ()=>{ const c=pool.filter(x=>!rareApts.includes(x)); if(!c.length) return; const k=r.pick(c); rareApts.push(k); const rt=r.f(); apt[k]=Math.min(tierCap, rt<0.45?5:(rt<0.80?6:7)); };
+    if(r.f()<0.05) tryRare();
+    if(gnum>=4 && r.f()<0.03) tryRare();
   }
   const gm=GM[grade[1]];
   const [hp,atk,df,as,mag,md,cri]=JC[job];
@@ -402,7 +440,8 @@ function makeHero(r, pickup){
   const nameRes = genName(lin, grade, r); used.add(nameRes.name);
   owned[lin]=(owned[lin]||0)+1;
   return {grade,lin,race,subrace,job,pers,apt,name:nameRes.name,origin:nameRes.origin,st,cp,
-          isRareJob: RARE_JOBS[lin]===job, isRareApt: !!rareApt, rareAptName: rareApt};
+          role: ROLE_TAG[job]||'—',
+          isRareJob: RARE_JOBS[lin]===job, isRareApt: rareApts.length>0, rareAptName: rareApts[0]||null, rareApts};
 }
 
 // ───────── UI ─────────
@@ -413,16 +452,17 @@ function card(h){
   const div=document.createElement('div');
   div.className=`card b${h.grade[1]}`;
   const rareCls = h.grade>='★5' ? 'rare-name shine' : (h.grade>='★4'?'rare-name':'');
-  const LIFE = new Set(['채집','벌목','농부','목수','광부']);
-  const shown = Object.entries(h.apt).filter(([k,v])=> h.isRareApt&&k===h.rareAptName ? true : (LIFE.has(k) ? v>=3 : true));
+  const shown = Object.entries(h.apt).filter(([k,v])=> v>=4); // 1~3 은닉 — 카드는 4(견습)부터 표시 (05 §6 7차)
   const aptHtml = shown.map(([k,v])=>{
-    const rare = h.isRareApt && k===h.rareAptName;
-    const hot = rare || v>=4;
-    const bg = rare ? 'var(--gold)' : (hot?'var(--c3)':'');
-    const tip = (APT_DESC[k]||k) + ' · 등급 ' + v + '/5 (' + ({1:'약체 ×0.6',2:'표준 ×0.8',3:'표준 ×1.0',4:'강화 ×1.2',5:'최상 ×1.5'}[v]||'') + ')';
-    const icon = rare ? '★'.repeat(v) : (v>=4 ? '●' : '○');
+    const rare = (h.rareApts||[]).includes(k);
+    const tierName = APT_TIER_NAME[v]||'';
+    const hot = v>=6;
+    const bg = rare ? 'var(--gold)' : (v===7?'var(--gold)':(v===6?'var(--c3)':''));
+    const tip = (APT_DESC[k]||k) + ' · 티어 ' + v + '/7' + (tierName?' ('+tierName+')':'') + ' — 배율 ×' + (APT_TIER[v]||1).toFixed(2);
+    const icon = rare ? '★'.repeat(v-3) : (v===7?'★★':(v===6?'★':(v===5?'●':'○')));
     const em = APT_ICON[k]||'•';
-    return `<span ${hot?`class="hot" style="background:${bg}"`:''} data-tip="${tip}"><i style="font-style:normal;margin-right:3px;opacity:.85">${em}</i>${k}${rare?` <b style="font-weight:800">${icon}</b>`:(v>=4?'<b>●</b>':'')}</span>`;
+    const label = k + (tierName?` <i style="font-style:normal;font-size:.72em;opacity:.9">${tierName}</i>`:'');
+    return `<span ${hot?`class="hot" style="background:${bg}"`:''} data-tip="${tip}"><i style="font-style:normal;margin-right:3px;opacity:.85">${em}</i>${label}${rare?` <b style="font-weight:800">${icon}</b>`:(v===7?'<b>★★</b>':(v===6?'<b>★</b>':''))}</span>`;
   }).join('');
   div.innerHTML=`
     <div class="g g${h.grade[1]}">${h.grade} ${h.grade>='★5'?'✦':''}${h.grade==='★6'?'★':'ㅤ'}</div>
@@ -431,7 +471,8 @@ function card(h){
     <div class="meta">
       <span data-tip="${LIN_DESC[h.lin]||''}">${h.lin}계열</span> ·
       <span data-tip="${RACE_DESC[h.race]||''}">${h.race}</span> (${h.subrace}) ·
-      <span data-tip="${JOB_DESC[h.job]||''}">${h.isRareJob?'<b class="rare-txt">'+h.job+'</b>':h.job}</span> ·
+      <span data-tip="${JOB_DESC[h.job]||''}">${h.isRareJob?'<b class="rare-txt">'+h.job+'</b>':h.job}</span>
+      <span data-tip="${ROLE_DESC[h.role]||''}" style="color:var(--c3);font-weight:700">[${h.role}]</span> ·
       <span data-tip="${PERS_DESC[h.pers]||''}">${h.pers}</span></div>
     <div class="apt">${aptHtml}</div>
     <div class="st">${Object.entries(h.st).map(([k,v])=>{

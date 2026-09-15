@@ -164,6 +164,8 @@ namespace SoulCommander.Core
                                $"AP {_data.ap}/{GameRules.MaxAp}  ·  골드 {_data.gold}  ·  영혼석(하) {_data.soulStones}  ·  경험치 {_data.expPool}\n" +
                                $"영지: 인구 {_data.estate.population}/{EstateSystem.MaxPopulation(_data)} · 식량 {_data.estate.food} · 민심 {_data.estate.morale} · 주택 {_data.estate.housingCount}동\n" +
                                $"재료: 약초 {_data.estate.herb} · 목재 {_data.estate.wood} · 광석 {_data.estate.ore} · 채집대 {EstateSystem.MaxGatheringTeams(_data)}팀\n" +
+                               $"농사: 경작지 {_data.estate.farmPlots.Count}/{EstateSystem.MaxFarmPlots(_data)} · 작물 {(EstateSystem.CurrentSeason(DateTime.UtcNow)?.id ?? "-")}\n" +
+                               $"칙령: {FormatActiveEdicts(_data.estate.activeEdicts)} (슬롯 {EstateSystem.MaxEdictSlots(_data)})\n" +
                                $"통계: 도전 {_data.runsStarted}회 · 패배 {_data.runsLost}회 · 추모 {_data.memorial.Count}명";
             _hpBar.text = ResonanceSummary();
 
@@ -631,6 +633,9 @@ namespace SoulCommander.Core
                 AppendLog($"{_runFloor}층 돌파 → 다음 {_data.currentFloor}층");
             }
 
+            // 영지: 층 클리어 시 주민 세금/식량 소비 (04 §3.4 · §3.11)
+            EstateSystem.OnFloorCleared(_data, _runFloor);
+
             // 세이브 (원자성)
             _save.Save(_data);
             AppendLog($"세이브 완료: {_save.FilePath}");
@@ -648,6 +653,8 @@ namespace SoulCommander.Core
                                $"보유: 골드 {_data.gold} · 영혼석(하) {_data.soulStones} · 경험치 {_data.expPool} · AP {_data.ap}/{GameRules.MaxAp}\n" +
                                $"영지: 인구 {_data.estate.population}/{EstateSystem.MaxPopulation(_data)} · 식량 {_data.estate.food} · 민심 {_data.estate.morale} · 주택 {_data.estate.housingCount}동\n" +
                                $"재료: 약초 {_data.estate.herb} · 목재 {_data.estate.wood} · 광석 {_data.estate.ore} · 채집대 {EstateSystem.MaxGatheringTeams(_data)}팀\n" +
+                               $"농사: 경작지 {_data.estate.farmPlots.Count}/{EstateSystem.MaxFarmPlots(_data)} · 작물 {(EstateSystem.CurrentSeason(DateTime.UtcNow)?.id ?? "-")}\n" +
+                               $"칙령: {FormatActiveEdicts(_data.estate.activeEdicts)} (슬롯 {EstateSystem.MaxEdictSlots(_data)})\n" +
                                $"통계: 도전 {_data.runsStarted}회 · 패배 {_data.runsLost}회  |  세이브: {_save.FilePath}";
 
             var sb = new System.Text.StringBuilder();
@@ -683,6 +690,22 @@ namespace SoulCommander.Core
             return System.DateTime.TryParse(iso, null, System.Globalization.DateTimeStyles.RoundtripKind, out var dt)
                 ? dt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")
                 : iso;
+        }
+
+        private static string FormatActiveEdicts(List<string> ids)
+        {
+            if (ids == null || ids.Count == 0) return "없음";
+            var sb = new System.Text.StringBuilder();
+            bool first = true;
+            foreach (var id in ids)
+            {
+                if (string.IsNullOrEmpty(id)) continue;
+                if (!first) sb.Append(" · ");
+                first = false;
+                var ed = EstateSystem.GetEdictData(id);
+                sb.Append(ed?.name_ko ?? id);
+            }
+            return sb.Length > 0 ? sb.ToString() : "없음";
         }
 
         // ============ UI 구성 ============

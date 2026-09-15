@@ -2,9 +2,9 @@
 """v8.0 문서 정합 검증 — exit 0 = 준수.
 
 검사:
-  1. Data JSON 5종 파싱 + 개수 (monsters 54 / ambient 19 / races 15 / codex 19 / biomes 20)
+  1. Data JSON 5종 파싱 + 개수 (monsters 54 / ambient 53 / races 15 / codex 53 / biomes 20)
   2. codex ID == ambient ID
-  3. biomes: 20종 · 그룹 층 범위(1~50/51~95/96~100) · habitat 전부 매핑·중복 0
+  3. biomes: 20종 · 그룹 층 범위(1~50/51~95/96~100) · habitat 전부 매핑·중복 0 · 온도(climate band ↔ 종 내성 107종 교차, 면역 역할 제외)
   4. 필수 문서 존재
   5. living 문서에 구수치 정본 주장 잔재 (전투 55종 / 74종 / 플레이어블 13종 / 아종 30종)
   6. living 문서에 구경로 참조 (design-docs/GDD/ · docs/GDD/ — archive/ 제외)
@@ -32,8 +32,8 @@ try:
     a = json.load(open(os.path.join(DATA, "ambient.json")))["ambient"]
     r = json.load(open(os.path.join(DATA, "races.json")))["races"]
     e = json.load(open(os.path.join(DATA, "ecology_codex.json")))["entries"]
-    for name, got, want in [("monsters", len(m), 54), ("ambient", len(a), 19),
-                            ("races", len(r), 15), ("codex", len(e), 19)]:
+    for name, got, want in [("monsters", len(m), 54), ("ambient", len(a), 53),
+                            ("races", len(r), 15), ("codex", len(e), 53)]:
         if got != want:
             fail(f"{name}.json 개수 {got} (기대 {want})")
     if sorted(x["id"] for x in a) != sorted(x["id"] for x in e):
@@ -55,6 +55,17 @@ try:
     orphan = sorted((mhab | ahab) - set(bhab))
     if orphan:
         fail(f"바이옴 미매핑 habitat (monsters/ambient에 있음): {orphan}")
+    # 온도 시스템 — 종 내성 ∩ 바이옴 band (06 §3.5 · 면역 역할 제외)
+    exempt = {"elemental", "guardian", "undead"}
+    clim = {x["id"]: x["climate"]["band"] for x in biomes}
+    for sp in m + a:
+        ec = sp["ecology"]
+        t1, t2 = ec["temperature"]["min"], ec["temperature"]["max"]
+        for x in biomes:
+            if set(ec["habitat"]) & set(x["habitat"]) and ec["role"] not in exempt:
+                lo, hi = clim[x["id"]]
+                if t2 < lo or t1 > hi:
+                    fail(f"온도 부정합: {sp['id']} 내성 {t1}~{t2} vs {x['id']} band {lo}~{hi}")
     req = ["id", "name", "tier", "stats", "spawn", "loot", "ecology"]
     bad = [x.get("id", "?") for x in m if not all(k in x for k in req)]
     if bad:
@@ -99,4 +110,4 @@ if errors:
     for e in errors:
         print(f"  - {e}")
     sys.exit(1)
-print("OK — v8.0 정합 (JSON 54/19/15/19/20 · biomes 1~50/51~95/96~100 · 필수문서 · 구수치/구경로 0건)")
+print("OK — v8.0 정합 (JSON 54/53/15/53/20 · biomes 1~50/51~95/96~100 · 온도 107종 정합 · 필수문서 · 구수치/구경로 0건)")

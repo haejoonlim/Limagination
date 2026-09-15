@@ -182,6 +182,7 @@ namespace SoulCommander.Save
                 if (d.estate.housingCount <= 0) d.estate.housingCount = 3;
                 if (string.IsNullOrEmpty(d.estate.lastTickUtc)) d.estate.lastTickUtc = DateTime.UtcNow.ToString("o");
                 if (d.estate.gatheringTeams == null) d.estate.gatheringTeams = new List<GatheringTeamState>();
+                if (d.estate.farmPlots == null) d.estate.farmPlots = new List<FarmPlotState>();
                 if (d.estate.activeEdicts == null) d.estate.activeEdicts = new List<string>();
                 if (string.IsNullOrEmpty(d.estate.currentStageId)) d.estate.currentStageId = "S1";
             }

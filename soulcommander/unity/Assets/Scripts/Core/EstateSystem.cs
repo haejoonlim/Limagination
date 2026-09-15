@@ -64,9 +64,8 @@ namespace SoulCommander.Core
             double elapsedRealSeconds = (nowUtc - last).TotalSeconds;
             if (elapsedRealSeconds <= 0) return;
             float islandDays = (float)(elapsedRealSeconds * IslandTimeMultiplier / SecondsPerIslandDay);
-            ApplyFoodConsumption(d, islandDays);
-            ApplyTax(d, islandDays);
-            ApplyNaturalGrowth(d, islandDays);
+            ApplyNaturalGrowth(d, islandDays, nowUtc);
+            AutoHarvestMatureCrops(d, nowUtc);
             d.estate.lastTickUtc = nowUtc.ToString("o");
         }
 
@@ -77,31 +76,40 @@ namespace SoulCommander.Core
             return DateTime.UtcNow;
         }
 
-        public static void ApplyFoodConsumption(SaveData d, float islandDays)
+        // 층 클리어 시 주민 세금/식량 소비 (04 §3.4 · §3.?? 세금 재설계).
+        public static void OnFloorCleared(SaveData d, int floor)
         {
-            if (d?.estate == null || islandDays <= 0) return;
-            var root = DataLoader.LoadEstate();
-            int consumption = (int)Math.Floor((root?.food?.consumption_per_pop_per_island_day ?? 1) * d.estate.population * islandDays);
+            if (d?.estate == null) return;
+            ApplyFloorTax(d);
+            ApplyFloorFoodConsumption(d);
+        }
+
+        private static void ApplyFloorFoodConsumption(SaveData d)
+        {
+            if (d?.estate == null) return;
+            int consumption = d.estate.population; // 1인당 1식량/층 클리어 (04 §3.4)
             d.estate.food -= consumption;
             if (d.estate.food < 0) d.estate.food = 0;
         }
 
-        public static void ApplyTax(SaveData d, float islandDays)
+        private static void ApplyFloorTax(SaveData d)
         {
-            if (d?.estate == null || islandDays <= 0) return;
-            var root = DataLoader.LoadEstate();
-            int tax = (int)Math.Floor((root?.tax?.gold_per_pop_per_island_day ?? 1) * d.estate.population * islandDays);
+            if (d?.estate == null) return;
+            int tax = d.estate.population; // 1인당 1G/층 클리어 (04 §3.11 세금 재설계)
+            tax = (int)Math.Floor(tax * GetActiveTaxMultiplier(d));
             d.gold += tax;
         }
 
-        public static void ApplyNaturalGrowth(SaveData d, float islandDays)
+        public static void ApplyNaturalGrowth(SaveData d, float islandDays, DateTime nowUtc)
         {
             if (d?.estate == null || islandDays <= 0) return;
             var root = DataLoader.LoadEstate();
             float growthRate = root?.population?.natural_growth_rate_per_island_day ?? 0.02f;
+            float seasonMul = CurrentSeason(nowUtc)?.natural_growth_mul ?? 1f;
+            float edictMul = GetActiveNaturalGrowthMultiplier(d);
             int maxPop = MaxPopulation(d);
             int room = Math.Max(0, Math.Min(Beds(d), maxPop) - d.estate.population);
-            int growth = (int)Math.Floor(d.estate.population * growthRate * islandDays);
+            int growth = (int)Math.Floor((double)d.estate.population * growthRate * seasonMul * edictMul * islandDays);
             growth = Math.Min(growth, room);
             if (growth > 0) d.estate.population += growth;
         }
@@ -124,6 +132,98 @@ namespace SoulCommander.Core
             if (!data.operate_required) return true;
             return !string.IsNullOrEmpty(state.operatorHeroId);
         }
+
+        // ============ 계절 (04 §3.13) ============
+
+        public static EstateFarming GetFarmingData() => DataLoader.LoadEstate()?.farming;
+
+        // 테스트용 계절 강제. null 이면 현실 월 기준.
+        public static string SeasonOverride { get; set; }
+
+        public static EstateSeason CurrentSeason(DateTime nowUtc)
+        {
+            var f = GetFarmingData();
+            if (f?.seasons == null) return null;
+            int month = nowUtc.Month;
+            foreach (var s in f.seasons)
+            {
+                if (!string.IsNullOrEmpty(SeasonOverride))
+                {
+                    if (s.id == SeasonOverride) return s;
+                    continue;
+                }
+                if (s.months != null && s.months.Contains(month)) return s;
+            }
+            return null;
+        }
+
+        // ============ 칙령 (04 §3.7) ============
+
+        public static EstateEdicts GetEdictsData() => DataLoader.LoadEstate()?.edicts;
+
+        public static EstateEdict GetEdictData(string id)
+        {
+            var e = GetEdictsData();
+            if (e?.list == null || id == null) return null;
+            foreach (var ed in e.list)
+                if (ed.id == id) return ed;
+            return null;
+        }
+
+        public static int MaxEdictSlots(SaveData d)
+        {
+            var e = GetEdictsData();
+            if (e?.slot_count_by_floor == null) return 0;
+            int floor = d?.currentFloor ?? 1;
+            int slots = 0;
+            foreach (var s in e.slot_count_by_floor)
+            {
+                if (floor >= s.floor) slots = s.slots;
+            }
+            return slots;
+        }
+
+        public static bool CanChangeEdict(SaveData d, int currentFloor)
+        {
+            var e = GetEdictsData();
+            if (e == null) return false;
+            return currentFloor - d.estate.lastEdictChangeFloor >= e.change_cooldown_floors;
+        }
+
+        public static bool TrySetEdict(SaveData d, string edictId, int slotIndex, int currentFloor)
+        {
+            if (d?.estate == null) return false;
+            var data = GetEdictsData();
+            if (data == null) return false;
+            if (currentFloor < data.unlock_floor) return false;
+            if (!CanChangeEdict(d, currentFloor)) return false;
+            if (slotIndex < 0 || slotIndex >= MaxEdictSlots(d)) return false;
+            var edict = GetEdictData(edictId);
+            if (edict == null) return false;
+
+            while (d.estate.activeEdicts.Count <= slotIndex)
+                d.estate.activeEdicts.Add(null);
+            d.estate.activeEdicts[slotIndex] = edictId;
+            d.estate.morale = Mathf.Clamp(d.estate.morale + edict.morale_delta, 0, 100);
+            d.estate.lastEdictChangeFloor = currentFloor;
+            return true;
+        }
+
+        private static float ProductMultiplier(Func<EstateEdict, float> selector, SaveData d)
+        {
+            float mul = 1f;
+            if (d?.estate?.activeEdicts == null) return mul;
+            foreach (var id in d.estate.activeEdicts)
+            {
+                var e = GetEdictData(id);
+                if (e != null) mul *= selector(e);
+            }
+            return mul;
+        }
+
+        public static float GetActiveTaxMultiplier(SaveData d) => ProductMultiplier(e => e.tax_mul, d);
+        public static float GetActiveGatheringMultiplier(SaveData d) => ProductMultiplier(e => e.gathering_yield_mul, d);
+        public static float GetActiveNaturalGrowthMultiplier(SaveData d) => ProductMultiplier(e => e.natural_growth_mul, d);
 
         // ============ 채집 (04 §3.3) ============
 
@@ -172,7 +272,7 @@ namespace SoulCommander.Core
             var team = GetTeam(d, teamId);
             var g = GetGatheringData();
             if (team == null || g?.base_yield == null) return false;
-            var yield = CalculateYield(d, team);
+            var yield = CalculateYield(d, team, nowUtc);
             d.estate.food += yield.food;
             d.estate.herb += yield.herb;
             d.estate.wood += yield.wood;
@@ -181,18 +281,118 @@ namespace SoulCommander.Core
             return true;
         }
 
-        public static EstateGatheringYield CalculateYield(SaveData d, GatheringTeamState team)
+        public static EstateGatheringYield CalculateYield(SaveData d, GatheringTeamState team, DateTime nowUtc)
         {
             var g = GetGatheringData();
             var result = new EstateGatheringYield();
             if (g?.base_yield == null || team == null) return result;
             float floorMul = 1f + team.floor / 50f;
-            result.food = (int)Math.Floor(g.base_yield.food * floorMul);
-            result.herb = g.base_yield.herb;
-            result.wood = g.base_yield.wood;
+            float edictMul = GetActiveGatheringMultiplier(d);
+            float seasonMul = CurrentSeason(nowUtc)?.food_yield_mul ?? 1f;
+            result.food = (int)Math.Floor(g.base_yield.food * floorMul * edictMul * seasonMul);
+            result.herb = (int)Math.Floor(g.base_yield.herb * edictMul);
+            result.wood = (int)Math.Floor(g.base_yield.wood * edictMul);
             // 광석 채굴은 광부 적성 티어 5+ 필요 — 05 §6 적성 시스템 후속 연동 예정
-            result.ore = g.base_yield.ore;
+            result.ore = (int)Math.Floor(g.base_yield.ore * edictMul);
             return result;
+        }
+
+        // ============ 농사 (04 §3.3-2) ============
+
+        public static int MaxFarmPlots(SaveData d)
+        {
+            var f = GetFarmingData();
+            return d.estate.housingCount * (f?.plots_per_housing ?? 1);
+        }
+
+        public static EstateCrop GetCrop(string id)
+        {
+            var f = GetFarmingData();
+            if (f?.crops == null || id == null) return null;
+            foreach (var c in f.crops)
+                if (c.id == id) return c;
+            return null;
+        }
+
+        public static bool TryPlant(SaveData d, string plotId, string cropId, DateTime nowUtc)
+        {
+            if (d?.estate == null) return false;
+            var season = CurrentSeason(nowUtc);
+            if (season == null || season.growth_mul <= 0f) return false; // 겨울 불가
+            if (d.estate.farmPlots.Count >= MaxFarmPlots(d)) return false;
+            if (GetCrop(cropId) == null) return false;
+            d.estate.farmPlots.Add(new FarmPlotState
+            {
+                id = plotId,
+                cropId = cropId,
+                plantedAtUtc = nowUtc.ToString("o")
+            });
+            return true;
+        }
+
+        public static FarmPlotState GetPlot(SaveData d, string plotId)
+        {
+            if (d?.estate?.farmPlots == null) return null;
+            foreach (var p in d.estate.farmPlots)
+                if (p.id == plotId) return p;
+            return null;
+        }
+
+        public static bool IsCropMature(SaveData d, string plotId, DateTime nowUtc)
+        {
+            var plot = GetPlot(d, plotId);
+            var crop = GetCrop(plot?.cropId);
+            if (plot == null || crop == null) return false;
+            var season = CurrentSeason(nowUtc);
+            if (season == null || season.growth_mul <= 0f) return false;
+            double elapsedIslandDays = (nowUtc - ParseLastTick(plot.plantedAtUtc)).TotalSeconds * IslandTimeMultiplier / SecondsPerIslandDay;
+            return elapsedIslandDays >= crop.growth_island_days;
+        }
+
+        public static bool TryHarvestCrop(SaveData d, string plotId, DateTime nowUtc)
+        {
+            if (!IsCropMature(d, plotId, nowUtc)) return false;
+            var plot = GetPlot(d, plotId);
+            var crop = GetCrop(plot?.cropId);
+            if (plot == null || crop == null) return false;
+            var yield = CalculateCropYield(d, plot, nowUtc);
+            d.estate.food += yield.food;
+            d.estate.herb += yield.herb;
+            d.estate.farmPlots.Remove(plot);
+            return true;
+        }
+
+        public static EstateGatheringYield CalculateCropYield(SaveData d, FarmPlotState plot, DateTime nowUtc)
+        {
+            var result = new EstateGatheringYield();
+            var crop = GetCrop(plot?.cropId);
+            if (crop == null) return result;
+            var season = CurrentSeason(nowUtc);
+            float foodMul = (season?.food_yield_mul ?? 1f) * GetActiveGatheringMultiplier(d);
+            float herbMul = GetActiveGatheringMultiplier(d);
+            // 농부 적성 티어 배율 — 05 §6 적성 시스템 후속 연동 예정
+            result.food = (int)Math.Floor(crop.yield_food * foodMul);
+            result.herb = (int)Math.Floor(crop.yield_herb * herbMul);
+            return result;
+        }
+
+        public static int AutoHarvestMatureCrops(SaveData d, DateTime nowUtc)
+        {
+            if (d?.estate?.farmPlots == null) return 0;
+            int count = 0;
+            for (int i = d.estate.farmPlots.Count - 1; i >= 0; i--)
+            {
+                var plot = d.estate.farmPlots[i];
+                if (IsCropMature(d, plot.id, nowUtc))
+                {
+                    var yield = CalculateCropYield(d, plot, nowUtc);
+                    d.estate.food += yield.food;
+                    d.estate.herb += yield.herb;
+                    d.estate.farmPlots.RemoveAt(i);
+                    count++;
+                }
+            }
+            return count;
         }
     }
 }

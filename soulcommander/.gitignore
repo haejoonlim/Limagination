@@ -16,6 +16,7 @@
 /.vs/
 /.vscode/
 *.csproj
+!SoulCommander.csproj
 *.sln
 *.slnx
 *.userprefs

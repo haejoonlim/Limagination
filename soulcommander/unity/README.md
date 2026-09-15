@@ -10,7 +10,7 @@
 3. Personal license (연매출 $200K 미만 무료)
 4. `git lfs install` 후 첫 커밋 (PNG/WAV/OGG/TTF 자동 LFS)
 5. Godot 백업(`../godot-ver.zip`)에서 가져오기 — **이관 대상만**: 3D 모델 `art/_source/`(Quaternius/KayKit) · `fonts/` → `Assets/Art/Fonts` · `audio/` → `Assets/Art/Audio` · `data/*.json`(구버전 — v8.0은 아래 6번이 정본)
-6. **v8.0 데이터 정본은 이미 이 폴더에 있음**: `Assets/Resources/Data/` (monsters 54 · ambient 19 · races 15 · ecology_codex)
+6. **v8.0 데이터 정본은 이미 이 폴더에 있음**: `Assets/Resources/Data/` (monsters 54 · ambient 53 · races 15 · ecology_codex 53)
    - 설계 기준: `../design-docs/` (v8.0 문서 3개) — `archive/`는 참고 금지
    - ⚠️ 2D 스프라이트(`sprites/`)는 **이관하지 않음** (Full 3D 확정 — `GDD_v8.0_00_확정사항.md` #15)
 
