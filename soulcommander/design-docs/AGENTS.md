@@ -26,6 +26,7 @@
 | `design-docs/GDD_v8.0_05_영웅생성.md` | 영웅 생성 13단계 파이프라인 확정 |
 | `design-docs/GDD_v8.0_06_바이옴.md` | 바이옴 20종 (10+9+1) · 5층 블록 슬롯 배정 · 난이도 (가안) |
 | `design-docs/GDD_v8.0_07_통합생태계.md` | 통합 생태계 — 20바이옴 사슬 완결 · 인공 바이옴 근원자원 · 신규 서식종 (가안) |
+| `design-docs/GDD_v8.0_08_먹이그물.md` | 복합 먹이 그물 재설계 제안 — 5경로·전투몬 편입·바이옴별 간선 목표 |
 | `unity/Assets/Resources/Data/monsters.json` | 전투 몬스터 **50종** (플레이어블 종족 오크·뱀파이어 제외) (스키마+스탯+패턴+스폰+생태) |
 | `unity/Assets/Resources/Data/ambient.json` | 비전투 53종 원본 데이터 (야생 19 + 서식 34) |
 | `unity/Assets/Resources/Data/races.json` | 플레이어블 **15종** + 계열6 + 공명 |

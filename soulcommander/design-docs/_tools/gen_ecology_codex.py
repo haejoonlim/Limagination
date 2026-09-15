@@ -112,10 +112,10 @@ for g in bi:
         cur = []
         for s in amb:
             if H & set(s["ecology"]["habitat"]):
-                cur.append({"n": s["name"], "r": s["ecology"]["role"], "p": False})
+                cur.append({"n": s["name"], "r": s["ecology"]["role"], "p": False, "id": s["id"]})
         for m in mon:
             if H & set(m["ecology"]["habitat"]):
-                cur.append({"n": m["name"], "r": m["ecology"]["role"], "p": False})
+                cur.append({"n": m["name"], "r": m["ecology"]["role"], "p": False, "id": m["id"]})
         for n, r, src, t in PLANNED.get(bid, []):
             cur.append({"n": n, "r": r, "p": True, "src": src, "tier": t})
         roles = {c["r"] for c in cur}
@@ -889,6 +889,77 @@ $('modal').addEventListener('click',e=>{if(e.target===$('modal'))closeSp();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSp();});
 document.addEventListener('click',e=>{
   const a=e.target.closest('[data-sp]'); if(a){openSp(a.dataset.sp); $('mcard').scrollTop=0;}
+});
+
+/* ── 바이옴 사전 (표제어 검색 + 상세 팝업) ── */
+const bState={q:'',g:'all'};
+function bioFiltered(){
+  return DATA.biomes.filter(b=>{
+    if(bState.g!=='all'&&b.gid!==bState.g)return false;
+    if(bState.q){const q=bState.q.toLowerCase();
+      const hay=[b.name,b.resName,b.resDesc,b.note,b.tempS,...b.species.map(s=>s.n)].join(' ').toLowerCase();
+      if(!hay.includes(q))return false;}
+    return true;});
+}
+function renderBioDex(){
+  const L=bioFiltered(),g=$('bioGrid');
+  g.innerHTML=L.map(b=>`<div class="dcard bio" data-bio="${b.id}">
+    <div class="dt"><b>${b.name}</b><span class="did">${b.id}</span></div>
+    <div class="dchips">
+      <span class="mini" style="background:#262035;color:var(--dim)">${b.gname}</span>
+      <span class="mini" style="background:#262035;color:var(--dim)">블록 ${b.slots[0]}</span>
+      ${b.complete?'<span class="mini amb">사슬완결</span>':`<span class="mini mon">결핍</span>`}
+    </div>
+    <p class="dl">⟡ ${b.resName} — ${b.resDesc}</p>
+    <p class="dl">🌡 ${b.tempS} · K≈${b.K}</p>
+    </div>`).join('');
+  $('bioEmpty').classList.toggle('hidden',L.length>0);
+  $('bioCount').textContent=`${L.length}/20 바이옴`;
+}
+function openBio(bid){
+  const b=DATA.biomes.find(x=>x.id===bid); if(!b)return;
+  const grps=[["🍂 먹이층",["prey","swarm","producer"]],["🎯 포식층",["predator","hunter","ambusher","apex"]],["♻ 분해층",["decomposer","scavenger","corruptor"]]];
+  let rows='';
+  for(const [lab,roles] of grps){
+    const mine=b.species.filter(s=>roles.includes(s.r));
+    if(!mine.length)continue;
+    rows+=`<div style="margin:8px 0"><b style="font-size:12px;color:var(--dim)">${lab}</b><div style="margin-top:4px">`+
+      mine.map(s=>`<span class="chip ${['predator','hunter','ambusher','apex'].includes(s.r)?'predator':(['decomposer','scavenger','corruptor'].includes(s.r)?'decomposer':'prey')}" data-sp="${s.id}" style="cursor:pointer">${s.n}</span>`).join(' ')+`</div></div>`;
+  }
+  $('mcard').innerHTML=`
+    <button class="mclose" onclick="closeSp()">닫기 ✕</button>
+    <div class="mhead"><b>${b.name}</b><span class="mid">${b.id}</span></div>
+    <div class="mbadges">
+      <span class="mini" style="background:#262035;color:var(--dim)">${b.gname}</span>
+      <span class="mini" style="background:#262035;color:var(--dim)">5층 블록 ${b.slots[0]}</span>
+      ${b.complete?'<span class="mini amb">사슬 완결 ✅</span>':`<span class="mini mon">결핍: ${b.missing.join('·')}</span>`}
+    </div>
+    <p class="mdef">🌱 ${b.note}</p>
+    <dl class="kv">
+      <dt>근원자원</dt><dd>⟡ ${b.resName} — ${b.resDesc}</dd>
+      <dt>수용력 K / 성장률</dt><dd>K≈${b.K} · r≈${b.r}</dd>
+      <dt>기후</dt><dd>${b.tempS}</dd>
+      <dt>난이도 계수</dt><dd>×${b.mult.toFixed(2)}</dd>
+      <dt>서식종</dt><dd>현행 ${b.curN}종 + 예정 ${b.planN}종</dd>
+    </dl>
+    <div style="margin:10px 0"><b style="font-size:12px;color:var(--dim)">먹이사슬</b></div>
+    ${rows}
+    <div class="simrow" style="margin-top:12px;align-items:center">
+      <button class="chipbtn" id="bioJump">📈 이 바이옴 시뮬레이터 ▶</button>
+      <span class="dim" style="font-size:11.5px">실데이터 시즌 시뮬에서 ${b.name} 서식종 ${b.curN}종 파동 보기</span>
+    </div>`;
+  $('modal').classList.remove('hidden');
+  $('bioJump').onclick=()=>{
+    closeSp();
+    document.querySelector('[data-p="sim"]').click();
+    const s2=$('simBio'); s2.value=b.id; s2.dispatchEvent(new Event('change'));};
+}
+window.openBio=openBio;
+$('bioQ').addEventListener('input',e=>{bState.q=e.target.value.trim();renderBioDex();});
+$('bioG').addEventListener('change',e=>{bState.g=e.target.value;renderBioDex();});
+document.addEventListener('click',e=>{
+  const c=e.target.closest('[data-bio]');
+  if(c && !e.target.closest('[data-sp]')){openBio(c.dataset.bio); $('mcard').scrollTop=0;}
 });
 
 /* ── 바이옴 카드 ── */

@@ -14,7 +14,7 @@
 | # | 작업 | 산출물 | 테스트 |
 |---|---|---|---|
 | P0-1 | Unity 6 LTS + URP 프로젝트 생성, `unity/` 스캐폴드 병합, Git LFS | 열리는 프로젝트 | — |
-| P0-2 | Data JSON 4종 → C# 모델 (`MonsterData`·`RaceData`·`AmbientData`·`CodexData`) | `Scripts/Data/` | JSON 54/35/15/35 로드 개수 assert |
+| P0-2 | Data JSON 4종 → C# 모델 (`MonsterData`·`RaceData`·`AmbientData`·`CodexData`) | `Scripts/Data/` | JSON 50/53/15/53 로드 개수 assert |
 | P0-3 | Quaternius/KayKit glTF 1종 + Humanoid Avatar + 바닥 1장 렌더 | 화면에 캐릭터 1명 | 육안 |
 | P0-4 | THIRD_PARTY_NOTICES 1차 기입 | 고지 문서 | — |
 
@@ -74,6 +74,7 @@
 | P4-7 | 생태 검증 확장 — check_docs.py에 바이옴별 3역할 완결·신규종 habitat 단일·diet none 금지 + ambient 기대치 갱신 | 07 §4 완결 기준 |
 | P4-8 | 온도 시스템 실장 — biome climate 스폰 게이트 2중화(habitat+온도) + 영웅 쾌적 10~25°C Sanity 드레인 + 전투 모디퍼 3단계 | 00 #25 · 06 §3.5 |
 | P4-9 | ✅ 시뮬레이터 법칙 검수기 `audit_sim.py` — 시뮬 1:1 파이썬 포팅, 20바이옴×12시즌 전수 루프 22검사(마르코프·φ·로지스틱·LV·홀링·10%법칙·결정론) 전부 통과 | 07 §8 |
+| P4-10 | ✅ 복합 먹이 그물 1차 — corpse·soul·mana 전역 자원 + 서식종 간선 부여 + 비대칭 쌍방 정합 → 간선 64→118 · 고아 46→0 · 비대칭 35→0 (T-08-1~4, gen_foodweb.py) | 08 §4·§8 |
 
 ## Phase 5 — 플탐·밸런스·출시 (Week 14~16)
 
@@ -87,7 +88,7 @@
 
 1. 전술개입 → 완전자동만
 2. 장비 100종 → 20종
-3. 영지 10종 → 3종 (10종 복구됨 — NO-GO 시 재축소 후보)
+3. 영지 12종 → 3종 (NO-GO 시 재축소 후보 — 정본 04 §3.1 12종 기준)
 4. 이름 L2/L3 → L1만
 5. 100층 → 20층 출시 (나머지는 업데이트)
 
