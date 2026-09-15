@@ -75,6 +75,10 @@ SCENARIOS = {
     "cluster_S2": dict(winter=False, famine_every=0, bandit_every=0, morale=50, s2_floor=12, split_expansion=True),     # 확장비 분할 50%+3층후 50%
     "cluster_S3": dict(winter=False, famine_every=0, bandit_every=0, morale=50, s2_floor=12, start_gold=2000),          # 시작 골드 2,000 (소액 보완)
     "cluster_S4": dict(winter=False, famine_every=0, bandit_every=0, morale=50, s2_floor=12, split_expansion=True, start_gold=2000),  # 분할+소액 조합
+    # 게이트잭팟 주기 비교 (§3.9 — 10층 단위 vs 5층 GK — 2026-09-15)
+    "jp_A10":      dict(winter=False, famine_every=0, bandit_every=0, morale=50, jp_every=10, jp_coeff=75),  # 현행: 10층 단위 ×75
+    "jp_B5_naive": dict(winter=False, famine_every=0, bandit_every=0, morale=50, jp_every=5,  jp_coeff=75),  # 5층 GK 전면 (계수 무보정)
+    "jp_B5_rebal": dict(winter=False, famine_every=0, bandit_every=0, morale=50, jp_every=5,  jp_coeff=40),  # 5층 GK + 계수 40 (총액 보정 — 71,750×40=287만)
 }
 
 def pop_at(f):
@@ -159,7 +163,9 @@ def run_sim(name, scn):
             # 수입
             gold += 100 * f
             gold += pop          # 주민 세금 +1G/명·클리어 (플랫 — 2026-09-15 재설계 · 루프 반영)
-            mana += 30 * f + (75 * f * f if f % 10 == 0 and f >= 10 else 0)
+            jp_every = scn.get("jp_every", 10)   # 게이트잭팟 주기 (10 = 문서 현행 · 5 = GK 전면 후보)
+            jp_coeff = scn.get("jp_coeff", 75)   # 게이트층² 계수 (§3.9 — 75 = 2026-09-14 재계산치)
+            mana += 30 * f + (jp_coeff * f * f if f % jp_every == 0 and f >= jp_every else 0)
             # 확장 (해금 층수·분할 지급 시나리오별 — B안 지연·클러스터 완화 검증용)
             s2f = scn.get("s2_floor", 10)
             s3f = scn.get("s3_floor", 25)
