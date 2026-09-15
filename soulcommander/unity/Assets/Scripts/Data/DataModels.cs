@@ -295,6 +295,61 @@ namespace SoulCommander.Data
     }
 
     [Serializable]
+    public class EstateCrop
+    {
+        public string id;
+        public string name_ko;
+        public int yield_food;
+        public int yield_herb;
+        public int growth_island_days;
+    }
+
+    [Serializable]
+    public class EstateSeason
+    {
+        public string id;
+        public List<int> months;
+        public float food_yield_mul;
+        public float natural_growth_mul;
+        public float growth_mul;
+    }
+
+    [Serializable]
+    public class EstateFarming
+    {
+        public int plots_per_housing;
+        public List<EstateCrop> crops;
+        public List<EstateSeason> seasons;
+    }
+
+    [Serializable]
+    public class EstateEdictSlot
+    {
+        public int floor;
+        public int slots;
+    }
+
+    [Serializable]
+    public class EstateEdict
+    {
+        public string id;
+        public string name_ko;
+        public float tax_mul;
+        public int morale_delta;
+        public float gathering_yield_mul;
+        public float natural_growth_mul;
+    }
+
+    [Serializable]
+    public class EstateEdicts
+    {
+        public int unlock_floor;
+        public List<EstateEdictSlot> slot_count_by_floor;
+        public int change_cooldown_floors;
+        public List<EstateEdict> list;
+    }
+
+    [Serializable]
     public class EstateRoot
     {
         public EstateMeta meta;
@@ -304,6 +359,8 @@ namespace SoulCommander.Data
         public EstateMorale morale;
         public EstateTax tax;
         public EstateGathering gathering;
+        public EstateFarming farming;
+        public EstateEdicts edicts;
         public List<EstateStage> stages;
     }
 }

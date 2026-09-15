@@ -9,14 +9,15 @@
 | 1 | [AGENTS.md](AGENTS.md) | 작업 규칙 · 프로젝트 개요 · 정본 목록 |
 | 2 | [GDD_v8.0_00_확정사항.md](GDD_v8.0_00_확정사항.md) | 확정된 결정만 모은 목록 (여기 없으면 미정) |
 | 3 | [GDD_v8.0_01_등급_전투력.md](GDD_v8.0_01_등급_전투력.md) | ★1~★7 등급계수 + 전투력(CP) 공식 |
-| 4 | [GDD_v8.0_02_생태사전.md](GDD_v8.0_02_생태사전.md) | 비전투 생물 19종 + 층별 출현 |
+| 4 | [GDD_v8.0_02_생태사전.md](GDD_v8.0_02_생태사전.md) | 비전투 생물 53종 (야생 19 + 서식 34) + 층별 출현 |
 | 5 | [GDD_v8.0_03_개발플랜.md](GDD_v8.0_03_개발플랜.md) | Phase 0~5 + 고/노-고 게이트 (개발 진행 기준) |
 | 6 | [GDD_v8.0_04_영지.md](GDD_v8.0_04_영지.md) | 시설 12종 + 인구·채집·농사·식량·민심·칙령 (base 확정) |
 | 7 | [GDD_v8.0_05_영웅생성.md](GDD_v8.0_05_영웅생성.md) | 소환 13단계 파이프라인 (등급·종족·직업·성격·적성·이름·스탯) |
 | 8 | [GDD_v8.0_06_바이옴.md](GDD_v8.0_06_바이옴.md) | 20바이옴 (10+9+1) · 5층 블록 슬롯 배정 · 난이도 (가안) |
+| 9 | [GDD_v8.0_07_통합생태계.md](GDD_v8.0_07_통합생태계.md) | 20바이옴을 하나의 먹이사슬로 — 생태 완결 · 신규 서식종 (가안) |
 
 데이터 정본은 코드 쪽에 있음 — `../unity/Assets/Resources/Data/`:
-`monsters.json`(전투 54종) · `ambient.json`(비전투 19종) · `races.json`(플레이어블 15종) · `ecology_codex.json` · `biomes.json`(바이옴 20종)
+`monsters.json`(전투 50종) · `ambient.json`(비전투 53종) · `races.json`(플레이어블 15종) · `ecology_codex.json`(53종) · `biomes.json`(바이옴 20종+기후)
 
 ## 폴더 구조
 
@@ -26,7 +27,8 @@ design-docs/
 ├── AGENTS.md                ← 에이전트·작업자 필독 규칙
 ├── GDD_v8.0_*.md            ← 게임 규칙 정본 (현행 5개)
 ├── _tools/check_docs.py     ← 정합 검증 스크립트 (exit 0 = 준수)
-├── _템플릿/                  ← 새 문서 작성용 템플릿 7종
+├── _tools/sim_economy.py    ← 재화 흐름 시뮬레이터 (baseline·stress·해결안 시나리오)
+├── 결정로그/                 ← 결정 단위 ADR (D-251~ — 템플릿은 _템플릿/결정_로그.md)
 └── archive/                 ← 역사자료 (읽지 말 것 · 수정 금지)
     ├── README.md            ← 보관 안내
     ├── _root/               ← 구 AGENTS·AUDIT_INDEX·SOUL_COMMANDER·11_design_decisions

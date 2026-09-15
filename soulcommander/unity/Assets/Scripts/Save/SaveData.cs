@@ -59,8 +59,10 @@ namespace SoulCommander.Save
         public int housingCount = 3; // 초기 3동 (04 §3.1)
         public string currentStageId = "S1";
         public string lastTickUtc; // ISO-8601 UTC. 섬 시간(현실×7) 기준 누적 정산용.
+        public int lastEdictChangeFloor; // 칙령 변경 쿨다운 기준층 (04 §3.7)
         public List<FacilityState> facilities = new List<FacilityState>();
         public List<GatheringTeamState> gatheringTeams = new List<GatheringTeamState>();
+        public List<FarmPlotState> farmPlots = new List<FarmPlotState>();
         public List<string> activeEdicts = new List<string>();
     }
 
@@ -80,6 +82,14 @@ namespace SoulCommander.Save
         public int floor;
         public string lastHarvestUtc; // ISO-8601 UTC
         public List<string> memberHeroIds = new List<string>();
+    }
+
+    [Serializable]
+    public class FarmPlotState
+    {
+        public string id;
+        public string cropId;
+        public string plantedAtUtc; // ISO-8601 UTC
     }
 
     // 보유 영웅 1명. 무한 영웅 생성 시스템 — 고정 주인공 없음.

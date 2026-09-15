@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>소울 커맨더 — 생태 도감</title>
+<style>
+  :root{--bg:#14111c;--card:#1e1930;--line:#332a4a;--tx:#e8e2f4;--dim:#9a90b8;
+    --g1:#5fb877;--g2:#5f8fd8;--g3:#d8b45f;--prey:#8fce6a;--pred:#e06a6a;--dec:#b08ce0;--prod:#6ad4c4;}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--tx);font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;line-height:1.6}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 20px 40px}
+  /* ── 상단 고정 내비 (탭 = 사전의 표제어 구획) ── */
+  .topbar{position:sticky;top:0;z-index:40;background:rgba(20,17,28,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);margin:0 -20px;padding:10px 20px 0}
+  .brand{font-size:17px;font-weight:800;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .brand small{color:var(--dim);font-weight:400;font-size:11.5px}
+  .tabs{display:flex;gap:4px;margin-top:8px;flex-wrap:wrap}
+  .tab{background:none;border:none;color:var(--dim);font:inherit;font-size:13.5px;font-weight:600;padding:8px 14px;border-radius:10px 10px 0 0;cursor:pointer;border-bottom:2px solid transparent}
+  .tab:hover{color:var(--tx)}
+  .tab.on{color:#fff;border-bottom-color:#ffd98a;background:#1a1626}
+  .panel{padding-top:22px}
+  .hidden{display:none}
+  h2{font-size:21px;margin:8px 0 6px;padding-bottom:8px;border-bottom:2px solid var(--line)}
+  h2 .sub{color:var(--dim);font-size:13px;font-weight:400;margin-left:8px}
+  .lead{color:var(--dim);font-size:13.5px;margin-bottom:16px;max-width:860px}
+  .lead b{color:#ffd98a}
+  .stats{display:flex;gap:12px;flex-wrap:wrap;margin:6px 0 14px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 14px;font-size:12px;color:var(--dim)}
+  .stat b{font-size:18px;display:block;color:#fff}
+  /* ── 종사전: 검색 · 필터 · 색인 ── */
+  .dexbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+  .dexbar input[type=search]{flex:1;min-width:220px;background:#12101a;border:1px solid var(--line);border-radius:10px;color:var(--tx);font:inherit;font-size:14px;padding:9px 14px}
+  .dexbar input[type=search]:focus{outline:1px solid #8fd0ff}
+  .chipbtn{background:#221d33;border:1px solid var(--line);color:#cfc6ee;font:inherit;font-size:12px;border-radius:20px;padding:5px 12px;cursor:pointer}
+  .chipbtn.on{background:#3a2f55;border-color:#8fd0ff;color:#fff}
+  select{background:#12101a;color:var(--tx);border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:12.5px}
+  .choidx{display:flex;gap:4px;flex-wrap:wrap;margin:2px 0 12px}
+  .cho{background:none;border:1px solid var(--line);color:var(--dim);font-size:11.5px;border-radius:6px;padding:2px 8px;cursor:pointer}
+  .cho.on{background:#332a4a;color:#fff;border-color:#8fd0ff}
+  .dexgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));gap:10px}
+  .dcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 13px;cursor:pointer;position:relative;transition:border-color .12s}
+  .dcard:hover{border-color:#8fd0ff}
+  .dcard .dt{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+  .dcard b{font-size:15px}
+  .dcard .did{font-size:10px;color:var(--dim);font-family:ui-monospace,monospace}
+  .dcard .dl{color:var(--dim);font-size:12px;margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .dcard .dchips{margin-top:7px;display:flex;gap:4px;flex-wrap:wrap}
+  .mini{font-size:10px;border-radius:4px;padding:1px 6px}
+  .mini.amb{background:#16332f;color:#6ad4c4}.mini.mon{background:#332a12;color:#ffd98a}.mini.plan{background:#2e1a33;color:#e08cd0;border:1px dashed #e08cd0}
+  .mini.r-prey,.mini.r-swarm,.mini.r-producer{background:#243620;color:var(--prey)}
+  .mini.r-predator,.mini.r-hunter,.mini.r-ambusher,.mini.r-apex{background:#382020;color:var(--pred)}
+  .mini.r-decomposer,.mini.r-scavenger,.mini.r-corruptor{background:#2c2240;color:var(--dec)}
+  .mini.r-guardian,.mini.r-undead,.mini.r-mimic,.mini.r-elemental,.mini.r-warrior{background:#262035;color:var(--dim)}
+  .mini.tier{background:#332a4a;color:#b8a8e8}
+  .empty{color:var(--dim);font-size:13px;padding:26px 0;text-align:center}
+  /* ── 상세 팝업 (사전 항목 뷰) ── */
+  .modal{position:fixed;inset:0;background:rgba(10,8,16,.72);display:flex;align-items:flex-start;justify-content:center;z-index:60;padding:5vh 14px}
+  .modal.hidden{display:none}
+  .mcard{width:min(660px,96vw);max-height:88vh;overflow:auto;background:var(--card);border:1px solid #4a3d6e;border-radius:16px;padding:20px 22px;position:relative}
+  .mclose{position:absolute;top:10px;right:12px;background:#221d33;border:1px solid var(--line);color:var(--dim);border-radius:8px;font:inherit;font-size:12px;padding:3px 10px;cursor:pointer}
+  .mhead b{font-size:22px}
+  .mhead .mid{color:var(--dim);font-size:11px;font-family:ui-monospace,monospace;margin-left:8px}
+  .mbadges{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 4px}
+  .mdef{font-size:14px;margin:10px 0 2px;color:#e8e2f4}
+  .kv{display:grid;grid-template-columns:92px 1fr;gap:5px 10px;font-size:13px;margin:12px 0;border-top:1px dashed var(--line);border-bottom:1px dashed var(--line);padding:12px 0}
+  .kv dt{color:var(--dim)}
+  .kv dd a,.xref{color:#8fd0ff;cursor:pointer;text-decoration:none;border-bottom:1px dotted #8fd0ff}
+  .rel{margin:10px 0}
+  .rel h4{font-size:12.5px;color:var(--dim);margin:8px 0 5px}
+  .relchip{display:inline-block;font-size:12px;border-radius:16px;padding:3px 11px;margin:2px 4px 2px 0;background:#262035;border:1px solid var(--line)}
+  .relchip a{color:#8fd0ff;cursor:pointer}
+  .relchip.res{border-style:dashed;color:var(--dim)}
+  table.stt{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
+  table.stt th{color:var(--dim);font-weight:500;text-align:left;padding:5px 8px;border-bottom:1px solid var(--line);font-size:12px}
+  table.stt td{padding:5px 8px;border-bottom:1px dashed var(--line)}
+  .mnote{font-size:12.5px;color:var(--dim);margin-top:12px}
+  /* ── 개념 사전 (접이식) ── */
+  .cghead{margin:26px 0 10px;font-size:16px;font-weight:700}
+  .cghead:first-of-type{margin-top:14px}
+  .cgsub{color:var(--dim);font-size:12px;font-weight:400;margin-left:8px}
+  .concepts{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:10px}
+  details.concept{background:var(--card);border:1px solid var(--line);border-radius:12px;font-size:13px;overflow:hidden}
+  details.concept.pinned{border-color:#5a4a22;box-shadow:0 0 0 1px #5a4a22 inset}
+  details.concept summary{list-style:none;cursor:pointer;padding:11px 14px;display:flex;flex-direction:column;gap:3px;position:relative}
+  details.concept summary::-webkit-details-marker{display:none}
+  details.concept summary::after{content:'▸ 펼치기';font-size:10.5px;color:var(--dim);position:absolute;right:14px;margin-top:-17px}
+  details.concept[open] summary::after{content:'▴ 접기'}
+  .conline{display:flex;align-items:center;gap:6px}
+  .conline b{font-size:14.5px}
+  .star{color:#ffd98a}
+  .oneliner{color:var(--dim);font-size:12px;line-height:1.45}
+  details.concept[open] .oneliner{color:#b8a8e8}
+  .cbody{padding:0 14px 13px;font-size:13px;border-top:1px dashed var(--line);margin-top:2px;padding-top:10px}
+  .cbody .en{display:block;color:var(--dim);font-size:11px;margin-bottom:6px}
+  .cat{font-size:10px;border-radius:4px;padding:1px 6px}
+  .cat.ce{background:#16332f;color:#6ad4c4}
+  .cat.cb{background:#3a2f12;color:#ffd98a}
+  .cat.cc{background:#2e1a33;color:#e08cd0}
+  .formula{font-family:ui-monospace,monospace;background:#12101a;border:1px solid var(--line);border-radius:8px;padding:6px 10px;margin:8px 0;font-size:12px;color:#ffd98a;white-space:pre-line}
+  .concept p{color:#cfc6e4;margin:4px 0}
+  .concept .map{color:#8fd0ff;font-size:12.5px}
+  /* ── 바이옴 카드 ── */
+  .ghead{margin:30px 0 12px;font-size:17px;font-weight:700}
+  .ghead .bar{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:8px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,350px),1fr));gap:14px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;position:relative}
+  .card.g1{border-top:3px solid var(--g1)} .card.g2{border-top:3px solid var(--g2)} .card.g3{border-top:3px solid var(--g3)}
+  .chead2{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;flex-wrap:wrap;gap:2px 8px}
+  .cname{font-size:17px;font-weight:700}
+  .cmeta{font-size:11px;color:var(--dim)}
+  .res{background:#12101a;border-radius:8px;padding:8px 10px;margin:8px 0;font-size:12.5px}
+  .res b{color:#ffd98a}
+  .res .d{color:var(--dim);font-size:11.5px;display:block}
+  .chain{margin:8px 0}
+  .crow{display:flex;align-items:flex-start;gap:6px;margin:5px 0;flex-wrap:wrap}
+  .clabel{font-size:11px;color:var(--dim);min-width:44px;padding-top:3px}
+  .chip{font-size:11.5px;border-radius:20px;padding:2px 9px;margin:1px 0;display:inline-block}
+  .chip.prey{background:#243620;border:1px solid var(--prey);color:var(--prey)}
+  .chip.swarm{background:#243620;border:1px solid var(--prey);color:var(--prey)}
+  .chip.producer{background:#16332f;border:1px solid var(--prod);color:var(--prod)}
+  .chip.predator,.chip.hunter,.chip.ambusher,.chip.apex{background:#382020;border:1px solid var(--pred);color:var(--pred)}
+  .chip.decomposer,.chip.scavenger,.chip.corruptor{background:#2c2240;border:1px solid var(--dec);color:var(--dec)}
+  .chip.other{background:#262035;border:1px solid var(--line);color:var(--dim)}
+  .chip.plan{border-style:dashed;opacity:.85}
+  .chip .src{color:var(--dim);font-size:10px}
+  .badge{font-size:10.5px;border-radius:6px;padding:2px 8px;margin-left:6px;vertical-align:2px}
+  .badge.ok{background:#1d3322;color:#7fe09a}
+  .badge.miss{background:#3a2720;color:#e0a07f}
+  .badge.plan{background:#332a4a;color:#b8a8e8}
+  .cnote{font-size:12px;color:var(--dim);border-top:1px dashed var(--line);margin-top:10px;padding-top:8px}
+  .jump{font-size:11px;background:#262035;border:1px solid var(--line);color:#b8a8e8;border-radius:6px;padding:2px 8px;cursor:pointer;margin-left:6px}
+  /* ── 시뮬레이터 ── */
+  .sim{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin-top:16px}
+  .simrow{display:flex;gap:22px;flex-wrap:wrap;margin-top:12px}
+  canvas{background:#12101a;border-radius:10px;border:1px solid var(--line);width:100%;max-width:620px;height:auto}
+  .sl{font-size:12px;color:var(--dim);display:block;margin:7px 0 2px}
+  .sl b{color:var(--tx)}
+  input[type=range]{width:190px;accent-color:#8fd0ff}
+  .eqbox{font-size:12.5px;color:#cfc6e4;background:#12101a;border-radius:8px;padding:8px 12px;margin-top:10px}
+  .legend{font-size:12px;color:var(--dim);margin-top:6px}
+  .legend i{display:inline-block;width:18px;height:3px;border-radius:2px;margin:0 5px 0 12px;vertical-align:3px}
+  footer{margin-top:46px;color:var(--dim);font-size:12px;border-top:1px solid var(--line);padding-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">📜 소울 커맨더 — 생태 도감 <small>20바이옴 × 하나의 먹이사슬 · 사전형 참조 (07 §10)</small></div>
+    <div class="tabs">
+      <button class="tab on" data-p="dex">🔎 종사전 <span class="mini amb" style="margin-left:2px">103종</span></button>
+      <button class="tab" data-p="biome">🗺 바이옴 <span class="mini amb" style="margin-left:2px">20</span></button>
+      <button class="tab" data-p="concept">📖 생태 개념 <span class="mini amb" style="margin-left:2px">22</span></button>
+      <button class="tab" data-p="sim">📈 시뮬레이터</button>
+      <button class="tab" data-p="web">🕸 먹이사슬</button>
+    </div>
+  </div>
+
+  <!-- ① 종사전 — 가장 중요한 내용이 기본 화면 -->
+  <section id="panel-dex" class="panel">
+    <div class="stats">
+      <div class="stat"><b>53</b>야생종</div>
+      <div class="stat"><b>50</b>전투종</div>
+      <div class="stat"><b>+0</b>예정 신규종</div>
+      <div class="stat"><b>36</b>생태 통로</div>
+      <div class="stat"><b>20/20</b>사슬 완결</div>
+    </div>
+    <p class="lead">표제어를 <b>검색</b>하거나 <b>초성 색인</b>으로 찾아보세요. 항목을 누르면 뜻풀이(정의)·서식·먹이사슬 관계가 나오고, <b>먹이·천적은 클릭</b>하면 그 종의 항목으로 이동합니다. 기본 정렬은 중요도(전투 티어 → 야생 → 예정)순.</p>
+    <div class="dexbar">
+      <input type="search" id="q" placeholder="표제어 검색 — 예: 쥐, 슬라임, 레비아탄…" autocomplete="off">
+      <button class="chipbtn on" data-k="all">전체</button>
+      <button class="chipbtn" data-k="mon">전투 50</button>
+      <button class="chipbtn" data-k="amb">야생 53</button>
+      <button class="chipbtn" data-k="plan">예정 0</button>
+      <select id="srt"><option value="imp">중요도순</option><option value="ga">가나다순</option></select>
+    </div>
+    <div class="choidx" id="choidx"></div>
+    <div class="dexgrid" id="dexgrid"></div>
+    <div class="empty hidden" id="dexempty">검색 결과가 없습니다 — 다른 표제어로 찾아보세요.</div>
+  </section>
+
+  <!-- ② 바이옴 (사전형) -->
+  <section id="panel-biome" class="panel hidden">
+    <h2>바이옴 사전 <span class="sub">20항목 · 표제어 검색 · 상세 팝업 — 종사전과 같은 방식</span></h2>
+    <p class="lead">각 항목은 한 바이옴의 "생태 머리말"이다. 근원자원이 수용력 K를 정하고, K가 개체수를 정하고, 개체수가 사슬 전체를 정한다. 카드를 <b>클릭</b>하면 사전 항목(기후·계수·서식종 전원·시뮬 연동)이 열린다.</p>
+    <div class="dexbar">
+      <input id="bioQ" placeholder="표제어 검색 (이름·서식종·근원자원…)">
+      <select id="bioG"><option value="all">전체 그룹</option><option value="g1">G1 하부 (1~50)</option><option value="g2">G2 중부 (51~95)</option><option value="g3">G3 정점 (96~100)</option></select>
+      <span class="dim" id="bioCount"></span>
+    </div>
+    <div id="bioGrid" class="dexgrid"></div>
+    <div class="empty hidden" id="bioEmpty">검색 결과가 없습니다 — 다른 표제어로 찾아보세요.</div>
+    <div style="margin-top:22px">
+      <div class="dexbar" style="margin-bottom:8px"><span class="dim">📋 전체 보기 (그룹 헤더 + 사슬 칩)</span></div>
+      <div id="cards"></div>
+    </div>
+  </section>
+
+  <!-- ③ 개념 -->
+  <section id="panel-concept" class="panel hidden">
+    <h2>생태학 개념 사전 <span class="sub">22개 · 카드를 눌러 펼치기 — ★ 2개는 핵심이니 먼저 보세요</span></h2>
+    <p class="lead">모두 다 읽을 필요 없습니다. <b>★ 로지스틱 성장</b>(개체수가 K에서 멈추는 S자 곡선)과 <b>★ 로트카-볼테라</b>(먹이·포식자의 주기 파동)만 이해하면 생태 설계의 8할입니다. 나머지는 필요할 때 펼쳐 보세요.</p>
+    <div class="cghead">생태 <span class="cgsub">먹이사슬·개체수 — 게임이 '살아있는' 이유 · 17개</span></div>
+<div class="concepts">
+<details class="concept pinned" open><summary><span class="conline"><span class="cat ce">생태</span><b><span class="star">★ </span>로지스틱 성장</b></span><span class="oneliner">개체수는 무한히 늘지 않고 한계(K)에서 멈춘다</span></summary><div class="cbody"><span class="en">Logistic Growth</span><div class="formula">dN/dt = r·N·(1−N/K)</div><p>개체수가 처음엔 폭발적으로 늘다가, 환경 한계에 가까워지면 성장이 멈추는 <b>S자 곡선</b>. 자연의 개체수 증가는 거의 항상 이 모양.</p><p class="map">→ 게임 매핑: 바이옴별 <b>개체수 상한</b> — 스폰 캡과 사냥 개체수 조절의 기본식. 하단 시뮬레이터의 초록 선이 이 곡선.</p></div></details>
+<details class="concept"><summary><span class="conline"><span class="cat ce">생태</span><b>수용력</b></span><span class="oneliner">그 환경이 먹여 살릴 수 있는 최대 개체수</span></summary><div class="cbody"><span class="en">Carrying Capacity (K)</span><div class="formula">K = 자원 등급 × 공간 크기</div><p>그 환경이 먹여 살릴 수 있는 최대 개체수. K를 넘으면 기아로 개체수가 다시 떨어진다.</p><p class="map">→ 게임 매핑: 근원자원 풍요도 → 바이옴별 K. 사막(K 35)과 정글(K 130)의 체감 차이가 여기서 나온다.</p></div></details>
+<details class="concept pinned" open><summary><span class="conline"><span class="cat ce">생태</span><b><span class="star">★ </span>로트카-볼테라</b></span><span class="oneliner">먹이 늘면 포식자 늘고, 포식자 늘면 먹이 줄고 — 주기 파동</span></summary><div class="cbody"><span class="en">Lotka-Volterra</span><div class="formula">dN/dt = rN(1−N/K) − aNP<br>dP/dt = baNP − dP</div><p>포식자와 피식자의 개체수가 서로 물고 물리며 <b>주기적 파동</b>을 만드는 모델. 토끼가 늘면 여우가 늘고, 여우가 늘면 토끼가 줄고.</p><p class="map">→ 게임 매핑: <b>조우율·사냥 가치의 시간 변화</b> — 시즌마다 사냥감이 많은 층/적은 층이 달라지는 이유. 시뮬레이터의 빨강·초록 파동.</p></div></details>
+<details class="concept"><summary><span class="conline"><span class="cat ce">생태</span><b>영양 단계 · 10% 법칙</b></span><span class="oneliner">단계가 올라갈수록 에너지는 1/10 — 최상위 포식자는 늘 소수</span></summary><div class="cbody"><span class="en">Trophic Levels · 10% Rule</span><div class="formula">먹이 10 → 포식 1</div><p>에너지는 단계가 올라갈수록 약 1/10만 전달된다. 그래서 최상위 포식자는 항상 소수.</p><p class="map">→ 게임 매핑: 스폰 테이블 비율 설계 — 먹이 10 : 포식 1. 서고 카드의 4종 사슬 배분도 이 법칙을 따름.</p></div></details>
+<details class="concept"><summary><span class="conline"><span class="cat ce">생태</span><b>영양급위</b></span><span class="oneliner">상위 포식자가 사라지면 그 아래가 폭발한다</span></summary><div class="cbody"><span class="en">Trophic Cascade</span><div class="formula">상위 제거 → 하위 폭발</div><p>최상위 포식자가 사라지면 그 아래 단계가 연쇄적으로 폭발하거나 붕괴한다. (옐로스톤 늑대 복귀 사례)</p><p class="map">→ 게임 매핑: <b>보스 처치 후 2~3시즌 하위종 폭증 이벤트</b> — 사냥 보너스·생태 변동으로 연결 가능.</p></div></details>
+<details class="concept"><summary><span class="conline"><span class="cat ce">생태</span><b>섬생물지리학</b></span><span class="oneliner">섬이 크고 본토와 가까울수록 종이 많다 — 5층 블록=섬</span></summary><div class="cbody"><span class="en">Island Biogeography</span><div class="formula">종수 ∝ 면적 · 연결도</div><p>섬이 클수록, 본토와 가까울수록 더 많은 종이 산다. 작고 고립된 섬은 종수가 적다.</p><p class="map">→ 게임 매핑: <b>5층 블록 = 섬</b>. 근원자원 K가 곧 면적, 생태 통로(공유종)가 곧 거리 — 통로 37개로 탑 전체가 하나로 연결.</p></div></details>
+<details class="concept"><summary><span class="conline"><span class="cat ce">생태</span><b>니치 분화 · 경쟁 배제</b></span><span class="oneliner">같은 자리·같은 먹이면 두 종은 공존 못 한다</span></summary><div class="cbody"><span class="en">Niche · Competitive Exclusion</span><div class="formula">같은 자리 · 같은 먹이 → 한 종만 생존</div><p>완전히 같은 역할을 하는 두 종은 공존할 수 없다. 그래서 종들은 각자 다른 자리를 만든다(니치 분화).</p><p class="map">→ 게임 매핑: <b>바이옴당 역할 중복 금지</b> — 신규종 habitat 단일 원칙의 근거. 같은 먹이를 노리는 종은 먹이를 나눠 먹도록 설계.</p></div></details>
+<details class="concept"><summary><span class="conline"><span class="cat ce">생태</span><b>r/K 전략</b></span><span class="oneliner">많이 낳고 빨리 늘는 종 vs 적게 낳고 크게 사는 종</span></summary><div class="cbody"><span class="en">r/K Selection</span><div class="formula">r전략: 많이 낳고 빨리 늘어<br>K전략: 적게 낳고 크게 산다</div><p>벌레·쥐 같은 r전략종은 개체수 회복이 빠르고, 용·곰 같은 K전략종은 느리지만 한 마리가 강하다.</p><p class="map">→ 게임 매핑: swarm 계열은 사냥해도 금방 채워지고(하수도), apex는 한 번 잡으면 오래 비어 있다(정점) — 사냥 경제의 밸런스 축.</p></div></details>
+<details class="concept"><summary><span class="conline"><span class="cat ce">생태</span><b>생태 천이</b></span><span class="oneliner">무너진 생태는 정해진 순서로 서서히 회복된다</span></summary><div class="cbody"><span class="en">Ecological Succession</span><div class="formula">빈 땅 → 풀 → 덤불 → 숲</div><p>교란(화재 등)으로 생태가 무너져도 정해진 순서로 서서히 회복된다.</p><p class="map">→ 게임 매핑: <b>리셋 주기 직후의 바이옴 재생 단계</b> — 갓 열린 층은 먹이종만 있고 포식자는 나중에 돌아온다 (미정J와 연결).</p></div></details>
+<details class="concept"><summary><span class="conline"><span class="cat ce">생태</span><b>핵심종 · 지표종</b></span><span class="oneliner">하나 빠지면 생태 전체가 바뀌는 종 / 건강도를 알리는 종</span></summary><div class="cbody"><span class="en">Keystone · Indicator Species</span><div class="formula">핵심종: 생태를 떠받치는 종<br>지표종: 건강도를 알리는 종</div><p>핵심종 하나의 부재가 생태 전체를 바꾼다. 지표종의 개체수로 생태 건강 상태를 알 수 있다.</p><p class="map">→ 게임 매핑: <b>쥐 = 지표종</b> (개체수 = 층 건강 게이지) · <b>정점 보스 = 핵심종</b> — 도감에 생태 역할 표기</p></div></details>
+<details class="concept"><summary><span class="conline"><span class="cat ce">생태</span><b>침입종</b></span><span class="oneliner">천적 없이 들어온 종은 제멋대로 폭발한다</span></summary><div class="cbody"><span class="en">Invasive Species</span><div class="formula">천적 없는 종의 폭발</div><p>천적 없이 들어온 종은 로지스틱의 브레이크 없이 폭발한다.</p><p class="map">→ 게임 매핑: 과거 <b>31~75층 데드존 사례</b> — 포식자 없는 밴드의 위험. check_docs 역할 검사가 방지 장치.</p></div></details>
+<details class="concept"><summary><span class="conline"><span class="cat ce">생태</span><b>영양물질 순환</b></span><span class="oneliner">죽은 것은 분해자를 거쳐 다시 자원이 된다</span></summary><div class="cbody"><span class="en">Nutrient Cycling</span><div class="formula">사체 → 분해자 → 자원</div><p>죽은 것은 분해자를 거쳐 다시 근원자원이 된다. 순환이 끊기면 생태도 끊긴다.</p><p class="map">→ 게임 매핑: <b>처치 사체 → 분해자 부스트</b> (v7.12 검증 완료 역학 승계안) — 사냥이 바이옴 자원에 미치는 영향.</p></div></details>
+<details class="concept"><summary><span class="conline"><span class="cat ce">생태</span><b>기능반응 곡선</b></span><span class="oneliner">사냥감이 아무리 많아도 포식 속도엔 한계가 있다</span></summary><div class="cbody"><span class="en">Holling's Functional Response</span><div class="formula">타입 II: 포화형 / 타입 III: S형</div><p>사냥감이 많아져도 포식자의 포식 속도엔 한계가 있다(포화). 타입 III은 사냥감이 적을 때 잘 안 잡다가 일정 수를 넘으면 폭발적으로 잡는다 — 피식자 멸종 방지 장치.</p><p class="map">→ 게임 매핑: <b>사냥 피로도·자동 사냥 효율 캡</b> — 밀도가 낮은 층에서 무한사냥 방지. AI 몬스터 포식 속도에도 동일 적용. (06 §3.5 온도와 결합 시 계절별 사냥 효율 변동)</p></div></details>
+<details class="concept"><summary><span class="conline"><span class="cat ce">생태</span><b>온도 의존성 · 열성능 곡선</b></span><span class="oneliner">최적 온도에서만 최고 성능 — 벗어나면 급락</span></summary><div class="cbody"><span class="en">Thermal Performance Curve</span><div class="formula">최적 온도 T_opt에서 성능 최대 — 멀어질수록 급락</div><p>모든 생물은 잘 활동하는 온도가 정해져 있고, 최적점에서 벗어날수록 활동 능력이 급격히 떨어진다.</p><p class="map">→ 게임 매핑: <b>종별 온도 내성(min~max) 필드</b> — 이미 73종 전종에 존재. 바이옴 band 밖 종은 스폰 게이트에서 차단 (06 §3.5).</p></div></details>
+<details class="concept"><summary><span class="conline"><span class="cat ce">생태</span><b>베르그만 법칙</b></span><span class="oneliner">추운 곳 생물은 몸집이 크다</span></summary><div class="cbody"><span class="en">Bergmann's Rule</span><div class="formula">추울수록 몸이 커진다</div><p>같은 계열이라도 추운 지역 종이 몸집이 크다 — 체적 대비 체표면적이 작아 열을 덜 잃는다.</p><p class="map">→ 게임 매핑: <b>산맥·심연·정점 = 거대종 위주</b> — 거대 곰·트롤·스톰 자이언트·레비아탄 배치가 이미 이 법칙을 따름. 신규종 설계 지침으로 명문화.</p></div></details>
+<details class="concept"><summary><span class="conline"><span class="cat ce">생태</span><b>앨런 법칙</b></span><span class="oneliner">추운 곳 생물은 귀·꼬리 같은 돌기가 짧다</span></summary><div class="cbody"><span class="en">Allen's Rule</span><div class="formula">추울수록 귀·꼬리 등 돌기가 짧아진다</div><p>추운 기후의 동물은 열 손실 부위(귀·다리·꼬리)가 짧다.</p><p class="map">→ 게임 매핑: <b>신규종 비주얼 가이드</b> — G1 한파 바이옴(산맥·동굴 상층) 종은 돌기 짧게. 도감 아이콘 일관성 규칙.</p></div></details>
+<details class="concept"><summary><span class="conline"><span class="cat ce">생태</span><b>바이오루미네센스</b></span><span class="oneliner">어두운 곳에서 생물이 스스로 빛을 낸다</span></summary><div class="cbody"><span class="en">Bioluminescence</span><div class="formula">빛으로 소통 · 먹이 유인</div><p>햇빛 없는 심해·동굴에서 생물이 스스로 빛을 낸다 — 먹이 유인·의사소통·위장 수단.</p><p class="map">→ 게임 매핑: <b>심해·동굴의 시야 시스템</b> — 발광 종은 어둠 속 시야 범위 제공. 동굴 바이옴 '조명 반경 -40%' 모디퍼와 정합 (06 §3.2).</p></div></details>
+</div>
+<div class="cghead">밸런스 <span class="cgsub">성장·제한 — 숫자가 폭주하지 않게 하는 법칙 · 2개</span></div>
+<div class="concepts">
+<details class="concept"><summary><span class="conline"><span class="cat cb">밸런스</span><b>체감 효용</b></span><span class="oneliner">같은 투자를 반복해도 체감 효과는 점점 줄어든다</span></summary><div class="cbody"><span class="en">Diminishing Returns</span><div class="formula">효과 = X/(X+C) 형태</div><p>같은 투자를 반복해도 실제 체감 효과는 점점 줄어든다. 무한 강화 방지의 기본.</p><p class="map">→ 게임 매핑: <b>DEF/(DEF+200) 데미지 감소식</b> — AGENTS §4에 이미 확정. 온도 내성·Sanity 회복에도 동일식 적용 권장.</p></div></details>
+<details class="concept"><summary><span class="conline"><span class="cat cb">밸런스</span><b>멱함수 성장</b></span><span class="oneliner">요구량이 거듭제곱으로 늘어난다 — 초반 빠르게, 후반 느리게</span></summary><div class="cbody"><span class="en">Power Law</span><div class="formula">Y = a·X^b</div><p>필요 경험치·강화 비용이 레벨의 거듭제곱으로 늘어난다 — 초반 빠르게, 후반 느리게.</p><p class="map">→ 게임 매핑: <b>Lv100 곡선·영혼석 합성 비용</b> (P3-1) — b≈2~2.5 가안. 생태 개체수 회복 속도에도 적용 가능 (r전략종 b 낮음).</p></div></details>
+</div>
+<div class="cghead">경제·시뮬 <span class="cgsub">재화·변동 — 시스템이 도는 법칙 · 3개</span></div>
+<div class="concepts">
+<details class="concept"><summary><span class="conline"><span class="cat cc">경제·시뮬</span><b>수요공급 · 동적 가격</b></span><span class="oneliner">재고가 많으면 싸지고, 부족하면 비싸진다</span></summary><div class="cbody"><span class="en">Supply–Demand Pricing</span><div class="formula">가격 = 기본가 × (목표재고/현재재고)^k</div><p>재고가 많으면 내려가고 부족하면 오르는 가격 변동 — 시장의 기본 원리.</p><p class="map">→ 게임 매핑: <b>NPC 상점·사냥 재료 판매가 변동</b> — 과잉 사냥된 재료는 값 떨어짐 → 자연스러운 자원 분산 유도 (P3 이후 후보).</p></div></details>
+<details class="concept"><summary><span class="conline"><span class="cat cc">경제·시뮬</span><b>싱크와 소스</b></span><span class="oneliner">돈이 나오는 통로와 들어가는 통로의 총량을 맞춘다</span></summary><div class="cbody"><span class="en">Sink & Source</span><div class="formula">발행(소스) = 회수(싱크) 유지</div><p>퀘스트·드롭으로 돈이 새로 생기면(소스), 강화·세금으로 돌아가는 통로(싱크)가 반드시 필요하다. 균형이 깨지면 인플레이션.</p><p class="map">→ 게임 매핑: <b>골드100×층·영혼석 층×30(소스) ↔ 소환티켓130석·합성·병원(싱크)</b> — 이미 존재하는 경제 설계. 사냥 재화 추가 시 재계산 필수.</p></div></details>
+<details class="concept"><summary><span class="conline"><span class="cat cc">경제·시뮬</span><b>마르코프 연쇄</b></span><span class="oneliner">다음 날씨는 현재 상태만으로 확률적으로 결정된다</span></summary><div class="cbody"><span class="en">Markov Chain</span><div class="formula">다음 상태 = f(현재 상태)만으로 결정</div><p>날씨·환경이 현재 상태에서만 확률적으로 다음 상태로 넘어간다 — 기억 없는 자연스러운 변동.</p><p class="map">→ 게임 매핑: <b>시뮬레이터 계절제 시연 구현</b> — 한파·평년·폭엔 3상태 전이확률행렬(유지 0.60)이 온도를 흔들고, 열성능 φ가 r·K·d를 진폭 → 계절마다 파동 변화. 층 진입 기온 전환은 계절제 확장 후보 (06 §3.5·미정L).</p></div></details>
+</div>
+  </section>
+
+  <!-- ④ 시뮬레이터 -->
+  <section id="panel-sim" class="panel hidden">
+    <h2>로지스틱 · 로트카-볼테라 시뮬레이터 <span class="sub">바이옴 프리셋을 고르고 슬라이더를 움직여보세요</span></h2>
+    <div class="sim">
+      <select id="biomeSel"></select>
+      <label style="font-size:12px;color:var(--dim);margin-left:14px"><input type="checkbox" id="noPred" style="accent-color:#8fd0ff"> 포식자 없음 (순수 로지스틱만 보기)</label>
+      <label style="font-size:12px;color:var(--dim);margin-left:14px"><input type="checkbox" id="season" style="accent-color:#8fd0ff" checked> ❄ 마르코프 기온 변동 (계절제) — 한파·평년·폭염 확률 전환</label>
+      <button id="reroll" style="font-size:12px;margin-left:14px;background:#221d33;color:#cfc6ee;border:1px solid var(--line);border-radius:8px;padding:3px 10px;cursor:pointer">🎲 시즌 다시 굴리기</button>
+      <div class="simrow">
+        <div><canvas id="cv" width="620" height="300"></canvas>
+          <div class="legend"><i style="background:var(--prey)"></i>피식자 N (먹이층)<i style="background:var(--pred)"></i>포식자 P<i style="background:#ffd98a;opacity:.7"></i>수용력 K<i style="background:#6fa8ff;opacity:.5"></i>한파<i style="background:#9a90b8;opacity:.5"></i>평년<i style="background:#ff9a5a;opacity:.5"></i>폭엔</div>
+          <div class="eqbox" id="eq"></div>
+        </div>
+        <div>
+          <span class="sl">성장률 r = <b id="vr"></b></span><input type="range" id="r" min="0.1" max="1.6" step="0.05">
+          <span class="sl">수용력 K = <b id="vK"></b></span><input type="range" id="K" min="20" max="160" step="5">
+          <span class="sl">포식 강도 a = <b id="va"></b></span><input type="range" id="a" min="0.005" max="0.06" step="0.005">
+          <span class="sl">에너지 전환 b = <b id="vb"></b></span><input type="range" id="b" min="0.1" max="1.2" step="0.05">
+          <span class="sl">포식자 사망률 d = <b id="vd"></b></span><input type="range" id="d" min="0.1" max="0.9" step="0.05">
+          <span class="sl">초기 먹이 N₀ = <b id="vN"></b></span><input type="range" id="N0" min="5" max="150" step="5">
+          <span class="sl">초기 포식자 P₀ = <b id="vP"></b></span><input type="range" id="P0" min="1" max="40" step="1">
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:26px;border-top:1px dashed var(--line);padding-top:18px">
+      <h2 style="margin-top:0">🔬 실데이터 시즌 시뮬레이터 <span class="sub">35종 야생 + 전투 포식자 — 개체수 파동을 계절 단위로</span></h2>
+      <p class="lead">바이옴에 실제 서식하는 종 전원을 <b>로지스틱 + 로트카-볼테라</b>로 굽니다. r = 번식률(reproduction) · d = food_need 기반 · 포식강도 = aggression — <b>파라미터 전부 ambient.json의 ecology 필드에서 나옵니다</b>. 수용력 K는 10% 법칙으로 계층 배분(하위층 · 최상위 포식자 희소), 계절마다 각 종의 <b>자체 온도 밴드</b>로 φ가 달라집니다. 0.05 아래로 떨어지면 국소절멸, 시즌 경계에서 25% 확률로 이주 재유입.</p>
+      <div class="sim">
+        <select id="simBio"></select>
+        <span style="font-size:12px;color:var(--dim)">시즌 수</span>
+        <select id="simSeasons" style="background:#221d33;color:#cfc6ee;border:1px solid var(--line);border-radius:8px;padding:3px 8px"><option>6</option><option selected>8</option><option>12</option></select>
+        <button class="chipbtn" id="simRun">🎲 시즌 다시 굴리기</button>
+        <span style="font-size:12px;color:var(--dim)" id="simInfo"></span>
+      </div>
+      <div class="simrow">
+        <div><canvas id="simcv" width="620" height="300"></canvas>
+          <div class="legend"><i style="background:#8fce6a"></i>하위층(먹이·분해)<i style="background:#e06a6a"></i>중위층(포식)<i style="background:#ff5252"></i>최상위<i style="background:#ffd98a;opacity:.7"></i>한파<i style="background:#9a90b8;opacity:.5"></i>평년<i style="background:#ff9a5a;opacity:.5"></i>폭엔</div>
+        </div>
+        <div style="font-size:12px;overflow:auto;max-height:320px"><table id="simTable" style="width:100%;border-collapse:collapse"></table></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑤ 먹이사슬 그래프 -->
+  <section id="panel-web" class="panel hidden">
+    <h2>먹이사슬 그래프 <span class="sub">누가 누구를 먹는지 — 종 단위 연결 · 노드를 누르면 사전 항목으로</span></h2>
+    <p class="lead">노드 색 = 역할 (초록 먹이 · 빨강 포식 · 보라 분해 · 금 테두리 전투종 · 회색 다이아 근원자원). <b>실선</b> = 데이터에 명시된 관계(predators/prey), <b>점선</b> = 같은 바이옴 안의 역할 기반 추정 관계. 노드를 <b>클릭</b>하면 그 종의 사전 항목이 열립니다.</p>
+    <div class="dexbar">
+      <select id="webBio"><option value="all">전체 바이옴</option></select>
+      <button class="chipbtn on" id="webDeriv">추정 간선 표시</button>
+      <span style="font-size:12px;color:var(--dim)" id="webInfo"></span>
+    </div>
+    <canvas id="webcv" width="1100" height="660"></canvas>
+  </section>
+
+  <!-- 상세 팝업 -->
+  <div id="modal" class="modal hidden"><div class="mcard" id="mcard"></div></div>
+
+  <footer>생성: design-docs/_tools/gen_ecology_codex.py · 데이터 정본: biomes.json · ambient.json · monsters.json · 설계: GDD_v8.0_07_통합생태계 (가안) · 수치는 전부 가안 — 플탐에서 확정</footer>
+</div>
+
+<script>
+const DATA = {"biomes": [{"id": "biome_plains", "gid": "g1", "gname": "G1 하부", "tempS": "🌡 15°C (band 0~35°C)", "cl": [15, 0, 35], "name": "초원", "slots": [1, 5], "mult": 1.0, "habitat": ["grassland", "plains", "meadow"], "species": [{"n": "토끼", "r": "prey", "p": false}, {"n": "독벌", "r": "swarm", "p": false}, {"n": "장수풍뎅이", "r": "prey", "p": false}, {"n": "매", "r": "hunter", "p": false}, {"n": "몽구스", "r": "hunter", "p": false}, {"n": "오거", "r": "predator", "p": false}, {"n": "레이더", "r": "scavenger", "p": false}, {"n": "늑대", "r": "predator", "p": false}, {"n": "멧돼지", "r": "prey", "p": false}], "complete": true, "missing": [], "resName": "햇빛·풀", "resDesc": "1차 생산의 원형 — 탑 생태의 시작점", "K": 140, "r": 1.2, "note": "야생종 19종의 요충지 — 탑 전체 사슬(통로 37개)의 중심 허브.", "curN": 9, "planN": 0}, {"id": "biome_forest", "gid": "g1", "gname": "G1 하부", "tempS": "🌡 12°C (band -5~35°C)", "cl": [12, -5, 35], "name": "숲", "slots": [2, 5], "mult": 1.05, "habitat": ["forest"], "species": [{"n": "토끼", "r": "prey", "p": false}, {"n": "개구리", "r": "prey", "p": false}, {"n": "독벌", "r": "swarm", "p": false}, {"n": "박쥐나방", "r": "prey", "p": false}, {"n": "장수풍뎅이", "r": "prey", "p": false}, {"n": "매", "r": "hunter", "p": false}, {"n": "까마귀", "r": "scavenger", "p": false}, {"n": "독덩굴", "r": "predator", "p": false}, {"n": "독사", "r": "ambusher", "p": false}, {"n": "몽구스", "r": "hunter", "p": false}, {"n": "흉고블린", "r": "predator", "p": false}, {"n": "버그베어", "r": "ambusher", "p": false}, {"n": "라이칸슬로프", "r": "apex", "p": false}, {"n": "늑대", "r": "predator", "p": false}, {"n": "거대 늑대", "r": "predator", "p": false}, {"n": "곰", "r": "predator", "p": false}, {"n": "멧돼지", "r": "prey", "p": false}, {"n": "거대 멧돼지", "r": "prey", "p": false}, {"n": "거대 거미", "r": "ambusher", "p": false}, {"n": "거대 개미", "r": "swarm", "p": false}], "complete": true, "missing": [], "resName": "도토리·숲열매", "resDesc": "풍년 주기가 개체수 진동을 만든다", "K": 120, "r": 1.0, "note": "니치 분화의 모범 — 6개 역할이 공존하는 가장 풍요로운 층.", "curN": 20, "planN": 0}, {"id": "biome_swamp", "gid": "g1", "gname": "G1 하부", "tempS": "🌡 18°C (band 5~35°C)", "cl": [18, 5, 35], "name": "습지", "slots": [3, 5], "mult": 1.1, "habitat": ["swamp", "river"], "species": [{"n": "물고기", "r": "prey", "p": false}, {"n": "개구리", "r": "prey", "p": false}, {"n": "독덩굴", "r": "predator", "p": false}, {"n": "포자 버섯", "r": "decomposer", "p": false}, {"n": "독사", "r": "ambusher", "p": false}, {"n": "맹독 전갈", "r": "predator", "p": false}, {"n": "슬라임(그린)", "r": "decomposer", "p": false}, {"n": "오우즈", "r": "decomposer", "p": false}, {"n": "워터 엘리멘탈", "r": "elemental", "p": false}], "complete": true, "missing": [], "resName": "수생식물·유기물 침전", "resDesc": "천천히 쌓이고 천천히 썩는다", "K": 90, "r": 0.7, "note": "물가를 타고 숲·동굴·연해와 통하는 생태 회랑.", "curN": 9, "planN": 0}, {"id": "biome_cave", "gid": "g1", "gname": "G1 하부", "tempS": "🌡 12°C (band 5~25°C)", "cl": [12, 5, 25], "name": "동굴", "slots": [4, 5], "mult": 1.1, "habitat": ["cave", "mine", "underground", "fungus"], "species": [{"n": "쥐", "r": "scavenger", "p": false}, {"n": "박쥐나방", "r": "prey", "p": false}, {"n": "포자 버섯", "r": "decomposer", "p": false}, {"n": "슬라임(블루)", "r": "decomposer", "p": false}, {"n": "고블린", "r": "scavenger", "p": false}, {"n": "트롤", "r": "apex", "p": false}, {"n": "오거", "r": "predator", "p": false}, {"n": "코볼드", "r": "scavenger", "p": false}, {"n": "버그베어", "r": "ambusher", "p": false}, {"n": "밴시", "r": "undead", "p": false}, {"n": "거대 거미", "r": "ambusher", "p": false}, {"n": "거미 여왕", "r": "apex", "p": false}, {"n": "전갈", "r": "ambusher", "p": false}, {"n": "거대 개미", "r": "swarm", "p": false}, {"n": "슬라임(그린)", "r": "decomposer", "p": false}, {"n": "어스 엘리멘탈", "r": "elemental", "p": false}], "complete": true, "missing": [], "resName": "균류·박쥐 분변(구아노)", "resDesc": "지하 생태의 유일한 에너지 입구", "K": 80, "r": 0.6, "note": "박쥐 분변 하나가 전체 사슬을 떠받치는 지하 순환의 교과서.", "curN": 16, "planN": 0}, {"id": "biome_ruins", "gid": "g1", "gname": "G1 하부", "tempS": "🌡 10°C (band 0~40°C)", "cl": [10, 0, 40], "name": "폐허", "slots": [5, 5], "mult": 1.15, "habitat": ["ruins"], "species": [{"n": "쥐", "r": "scavenger", "p": false}, {"n": "까마귀", "r": "scavenger", "p": false}, {"n": "비둘기", "r": "prey", "p": false}, {"n": "먼지벌레", "r": "swarm", "p": false}, {"n": "고블린", "r": "scavenger", "p": false}, {"n": "흉고블린", "r": "predator", "p": false}, {"n": "유안티", "r": "predator", "p": false}, {"n": "스켈레톤", "r": "undead", "p": false}, {"n": "좀비", "r": "undead", "p": false}, {"n": "스켈레톤 야차", "r": "undead", "p": false}, {"n": "스켈레톤 워리어", "r": "undead", "p": false}, {"n": "스켈레톤 메이지", "r": "undead", "p": false}, {"n": "레이더", "r": "scavenger", "p": false}, {"n": "밴시", "r": "undead", "p": false}, {"n": "리치", "r": "apex", "p": false}, {"n": "임프", "r": "scavenger", "p": false}, {"n": "도플갱어", "r": "mimic", "p": false}], "complete": true, "missing": [], "resName": "버려진 식량 저장고", "resDesc": "인간의 잔재가 생태를 부양", "K": 70, "r": 0.8, "note": "청소부(까마귀·쥐)가 왕이 된 층 — 먹이는 저장고가 대신한다.", "curN": 17, "planN": 0}, {"id": "biome_graveyard", "gid": "g1", "gname": "G1 하부", "tempS": "🌡 8°C (band -5~30°C)", "cl": [8, -5, 30], "name": "묘지", "slots": [6, 5], "mult": 1.15, "habitat": ["graveyard"], "species": [{"n": "까마귀", "r": "scavenger", "p": false}, {"n": "무덤벌레", "r": "prey", "p": false}, {"n": "어스름매", "r": "hunter", "p": false}, {"n": "스켈레톤", "r": "undead", "p": false}, {"n": "좀비", "r": "undead", "p": false}], "complete": true, "missing": [], "resName": "제물·향유 잔여", "resDesc": "작고 고정적인 자원 — 개체수 한계 명확", "K": 40, "r": 0.4, "note": "자원이 적어 개체수가 항상 K 근처 아래 — 사냥감이 귀한 곳.", "curN": 5, "planN": 0}, {"id": "biome_mountain", "gid": "g1", "gname": "G1 하부", "tempS": "🌡 -5°C (band -25~25°C)", "cl": [-5, -25, 25], "name": "산맥", "slots": [7, 5], "mult": 1.15, "habitat": ["mountain", "tundra", "ice_cave"], "species": [{"n": "매", "r": "hunter", "p": false}, {"n": "바위이끼", "r": "decomposer", "p": false}, {"n": "트롤", "r": "apex", "p": false}, {"n": "라이칸슬로프", "r": "apex", "p": false}, {"n": "거대 늑대", "r": "predator", "p": false}, {"n": "곰", "r": "predator", "p": false}, {"n": "거대 곰", "r": "apex", "p": false}, {"n": "거대 멧돼지", "r": "prey", "p": false}, {"n": "아이 스폰", "r": "elemental", "p": false}, {"n": "에어 엘리멘탈", "r": "elemental", "p": false}, {"n": "어스 엘리멘탈", "r": "elemental", "p": false}, {"n": "라이트닝 엘리멘탈", "r": "elemental", "p": false}, {"n": "스톰 자이언트", "r": "apex", "p": false}], "complete": true, "missing": [], "resName": "고산초·지이끼", "resDesc": "성장이 느린 극한 자원", "K": 60, "r": 0.5, "note": "사냥꾼(매)은 산맥과 초원을 오가며 두 사슬을 연결한다.", "curN": 13, "planN": 0}, {"id": "biome_desert", "gid": "g1", "gname": "G1 하부", "tempS": "🌡 32°C (band 15~50°C)", "cl": [32, 15, 50], "name": "사막", "slots": [8, 5], "mult": 1.1, "habitat": ["desert"], "species": [{"n": "독사", "r": "ambusher", "p": false}, {"n": "사막쥐", "r": "prey", "p": false}, {"n": "썩고기갑충", "r": "decomposer", "p": false}, {"n": "전갈", "r": "ambusher", "p": false}, {"n": "맹독 전갈", "r": "predator", "p": false}], "complete": true, "missing": [], "resName": "선인장 즙·이슬", "resDesc": "희소 자원 — K가 낮아 개체수 폭락·폭등 반복", "K": 35, "r": 0.5, "note": "K가 가장 낮은 층 — 개체수 붕괴·회복을 눈으로 볼 수 있는 사슬.", "curN": 5, "planN": 0}, {"id": "biome_volcano", "gid": "g1", "gname": "G1 하부", "tempS": "🌡 80°C (band 20~300°C)", "cl": [80, 20, 300], "name": "화산", "slots": [9, 5], "mult": 1.2, "habitat": ["volcano", "lava"], "species": [{"n": "슬라임(레드)", "r": "decomposer", "p": false}, {"n": "화염벌레", "r": "prey", "p": false}, {"n": "파이어 엘리멘탈", "r": "elemental", "p": false}, {"n": "헬 하운드", "r": "hunter", "p": false}, {"n": "발록", "r": "apex", "p": false}, {"n": "드라코리치", "r": "apex", "p": false}], "complete": true, "missing": [], "resName": "열조류(熱藻類)·광물 이온", "resDesc": "열수에만 사는 특화 생산자", "K": 50, "r": 0.6, "note": "열에 특화된 분해자(레드 슬라임)가 자원을 다시 흘려보낸다.", "curN": 6, "planN": 0}, {"id": "biome_coast", "gid": "g1", "gname": "G1 하부", "tempS": "🌡 14°C (band 0~30°C)", "cl": [14, 0, 30], "name": "연해", "slots": [10, 5], "mult": 1.1, "habitat": ["ocean", "coral"], "species": [{"n": "물고기", "r": "prey", "p": false}, {"n": "마녀 해파리", "r": "predator", "p": false}, {"n": "거대 게", "r": "scavenger", "p": false}, {"n": "산호초", "r": "guardian", "p": false}, {"n": "슬라임(블루)", "r": "decomposer", "p": false}, {"n": "워터 엘리멘탈", "r": "elemental", "p": false}, {"n": "크라켄 촉수", "r": "apex", "p": false}, {"n": "바다 뱀", "r": "predator", "p": false}], "complete": true, "missing": [], "resName": "플랑크톤·해조", "resDesc": "조류(潮流)가 자원을 계속 새로 보낸다", "K": 110, "r": 1.0, "note": "조류가 자원을 계속 공급 — 폐쇄 바이옴과 다른 열린 사슬.", "curN": 8, "planN": 0}, {"id": "biome_deepsea", "gid": "g2", "gname": "G2 중부", "tempS": "🌡 4°C (band 0~15°C)", "cl": [4, 0, 15], "name": "심해", "slots": [1, 5], "mult": 1.0, "habitat": ["deep_ocean", "deep", "trench"], "species": [{"n": "마녀 해파리", "r": "predator", "p": false}, {"n": "거대 게", "r": "scavenger", "p": false}, {"n": "블랙 슬라임", "r": "corruptor", "p": false}, {"n": "심해플랑크톤", "r": "swarm", "p": false}, {"n": "거미 여왕", "r": "apex", "p": false}, {"n": "드레드노트", "r": "guardian", "p": false}, {"n": "마인드 플레이어", "r": "predator", "p": false}, {"n": "비홀더", "r": "apex", "p": false}, {"n": "크라켄 촉수", "r": "apex", "p": false}, {"n": "바다 뱀", "r": "predator", "p": false}, {"n": "레비아탄", "r": "apex", "p": false}], "complete": true, "missing": [], "resName": "열수 분출구 미네랄", "resDesc": "햇빛 없는 화학합성 생태 — 섬생물지리학의 극단", "K": 65, "r": 0.5, "note": "햇빛 대신 열수 분출구 — 화학합성 생태 (10% 법칙이 극한으로 작동).", "curN": 11, "planN": 0}, {"id": "biome_sky", "gid": "g2", "gname": "G2 중부", "tempS": "🌡 -10°C (band -20~20°C)", "cl": [-10, -20, 20], "name": "천공", "slots": [2, 5], "mult": 1.05, "habitat": ["sky", "storm"], "species": [{"n": "바람모종", "r": "prey", "p": false}, {"n": "폭풍꿀벌", "r": "swarm", "p": false}, {"n": "바람버섯", "r": "decomposer", "p": false}, {"n": "폭풍매", "r": "hunter", "p": false}, {"n": "에어 엘리멘탈", "r": "elemental", "p": false}, {"n": "라이트닝 엘리멘탈", "r": "elemental", "p": false}, {"n": "스톰 자이언트", "r": "apex", "p": false}, {"n": "아아시마르", "r": "guardian", "p": false}], "complete": true, "missing": [], "resName": "바람씨앗", "resDesc": "상승기류가 띄워 보내는 떠다니는 자원", "K": 55, "r": 0.7, "note": "떠다니는 씨앗을 놓고 벌·매가 경쟁 — 높이 곤충이 지배한다.", "curN": 8, "planN": 0}, {"id": "biome_labyrinthcity", "gid": "g2", "gname": "G2 중부", "tempS": "🌡 12°C (band 0~30°C)", "cl": [12, 0, 30], "name": "미궁도시", "slots": [3, 5], "mult": 1.05, "habitat": ["dungeon", "city", "castle", "tower"], "species": [{"n": "도시비둘기", "r": "prey", "p": false}, {"n": "바퀴벌레", "r": "decomposer", "p": false}, {"n": "골목쥐", "r": "prey", "p": false}, {"n": "스켈레톤 워리어", "r": "undead", "p": false}, {"n": "리치", "r": "apex", "p": false}, {"n": "마인드 플레이어", "r": "predator", "p": false}, {"n": "도플갱어", "r": "mimic", "p": false}], "complete": true, "missing": [], "resName": "시장 잔반", "resDesc": "도시가 흘려보내는 근원자원 — 풍요롭지만 불규칙", "K": 85, "r": 0.9, "note": "잔반 = 근원자원. 골목쥐·바퀴벌레의 도시 생태가 전부 여기서 시작.", "curN": 7, "planN": 0}, {"id": "biome_sewer", "gid": "g2", "gname": "G2 중부", "tempS": "🌡 18°C (band 10~30°C)", "cl": [18, 10, 30], "name": "하수도", "slots": [4, 5], "mult": 1.1, "habitat": ["sewer"], "species": [{"n": "바퀴벌레", "r": "decomposer", "p": false}, {"n": "골목쥐", "r": "prey", "p": false}, {"n": "하수뱀", "r": "ambusher", "p": false}, {"n": "오우즈", "r": "decomposer", "p": false}], "complete": true, "missing": [], "resName": "슬러지", "resDesc": "버려진 음식물 찌꺼기 — r전략종의 천국", "K": 95, "r": 1.1, "note": "r전략종의 천국 — 바퀴벌레 군체가 폭발적으로 회복되는 층.", "curN": 4, "planN": 0}, {"id": "biome_temple", "gid": "g2", "gname": "G2 중부", "tempS": "🌡 14°C (band 0~30°C)", "cl": [14, 0, 30], "name": "신전", "slots": [5, 5], "mult": 1.1, "habitat": ["temple", "shrine"], "species": [{"n": "신전비둘기", "r": "prey", "p": false}, {"n": "성수이끼", "r": "decomposer", "p": false}, {"n": "가람뱀", "r": "ambusher", "p": false}, {"n": "스켈레톤 야차", "r": "undead", "p": false}, {"n": "수호령", "r": "guardian", "p": false}, {"n": "아아시마르", "r": "guardian", "p": false}], "complete": true, "missing": [], "resName": "성수 이슬", "resDesc": "제단에 맺히는 마력 응결 — 소량·고품질", "K": 45, "r": 0.5, "note": "수호자(가디언)는 사슬 밖 존재 — 사냥하지 않고 지킨다.", "curN": 6, "planN": 0}, {"id": "biome_jungle", "gid": "g2", "gname": "G2 중부", "tempS": "🌡 26°C (band 15~40°C)", "cl": [26, 15, 40], "name": "정글", "slots": [6, 5], "mult": 1.15, "habitat": ["jungle"], "species": [{"n": "원숭이", "r": "prey", "p": false}, {"n": "앵무떼", "r": "swarm", "p": false}, {"n": "부패균", "r": "decomposer", "p": false}, {"n": "유안티", "r": "predator", "p": false}], "complete": true, "missing": [], "resName": "과실·수액", "resDesc": "사계절 풍부 — 다층 구조로 니치 분화 극대화", "K": 130, "r": 1.1, "note": "다층 숲이 만든 니치 폭발 — 같은 나무에 3개의 사슬이 산다.", "curN": 4, "planN": 0}, {"id": "biome_abyss", "gid": "g2", "gname": "G2 중부", "tempS": "🌡 -20°C (band -30~30°C)", "cl": [-20, -30, 30], "name": "심연", "slots": [7, 5], "mult": 1.15, "habitat": ["abyss"], "species": [{"n": "블랙 슬라임", "r": "corruptor", "p": false}, {"n": "심연충", "r": "prey", "p": false}, {"n": "보이드이끼", "r": "decomposer", "p": false}, {"n": "레서 데몬", "r": "predator", "p": false}, {"n": "레비아탄", "r": "apex", "p": false}], "complete": true, "missing": [], "resName": "보이드 이슬", "resDesc": "심연에서 응결하는 알 수 없는 근원", "K": 50, "r": 0.4, "note": "포식자만 있는 위험한 구조 — 먹이 충(심연충) 추가가 생존의 열쇠.", "curN": 5, "planN": 0}, {"id": "biome_hell", "gid": "g2", "gname": "G2 중부", "tempS": "🌡 150°C (band 50~400°C)", "cl": [150, 50, 400], "name": "지옥", "slots": [8, 5], "mult": 1.2, "habitat": ["hellscape", "fortress"], "species": [{"n": "유황파리", "r": "swarm", "p": false}, {"n": "불열매덩굴", "r": "prey", "p": false}, {"n": "임프", "r": "scavenger", "p": false}, {"n": "레서 데몬", "r": "predator", "p": false}, {"n": "헬 하운드", "r": "hunter", "p": false}, {"n": "발록", "r": "apex", "p": false}, {"n": "드레드노트", "r": "guardian", "p": false}], "complete": true, "missing": [], "resName": "유황 분출물", "resDesc": "화염 생태의 에너지원 — 독성 강해 특화종만 섭취", "K": 60, "r": 0.6, "note": "유황파리 군체가 불열매를 수분하는 공생 구조 (가안).", "curN": 7, "planN": 0}, {"id": "biome_archive", "gid": "g2", "gname": "G2 중부", "tempS": "🌡 16°C (band 5~25°C)", "cl": [16, 5, 25], "name": "서고 (구 대도서관)", "slots": [9, 5], "mult": 1.2, "habitat": ["library"], "species": [{"n": "글자벌레", "r": "decomposer", "p": false}, {"n": "종이나방", "r": "prey", "p": false}, {"n": "먹지쥐", "r": "prey", "p": false}, {"n": "잉크까마귀", "r": "hunter", "p": false}, {"n": "스켈레톤 메이지", "r": "undead", "p": false}], "complete": true, "missing": [], "resName": "먹광(墨光)", "resDesc": "책의 잉크·표지가 빛내는 마력 찌꺼기", "K": 55, "r": 0.6, "note": "글자벌레→종이나방→잉크까마귀 — 인공 바이옴 생태의 대표 사례.", "curN": 5, "planN": 0}, {"id": "biome_summit", "gid": "g3", "gname": "G3 정점", "tempS": "🌡 -25°C (band -40~60°C)", "cl": [-25, -40, 60], "name": "정점", "slots": [1, 1], "mult": 1.3, "habitat": ["astral", "dragon_lair", "lair"], "species": [{"n": "별가루", "r": "swarm", "p": false}, {"n": "아스트랄 이끼", "r": "decomposer", "p": false}, {"n": "구름이끼", "r": "producer", "p": false}, {"n": "드라코리치", "r": "apex", "p": false}, {"n": "비홀더", "r": "apex", "p": false}], "complete": true, "missing": [], "resName": "근원 합류", "resDesc": "탑 전체 근원자원이 흘러모이는 정점", "K": 70, "r": 0.5, "note": "영양급위의 정점 — 최상위 포식자 하나가 전층 개체 균형을 좌우한다.", "curN": 5, "planN": 0}], "edges": 36, "species": [{"id": "mon_dracolich_01", "name": "드라코리치", "k": "mon", "tier": 5, "r": "apex", "d": "mana", "bio": ["화산", "정점"], "floors": [51, 60], "temp": [30, 100], "stats": {"hp": 36000, "atk": 480, "def": 100, "aspd": 8, "mdef": 60}, "el": "fire", "note": "최상위형 전투 몬스터 (T5) · 식성 마력.", "pred": [], "prey": [{"n": "파이어 엘리멘탈", "id": "mon_fire_elemental_01"}], "eco": {"rep": 0.05, "food": 0.9, "agg": 0.95, "soc": 0.1}}, {"id": "mon_leviathan_01", "name": "레비아탄", "k": "mon", "tier": 5, "r": "apex", "d": "carnivore", "bio": ["심해", "심연"], "floors": [96, 100], "temp": [1, 8], "stats": {"hp": 45000, "atk": 520, "def": 80, "aspd": 10, "mdef": 70}, "el": "water", "note": "최상위형 전투 몬스터 (T5) · 식성 육식.", "pred": [], "prey": [{"n": "크라켄 촉수", "id": "mon_kraken_tentacle_01"}, {"n": "바다 뱀", "id": "mon_sea_serpent_01"}, {"n": "마녀 해파리", "id": "mon_jellyfish_01"}], "eco": {"rep": 0.05, "food": 1.0, "agg": 0.9, "soc": 0.05}}, {"id": "mon_lich_01", "name": "리치", "k": "mon", "tier": 5, "r": "apex", "d": "mana", "bio": ["폐허", "미궁도시"], "floors": [36, 40], "temp": [-20, 10], "stats": {"hp": 26000, "atk": 420, "def": 60, "aspd": 18, "mdef": 50}, "el": "dark", "note": "최상위형 전투 몬스터 (T5) · 식성 마력.", "pred": [], "prey": [], "eco": {"rep": 0.0, "food": 0.5, "agg": 0.8, "soc": 0.2}}, {"id": "mon_storm_giant_01", "name": "스톰 자이언트", "k": "mon", "tier": 5, "r": "apex", "d": "carnivore", "bio": ["산맥", "천공"], "floors": [80, 85, 90], "temp": [-10, 40], "stats": {"hp": 28000, "atk": 420, "def": 55, "aspd": 12, "mdef": 45}, "el": "light", "note": "최상위형 전투 몬스터 (T5) · 식성 육식.", "pred": [], "prey": [{"n": "에어 엘리멘탈", "id": "mon_air_elemental_01"}], "eco": {"rep": 0.1, "food": 0.9, "agg": 0.6, "soc": 0.3}}, {"id": "mon_aasimar_01", "name": "아아시마르", "k": "mon", "tier": 5, "r": "guardian", "d": "omnivore", "bio": ["신전", "천공"], "floors": [75, 85], "temp": [-10, 40], "stats": {"hp": 24000, "atk": 380, "def": 45, "aspd": 14, "mdef": 55}, "el": "light", "note": "수호자형 전투 몬스터 (T5) · 식성 잡식.", "pred": [], "prey": [], "eco": {"rep": 0.2, "food": 0.5, "agg": 0.4, "soc": 0.5}}, {"id": "mon_kraken_tentacle_01", "name": "크라켄 촉수", "k": "mon", "tier": 5, "r": "apex", "d": "carnivore", "bio": ["심해", "연해"], "floors": [51, 60], "temp": [0, 10], "stats": {"hp": 36000, "atk": 480, "def": 100, "aspd": 8, "mdef": 60}, "el": "fire", "note": "최상위형 전투 몬스터 (T5) · 식성 육식.", "pred": [], "prey": [{"n": "워터 엘리멘탈", "id": "mon_water_elemental_01"}], "eco": {"rep": 0.1, "food": 0.9, "agg": 0.9, "soc": 0.1}}, {"id": "mon_doppelganger_01", "name": "도플갱어", "k": "mon", "tier": 4, "r": "mimic", "d": "carnivore", "bio": ["미궁도시", "폐허"], "floors": [5, 46, 50], "temp": [5, 30], "stats": {"hp": 16000, "atk": 260, "def": 45, "aspd": 7, "mdef": 80}, "el": "dark", "note": "전투층 중보스 (T4 모방형) — 도시에서 지나가는 사람으로 위장하는 전투 설계 존재. 생태 개체수 시뮬레이션 대상이 아니며, 고블린 사냥 관계만 참조용으로 표기.", "pred": [], "prey": [{"n": "고블린", "id": "mon_goblin_01"}], "eco": {"rep": 0.3, "food": 0.6, "agg": 0.6, "soc": 0.3}}, {"id": "mon_dreadnought_01", "name": "드레드노트", "k": "mon", "tier": 4, "r": "guardian", "d": "mana", "bio": ["지옥", "심해"], "floors": [15], "temp": [-10, 40], "stats": {"hp": 12000, "atk": 220, "def": 90, "aspd": 4, "mdef": 70}, "el": "earth", "note": "수호자형 전투 몬스터 (T4) · 식성 마력.", "pred": [], "prey": [], "eco": {"rep": 0.1, "food": 0.6, "agg": 0.7, "soc": 0.2}}, {"id": "mon_mindflayer_01", "name": "마인드 플레이어", "k": "mon", "tier": 4, "r": "predator", "d": "brain", "bio": ["심해", "미궁도시"], "floors": [46, 50], "temp": [5, 25], "stats": {"hp": 16000, "atk": 260, "def": 45, "aspd": 7, "mdef": 80}, "el": "dark", "note": "포식자형 전투 몬스터 (T4) · 식성 뇌.", "pred": [], "prey": [{"n": "고블린", "id": "mon_goblin_01"}, {"n": "코볼드", "id": "mon_kobold_01"}], "eco": {"rep": 0.2, "food": 0.7, "agg": 0.8, "soc": 0.5}}, {"id": "mon_balrog_01", "name": "발록", "k": "mon", "tier": 4, "r": "apex", "d": "mana", "bio": ["화산", "지옥"], "floors": [20, 46, 50], "temp": [100, 500], "stats": {"hp": 16000, "atk": 260, "def": 45, "aspd": 7, "mdef": 80}, "el": "dark", "note": "최상위형 전투 몬스터 (T4) · 식성 마력.", "pred": [], "prey": [{"n": "파이어 엘리멘탈", "id": "mon_fire_elemental_01"}, {"n": "임프", "id": "mon_imp_01"}], "eco": {"rep": 0.1, "food": 0.9, "agg": 0.95, "soc": 0.1}}, {"id": "mon_beholder_01", "name": "비홀더", "k": "mon", "tier": 4, "r": "apex", "d": "omnivore", "bio": ["심해", "정점"], "floors": [10, 46, 50], "temp": [5, 30], "stats": {"hp": 16000, "atk": 260, "def": 45, "aspd": 7, "mdef": 80}, "el": "dark", "note": "최상위형 전투 몬스터 (T4) · 식성 잡식.", "pred": [], "prey": [{"n": "마인드 플레이어", "id": "mon_mindflayer_01"}, {"n": "임프", "id": "mon_imp_01"}], "eco": {"rep": 0.1, "food": 0.8, "agg": 0.9, "soc": 0.1}}, {"id": "mon_dire_bear_01", "name": "거대 곰", "k": "mon", "tier": 3, "r": "apex", "d": "carnivore", "bio": ["산맥"], "floors": [22, 25], "temp": [-20, 15], "stats": {"hp": 3200, "atk": 95, "def": 30, "aspd": 9, "mdef": 20}, "el": "none", "note": "최상위형 전투 몬스터 (T3) · 식성 육식.", "pred": [], "prey": [{"n": "곰", "id": "mon_bear_01"}, {"n": "늑대", "id": "mon_wolf_01"}], "eco": {"rep": 0.3, "food": 0.8, "agg": 0.7, "soc": 0.2}}, {"id": "mon_spider_queen_01", "name": "거미 여왕", "k": "mon", "tier": 3, "r": "apex", "d": "carnivore", "bio": ["동굴", "심해"], "floors": [22, 25], "temp": [5, 25], "stats": {"hp": 3200, "atk": 95, "def": 30, "aspd": 9, "mdef": 20}, "el": "none", "note": "최상위형 전투 몬스터 (T3) · 식성 육식.", "pred": [], "prey": [{"n": "거대 거미", "id": "mon_giant_spider_01"}, {"n": "코볼드", "id": "mon_kobold_01"}], "eco": {"rep": 0.5, "food": 0.7, "agg": 0.8, "soc": 0.4}}, {"id": "mon_lycanthrope_01", "name": "라이칸슬로프", "k": "mon", "tier": 3, "r": "apex", "d": "carnivore", "bio": ["숲", "산맥"], "floors": [23, 26], "temp": [-5, 20], "stats": {"hp": 2600, "atk": 88, "def": 25, "aspd": 13, "mdef": 18}, "el": "dark", "note": "최상위형 전투 몬스터 (T3) · 식성 육식.", "pred": [], "prey": [{"n": "늑대", "id": "mon_wolf_01"}], "eco": {"rep": 0.3, "food": 0.8, "agg": 0.9, "soc": 0.3}}, {"id": "mon_lightning_elemental_01", "name": "라이트닝 엘리멘탈", "k": "mon", "tier": 3, "r": "elemental", "d": "mana", "bio": ["천공", "산맥"], "floors": [20, 23], "temp": [-5, 50], "stats": {"hp": 2400, "atk": 85, "def": 20, "aspd": 10, "mdef": 35}, "el": "none", "note": "정령형 전투 몬스터 (T3) · 식성 마력.", "pred": [{"n": "어스 엘리멘탈", "id": "mon_earth_elemental_01"}], "prey": [], "eco": {"rep": 0.2, "food": 0.4, "agg": 0.8, "soc": 0.2}}, {"id": "mon_lesser_demon_01", "name": "레서 데몬", "k": "mon", "tier": 3, "r": "predator", "d": "soul", "bio": ["지옥", "심연"], "floors": [23, 26], "temp": [30, 100], "stats": {"hp": 2600, "atk": 88, "def": 25, "aspd": 13, "mdef": 18}, "el": "dark", "note": "포식자형 전투 몬스터 (T3) · 식성 영혼.", "pred": [{"n": "발록", "id": "mon_balrog_01"}], "prey": [{"n": "임프", "id": "mon_imp_01"}, {"n": "soul", "id": null}], "eco": {"rep": 0.3, "food": 0.7, "agg": 0.8, "soc": 0.4}}, {"id": "mon_sea_serpent_01", "name": "바다 뱀", "k": "mon", "tier": 3, "r": "predator", "d": "carnivore", "bio": ["연해", "심해"], "floors": [76, 90], "temp": [5, 25], "stats": {"hp": 400, "atk": 50, "def": 15, "aspd": 18, "mdef": 10}, "el": "water", "note": "포식자형 전투 몬스터 (T3) · 식성 육식.", "pred": [{"n": "크라켄 촉수", "id": "mon_kraken_tentacle_01"}], "prey": [{"n": "물고기", "id": "mon_fish_01"}, {"n": "거대 게", "id": "mon_crab_01"}, {"n": "마녀 해파리", "id": "mon_jellyfish_01"}], "eco": {"rep": 0.3, "food": 0.7, "agg": 0.8, "soc": 0.2}}, {"id": "mon_guardian_spirit_01", "name": "수호령", "k": "mon", "tier": 3, "r": "guardian", "d": "mana", "bio": ["신전"], "floors": [12], "temp": [-20, 50], "stats": {"hp": 2600, "atk": 70, "def": 20, "aspd": 5, "mdef": 18}, "el": "dark", "note": "수호자형 전투 몬스터 (T3) · 식성 마력.", "pred": [], "prey": [], "eco": {"rep": 0.0, "food": 0.3, "agg": 0.3, "soc": 0.2}}, {"id": "mon_earth_elemental_01", "name": "어스 엘리멘탈", "k": "mon", "tier": 3, "r": "elemental", "d": "mineral", "bio": ["산맥", "동굴"], "floors": [20, 23], "temp": [5, 40], "stats": {"hp": 2400, "atk": 85, "def": 20, "aspd": 10, "mdef": 35}, "el": "earth", "note": "정령형 전투 몬스터 (T3) · 식성 광물.", "pred": [{"n": "에어 엘리멘탈", "id": "mon_air_elemental_01"}], "prey": [], "eco": {"rep": 0.2, "food": 0.4, "agg": 0.6, "soc": 0.2}}, {"id": "mon_air_elemental_01", "name": "에어 엘리멘탈", "k": "mon", "tier": 3, "r": "elemental", "d": "mana", "bio": ["산맥", "천공"], "floors": [20, 23], "temp": [-10, 40], "stats": {"hp": 2400, "atk": 85, "def": 20, "aspd": 10, "mdef": 35}, "el": "nature", "note": "정령형 전투 몬스터 (T3) · 식성 마력.", "pred": [{"n": "어스 엘리멘탈", "id": "mon_earth_elemental_01"}], "prey": [], "eco": {"rep": 0.3, "food": 0.2, "agg": 0.5, "soc": 0.3}}, {"id": "mon_water_elemental_01", "name": "워터 엘리멘탈", "k": "mon", "tier": 3, "r": "elemental", "d": "mana", "bio": ["연해", "습지"], "floors": [20, 23], "temp": [0, 30], "stats": {"hp": 2400, "atk": 85, "def": 20, "aspd": 10, "mdef": 35}, "el": "water", "note": "정령형 전투 몬스터 (T3) · 식성 마력.", "pred": [{"n": "파이어 엘리멘탈", "id": "mon_fire_elemental_01"}], "prey": [], "eco": {"rep": 0.4, "food": 0.3, "agg": 0.4, "soc": 0.3}}, {"id": "mon_troll_01", "name": "트롤", "k": "mon", "tier": 3, "r": "apex", "d": "carnivore", "bio": ["동굴", "산맥"], "floors": [11, 13, 14], "temp": [-5, 25], "stats": {"hp": 3125, "atk": 88, "def": 24, "aspd": 6, "mdef": 8}, "el": "none", "note": "최상위형 전투 몬스터 (T3) · 식성 육식.", "pred": [], "prey": [{"n": "곰", "id": "mon_bear_01"}], "eco": {"rep": 0.3, "food": 0.8, "agg": 0.9, "soc": 0.3}}, {"id": "mon_fire_elemental_01", "name": "파이어 엘리멘탈", "k": "mon", "tier": 3, "r": "elemental", "d": "mana", "bio": ["화산"], "floors": [20, 23], "temp": [100, 1000], "stats": {"hp": 2400, "atk": 85, "def": 20, "aspd": 10, "mdef": 35}, "el": "fire", "note": "정령형 전투 몬스터 (T3) · 식성 마력.", "pred": [{"n": "워터 엘리멘탈", "id": "mon_water_elemental_01"}], "prey": [], "eco": {"rep": 0.3, "food": 0.5, "agg": 0.7, "soc": 0.2}}, {"id": "mon_hell_hound_01", "name": "헬 하운드", "k": "mon", "tier": 3, "r": "hunter", "d": "carnivore", "bio": ["지옥", "화산"], "floors": [23, 26], "temp": [30, 80], "stats": {"hp": 2600, "atk": 88, "def": 25, "aspd": 13, "mdef": 18}, "el": "dark", "note": "사냥꾼형 전투 몬스터 (T3) · 식성 육식.", "pred": [{"n": "발록", "id": "mon_balrog_01"}], "prey": [{"n": "늑대", "id": "mon_wolf_01"}, {"n": "임프", "id": "mon_imp_01"}], "eco": {"rep": 0.4, "food": 0.7, "agg": 0.9, "soc": 0.6}}, {"id": "mon_giant_ant_01", "name": "거대 개미", "k": "mon", "tier": 2, "r": "swarm", "d": "omnivore", "bio": ["숲", "동굴"], "floors": [8], "temp": [10, 35], "stats": {"hp": 400, "atk": 30, "def": 10, "aspd": 17, "mdef": 8}, "el": "nature", "note": "군체형 전투 몬스터 (T2) · 식성 잡식.", "pred": [{"n": "맹독 전갈", "id": "mon_venom_scorpion_01"}], "prey": [{"n": "plants", "id": null}, {"n": "insects", "id": null}], "eco": {"rep": 0.8, "food": 0.5, "agg": 0.5, "soc": 0.95}}, {"id": "mon_giant_spider_01", "name": "거대 거미", "k": "mon", "tier": 2, "r": "ambusher", "d": "carnivore", "bio": ["동굴", "숲"], "floors": [8], "temp": [5, 30], "stats": {"hp": 400, "atk": 30, "def": 10, "aspd": 17, "mdef": 8}, "el": "nature", "note": "매복자형 전투 몬스터 (T2) · 식성 육식.", "pred": [{"n": "거미 여왕", "id": "mon_spider_queen_01"}], "prey": [{"n": "코볼드", "id": "mon_kobold_01"}, {"n": "거대 개미", "id": "mon_giant_ant_01"}], "eco": {"rep": 0.6, "food": 0.5, "agg": 0.7, "soc": 0.3}}, {"id": "mon_dire_wolf_01", "name": "거대 늑대", "k": "mon", "tier": 2, "r": "predator", "d": "carnivore", "bio": ["숲", "산맥"], "floors": [8], "temp": [-15, 20], "stats": {"hp": 400, "atk": 30, "def": 10, "aspd": 17, "mdef": 8}, "el": "nature", "note": "포식자형 전투 몬스터 (T2) · 식성 육식.", "pred": [{"n": "트롤", "id": "mon_troll_01"}], "prey": [{"n": "늑대", "id": "mon_wolf_01"}, {"n": "곰", "id": "mon_bear_01"}], "eco": {"rep": 0.4, "food": 0.7, "agg": 0.8, "soc": 0.7}}, {"id": "mon_dire_boar_01", "name": "거대 멧돼지", "k": "mon", "tier": 2, "r": "prey", "d": "herbivore", "bio": ["숲", "산맥"], "floors": [8], "temp": [-10, 25], "stats": {"hp": 400, "atk": 30, "def": 10, "aspd": 17, "mdef": 8}, "el": "nature", "note": "먹이형 전투 몬스터 (T2) · 식성 초식.", "pred": [{"n": "거대 늑대", "id": "mon_dire_wolf_01"}, {"n": "트롤", "id": "mon_troll_01"}], "prey": [{"n": "grass", "id": null}, {"n": "roots", "id": null}], "eco": {"rep": 0.6, "food": 0.6, "agg": 0.5, "soc": 0.5}}, {"id": "mon_bear_01", "name": "곰", "k": "mon", "tier": 2, "r": "predator", "d": "omnivore", "bio": ["숲", "산맥"], "floors": [8], "temp": [-5, 30], "stats": {"hp": 400, "atk": 30, "def": 10, "aspd": 17, "mdef": 8}, "el": "nature", "note": "포식자형 전투 몬스터 (T2) · 식성 잡식.", "pred": [{"n": "트롤", "id": "mon_troll_01"}], "prey": [{"n": "멧돼지", "id": "mon_boar_01"}], "eco": {"rep": 0.4, "food": 0.7, "agg": 0.5, "soc": 0.3}}, {"id": "mon_raider_01", "name": "레이더", "k": "mon", "tier": 2, "r": "scavenger", "d": "omnivore", "bio": ["폐허", "초원"], "floors": [9, 10], "temp": [0, 30], "stats": {"hp": 375, "atk": 29, "def": 10, "aspd": 9, "mdef": 4}, "el": "none", "note": "청소부형 전투 몬스터 (T2) · 식성 잡식.", "pred": [], "prey": [{"n": "고블린", "id": "mon_goblin_01"}, {"n": "코볼드", "id": "mon_kobold_01"}], "eco": {"rep": 0.5, "food": 0.5, "agg": 0.7, "soc": 0.6}}, {"id": "mon_venom_scorpion_01", "name": "맹독 전갈", "k": "mon", "tier": 2, "r": "predator", "d": "carnivore", "bio": ["사막", "습지"], "floors": [8], "temp": [20, 45], "stats": {"hp": 400, "atk": 30, "def": 10, "aspd": 17, "mdef": 8}, "el": "nature", "note": "포식자형 전투 몬스터 (T2) · 식성 육식.", "pred": [], "prey": [{"n": "전갈", "id": "mon_scorpion_01"}, {"n": "거대 개미", "id": "mon_giant_ant_01"}], "eco": {"rep": 0.4, "food": 0.5, "agg": 0.7, "soc": 0.2}}, {"id": "mon_banshee_01", "name": "밴시", "k": "mon", "tier": 2, "r": "undead", "d": "none", "bio": ["폐허", "동굴"], "floors": [7], "temp": [-10, 10], "stats": {"hp": 350, "atk": 25, "def": 8, "aspd": 8, "mdef": 5}, "el": "dark", "note": "언데드형 전투 몬스터 (T2) · 식성 비섭취.", "pred": [], "prey": [], "eco": {"rep": 0.0, "food": 0.0, "agg": 0.6, "soc": 0.2}}, {"id": "mon_bugbear_01", "name": "버그베어", "k": "mon", "tier": 2, "r": "ambusher", "d": "carnivore", "bio": ["숲", "동굴"], "floors": [9, 10], "temp": [0, 25], "stats": {"hp": 375, "atk": 29, "def": 10, "aspd": 9, "mdef": 4}, "el": "none", "note": "매복자형 전투 몬스터 (T2) · 식성 육식.", "pred": [{"n": "곰", "id": "mon_bear_01"}], "prey": [{"n": "고블린", "id": "mon_goblin_01"}, {"n": "늑대", "id": "mon_wolf_01"}], "eco": {"rep": 0.4, "food": 0.6, "agg": 0.8, "soc": 0.4}}, {"id": "mon_skeleton_mage_01", "name": "스켈레톤 메이지", "k": "mon", "tier": 2, "r": "undead", "d": "none", "bio": ["폐허", "서고 (구 대도서관)"], "floors": [7], "temp": [-10, 20], "stats": {"hp": 350, "atk": 25, "def": 8, "aspd": 8, "mdef": 5}, "el": "dark", "note": "언데드형 전투 몬스터 (T2) · 식성 비섭취.", "pred": [], "prey": [], "eco": {"rep": 0.0, "food": 0.0, "agg": 0.5, "soc": 0.3}}, {"id": "mon_skeleton_yaksha_01", "name": "스켈레톤 야차", "k": "mon", "tier": 2, "r": "undead", "d": "none", "bio": ["신전", "폐허"], "floors": [7], "temp": [-10, 20], "stats": {"hp": 350, "atk": 25, "def": 8, "aspd": 8, "mdef": 5}, "el": "dark", "note": "언데드형 전투 몬스터 (T2) · 식성 비섭취.", "pred": [], "prey": [], "eco": {"rep": 0.0, "food": 0.0, "agg": 0.7, "soc": 0.3}}, {"id": "mon_skeleton_warrior_01", "name": "스켈레톤 워리어", "k": "mon", "tier": 2, "r": "undead", "d": "none", "bio": ["폐허", "미궁도시"], "floors": [7], "temp": [-10, 20], "stats": {"hp": 350, "atk": 25, "def": 8, "aspd": 8, "mdef": 5}, "el": "dark", "note": "언데드형 전투 몬스터 (T2) · 식성 비섭취.", "pred": [], "prey": [], "eco": {"rep": 0.0, "food": 0.0, "agg": 0.6, "soc": 0.6}}, {"id": "mon_ice_spawn_01", "name": "아이 스폰", "k": "mon", "tier": 2, "r": "elemental", "d": "mana", "bio": ["산맥"], "floors": [16, 17, 18, 19], "temp": [-30, 0], "stats": {"hp": 450, "atk": 28, "def": 25, "aspd": 6, "mdef": 12}, "el": "earth", "note": "정령형 전투 몬스터 (T2) · 식성 마력.", "pred": [{"n": "파이어 엘리멘탈", "id": "mon_fire_elemental_01"}], "prey": [], "eco": {"rep": 0.3, "food": 0.3, "agg": 0.5, "soc": 0.2}}, {"id": "mon_ogre_01", "name": "오거", "k": "mon", "tier": 2, "r": "predator", "d": "omnivore", "bio": ["초원", "동굴"], "floors": [9, 10], "temp": [-5, 35], "stats": {"hp": 375, "atk": 29, "def": 10, "aspd": 9, "mdef": 4}, "el": "none", "note": "포식자형 전투 몬스터 (T2) · 식성 잡식.", "pred": [{"n": "트롤", "id": "mon_troll_01"}], "prey": [{"n": "고블린", "id": "mon_goblin_01"}, {"n": "멧돼지", "id": "mon_boar_01"}], "eco": {"rep": 0.4, "food": 0.7, "agg": 0.7, "soc": 0.4}}, {"id": "mon_yuan_ti_01", "name": "유안티", "k": "mon", "tier": 2, "r": "predator", "d": "carnivore", "bio": ["정글", "폐허"], "floors": [9, 10], "temp": [15, 40], "stats": {"hp": 375, "atk": 29, "def": 10, "aspd": 9, "mdef": 4}, "el": "none", "note": "포식자형 전투 몬스터 (T2) · 식성 육식.", "pred": [], "prey": [{"n": "쥐", "id": "mon_rat_01"}, {"n": "거대 거미", "id": "mon_giant_spider_01"}], "eco": {"rep": 0.4, "food": 0.6, "agg": 0.7, "soc": 0.5}}, {"id": "mon_imp_01", "name": "임프", "k": "mon", "tier": 2, "r": "scavenger", "d": "omnivore", "bio": ["지옥", "폐허"], "floors": [9, 10], "temp": [20, 80], "stats": {"hp": 375, "atk": 29, "def": 10, "aspd": 9, "mdef": 4}, "el": "none", "note": "청소부형 전투 몬스터 (T2) · 식성 잡식.", "pred": [{"n": "발록", "id": "mon_balrog_01"}, {"n": "레서 데몬", "id": "mon_lesser_demon_01"}], "prey": [{"n": "soul", "id": null}], "eco": {"rep": 0.6, "food": 0.5, "agg": 0.6, "soc": 0.7}}, {"id": "mon_hobgoblin_01", "name": "흉고블린", "k": "mon", "tier": 2, "r": "predator", "d": "carnivore", "bio": ["폐허", "숲"], "floors": [9, 10], "temp": [5, 30], "stats": {"hp": 375, "atk": 29, "def": 10, "aspd": 9, "mdef": 4}, "el": "none", "note": "포식자형 전투 몬스터 (T2) · 식성 육식.", "pred": [], "prey": [{"n": "고블린", "id": "mon_goblin_01"}, {"n": "코볼드", "id": "mon_kobold_01"}], "eco": {"rep": 0.6, "food": 0.6, "agg": 0.7, "soc": 0.7}}, {"id": "mon_goblin_01", "name": "고블린", "k": "mon", "tier": 1, "r": "scavenger", "d": "omnivore", "bio": ["동굴", "폐허"], "floors": [2, 3, 4], "temp": [5, 30], "stats": {"hp": 150, "atk": 12, "def": 5, "aspd": 14, "mdef": 3}, "el": "none", "note": "청소부형 전투 몬스터 (T1) · 식성 잡식.", "pred": [{"n": "오거", "id": "mon_ogre_01"}, {"n": "늑대", "id": "mon_wolf_01"}], "prey": [{"n": "슬라임(그린)", "id": "mon_slime_green_01"}, {"n": "코볼드", "id": "mon_kobold_01"}], "eco": {"rep": 0.7, "food": 0.5, "agg": 0.6, "soc": 0.8}}, {"id": "mon_wolf_01", "name": "늑대", "k": "mon", "tier": 1, "r": "predator", "d": "carnivore", "bio": ["숲", "초원"], "floors": [2, 3, 4], "temp": [-10, 25], "stats": {"hp": 150, "atk": 12, "def": 5, "aspd": 14, "mdef": 3}, "el": "none", "note": "포식자형 전투 몬스터 (T1) · 식성 육식.", "pred": [{"n": "트롤", "id": "mon_troll_01"}, {"n": "오거", "id": "mon_ogre_01"}], "prey": [{"n": "멧돼지", "id": "mon_boar_01"}], "eco": {"rep": 0.6, "food": 0.6, "agg": 0.6, "soc": 0.8}}, {"id": "mon_boar_01", "name": "멧돼지", "k": "mon", "tier": 1, "r": "prey", "d": "herbivore", "bio": ["숲", "초원"], "floors": [2, 3, 4], "temp": [-5, 30], "stats": {"hp": 150, "atk": 12, "def": 5, "aspd": 14, "mdef": 3}, "el": "none", "note": "먹이형 전투 몬스터 (T1) · 식성 초식.", "pred": [{"n": "늑대", "id": "mon_wolf_01"}], "prey": [{"n": "grass", "id": null}, {"n": "roots", "id": null}], "eco": {"rep": 0.7, "food": 0.6, "agg": 0.3, "soc": 0.5}}, {"id": "mon_skeleton_01", "name": "스켈레톤", "k": "mon", "tier": 1, "r": "undead", "d": "none", "bio": ["폐허", "묘지"], "floors": [1, 6, 12], "temp": [-10, 15], "stats": {"hp": 150, "atk": 12, "def": 5, "aspd": 10, "mdef": 4}, "el": "dark", "note": "언데드형 전투 몬스터 (T1) · 식성 비섭취.", "pred": [], "prey": [], "eco": {"rep": 0.0, "food": 0.0, "agg": 0.5, "soc": 0.7}}, {"id": "mon_slime_green_01", "name": "슬라임(그린)", "k": "mon", "tier": 1, "r": "decomposer", "d": "omnivore", "bio": ["습지", "동굴"], "floors": [1, 2], "temp": [5, 35], "stats": {"hp": 170, "atk": 11, "def": 4, "aspd": 6, "mdef": 4}, "el": "none", "note": "분해자형 전투 몬스터 (T1) · 식성 잡식.", "pred": [{"n": "오우즈", "id": "mon_ooze_01"}], "prey": [{"n": "organic_waste", "id": null}], "eco": {"rep": 0.9, "food": 0.4, "agg": 0.2, "soc": 0.9}}, {"id": "mon_ooze_01", "name": "오우즈", "k": "mon", "tier": 1, "r": "decomposer", "d": "omnivore", "bio": ["습지", "하수도"], "floors": [1, 2], "temp": [10, 30], "stats": {"hp": 170, "atk": 11, "def": 4, "aspd": 6, "mdef": 4}, "el": "none", "note": "분해자형 전투 몬스터 (T1) · 식성 잡식.", "pred": [], "prey": [{"n": "organic_waste", "id": null}], "eco": {"rep": 0.8, "food": 0.5, "agg": 0.3, "soc": 0.6}}, {"id": "mon_scorpion_01", "name": "전갈", "k": "mon", "tier": 1, "r": "ambusher", "d": "carnivore", "bio": ["사막", "동굴"], "floors": [2, 3, 4], "temp": [20, 50], "stats": {"hp": 150, "atk": 12, "def": 5, "aspd": 14, "mdef": 3}, "el": "none", "note": "매복자형 전투 몬스터 (T1) · 식성 육식.", "pred": [{"n": "맹독 전갈", "id": "mon_venom_scorpion_01"}], "prey": [{"n": "거대 개미", "id": "mon_giant_ant_01"}], "eco": {"rep": 0.5, "food": 0.4, "agg": 0.6, "soc": 0.2}}, {"id": "mon_zombie_01", "name": "좀비", "k": "mon", "tier": 1, "r": "undead", "d": "none", "bio": ["묘지", "폐허"], "floors": [1, 6, 12], "temp": [-10, 20], "stats": {"hp": 150, "atk": 12, "def": 5, "aspd": 10, "mdef": 4}, "el": "dark", "note": "언데드형 전투 몬스터 (T1) · 식성 비섭취.", "pred": [], "prey": [], "eco": {"rep": 0.0, "food": 0.0, "agg": 0.4, "soc": 0.6}}, {"id": "mon_kobold_01", "name": "코볼드", "k": "mon", "tier": 1, "r": "scavenger", "d": "omnivore", "bio": ["동굴"], "floors": [2, 3, 4], "temp": [5, 25], "stats": {"hp": 150, "atk": 12, "def": 5, "aspd": 14, "mdef": 3}, "el": "none", "note": "청소부형 전투 몬스터 (T1) · 식성 잡식.", "pred": [{"n": "고블린", "id": "mon_goblin_01"}], "prey": [{"n": "슬라임(그린)", "id": "mon_slime_green_01"}], "eco": {"rep": 0.8, "food": 0.4, "agg": 0.3, "soc": 0.9}}, {"id": "mon_gardensnake_01", "name": "가람뱀", "k": "amb", "tier": null, "r": "ambusher", "d": "carnivore", "bio": ["신전"], "floors": [0, 30], "temp": [8, 28], "stats": {"hp": 45, "atk": 12, "def": 3, "spd": 22, "mdef": 2}, "el": null, "note": "기둥 그늘에 매복해 비둘기 사냥", "pred": [], "prey": [], "eco": {"rep": 0.5, "food": 0.5, "agg": 0.7, "soc": 0.1}}, {"id": "mon_frog_01", "name": "개구리", "k": "amb", "tier": null, "r": "prey", "d": "carnivore", "bio": ["습지", "숲"], "floors": [1, 30], "temp": [10, 35], "stats": {"hp": 25, "atk": 3, "def": 1, "spd": 16, "mdef": 0}, "el": null, "note": "먹이형 · 식성 육식.", "pred": [{"n": "독사", "id": "mon_snake_01"}, {"n": "매", "id": "mon_hawk_01"}], "prey": [{"n": "insects", "id": null}, {"n": "쥐", "id": "mon_rat_01"}], "eco": {"rep": 0.8, "food": 0.3, "agg": 0.1, "soc": 0.4}}, {"id": "mon_crab_01", "name": "거대 게", "k": "amb", "tier": null, "r": "scavenger", "d": "omnivore", "bio": ["연해", "심해"], "floors": [76, 85], "temp": [5, 25], "stats": {"hp": 120, "atk": 15, "def": 20, "spd": 5, "mdef": 3}, "el": null, "note": "청소부형 · 식성 잡식.", "pred": [{"n": "마녀 해파리", "id": "mon_jellyfish_01"}, {"n": "바다 뱀", "id": "mon_sea_serpent_01"}], "prey": [{"n": "물고기", "id": "mon_fish_01"}, {"n": "algae", "id": null}, {"n": "organic_waste", "id": null}], "eco": {"rep": 0.6, "food": 0.5, "agg": 0.3, "soc": 0.4}}, {"id": "mon_alleyrat_01", "name": "골목쥐", "k": "amb", "tier": null, "r": "prey", "d": "omnivore", "bio": ["미궁도시", "하수도"], "floors": [0, 30], "temp": [5, 25], "stats": {"hp": 25, "atk": 3, "def": 1, "spd": 18, "mdef": 0}, "el": null, "note": "미궁도시·하수도 공유종", "pred": [], "prey": [{"n": "시장 잔반", "id": null}], "eco": {"rep": 0.95, "food": 0.5, "agg": 0.2, "soc": 0.9}}, {"id": "mon_cloudmoss_01", "name": "구름이끼", "k": "amb", "tier": null, "r": "producer", "d": "none", "bio": ["정점"], "floors": [-40, 60], "temp": [-35, 50], "stats": {"hp": 50, "atk": 8, "def": 3, "spd": 0, "mdef": 10}, "el": null, "note": "구름을 짜는 이끼 — 해충(별가루)을 가두는 생산자 가안", "pred": [], "prey": [], "eco": {"rep": 0.9, "food": 0.2, "agg": 0.1, "soc": 0.8}}, {"id": "mon_inkworm_01", "name": "글자벌레", "k": "amb", "tier": null, "r": "decomposer", "d": "omnivore", "bio": ["서고 (구 대도서관)"], "floors": [5, 25], "temp": [10, 22], "stats": {"hp": 50, "atk": 8, "def": 3, "spd": 0, "mdef": 10}, "el": null, "note": "책 표지·접착제를 먹는 해충 — 서고 생태의 바닥", "pred": [], "prey": [{"n": "먹광", "id": null}], "eco": {"rep": 0.9, "food": 0.2, "agg": 0.1, "soc": 0.8}}, {"id": "mon_crow_01", "name": "까마귀", "k": "amb", "tier": null, "r": "scavenger", "d": "omnivore", "bio": ["폐허", "묘지", "숲"], "floors": [1, 40], "temp": [-10, 35], "stats": {"hp": 35, "atk": 6, "def": 2, "spd": 20, "mdef": 3}, "el": null, "note": "청소부형 · 식성 잡식.", "pred": [], "prey": [{"n": "토끼", "id": "mon_rabbit_01"}, {"n": "organic_waste", "id": null}, {"n": "쥐", "id": "mon_rat_01"}], "eco": {"rep": 0.6, "food": 0.4, "agg": 0.3, "soc": 0.8}}, {"id": "mon_citypigeon_01", "name": "도시비둘기", "k": "amb", "tier": null, "r": "prey", "d": "omnivore", "bio": ["미궁도시"], "floors": [0, 30], "temp": [5, 25], "stats": {"hp": 30, "atk": 2, "def": 1, "spd": 20, "mdef": 0}, "el": null, "note": "미궁도시 대표 소음원 — 잔반을 먹고 번식", "pred": [], "prey": [{"n": "시장 잔반", "id": null}], "eco": {"rep": 0.9, "food": 0.7, "agg": 0.05, "soc": 0.6}}, {"id": "mon_vine_01", "name": "독덩굴", "k": "amb", "tier": null, "r": "predator", "d": "none", "bio": ["숲", "습지"], "floors": [11, 25], "temp": [10, 35], "stats": {"hp": 80, "atk": 10, "def": 5, "spd": 0, "mdef": 5}, "el": null, "note": "포식자형 · 식성 비섭취.", "pred": [{"n": "파이어 엘리멘탈", "id": "mon_fire_elemental_01"}], "prey": [{"n": "토끼", "id": "mon_rabbit_01"}, {"n": "개구리", "id": "mon_frog_01"}], "eco": {"rep": 0.7, "food": 0.3, "agg": 0.4, "soc": 0.3}}, {"id": "mon_bee_01", "name": "독벌", "k": "amb", "tier": null, "r": "swarm", "d": "herbivore", "bio": ["숲", "초원"], "floors": [1, 20], "temp": [15, 38], "stats": {"hp": 40, "atk": 6, "def": 1, "spd": 22, "mdef": 0}, "el": null, "note": "군체형 · 식성 초식.", "pred": [{"n": "곰", "id": "mon_bear_01"}, {"n": "매", "id": "mon_hawk_01"}], "prey": [{"n": "flowers", "id": null}, {"n": "nectar", "id": null}], "eco": {"rep": 0.85, "food": 0.4, "agg": 0.6, "soc": 0.95}}, {"id": "mon_snake_01", "name": "독사", "k": "amb", "tier": null, "r": "ambusher", "d": "carnivore", "bio": ["사막", "숲", "습지"], "floors": [1, 30], "temp": [20, 40], "stats": {"hp": 45, "atk": 12, "def": 3, "spd": 22, "mdef": 2}, "el": null, "note": "매복자형 · 식성 육식.", "pred": [{"n": "매", "id": "mon_hawk_01"}, {"n": "몽구스", "id": "mon_mongoose_01"}], "prey": [{"n": "토끼", "id": "mon_rabbit_01"}, {"n": "쥐", "id": "mon_rat_01"}, {"n": "개구리", "id": "mon_frog_01"}], "eco": {"rep": 0.5, "food": 0.5, "agg": 0.7, "soc": 0.1}}, {"id": "mon_jellyfish_01", "name": "마녀 해파리", "k": "amb", "tier": null, "r": "predator", "d": "carnivore", "bio": ["연해", "심해"], "floors": [76, 85], "temp": [2, 20], "stats": {"hp": 80, "atk": 12, "def": 2, "spd": 4, "mdef": 15}, "el": null, "note": "포식자형 · 식성 육식.", "pred": [{"n": "크라켄 촉수", "id": "mon_kraken_tentacle_01"}], "prey": [{"n": "물고기", "id": "mon_fish_01"}, {"n": "거대 게", "id": "mon_crab_01"}], "eco": {"rep": 0.5, "food": 0.4, "agg": 0.4, "soc": 0.2}}, {"id": "mon_hawk_01", "name": "매", "k": "amb", "tier": null, "r": "hunter", "d": "carnivore", "bio": ["산맥", "초원", "숲"], "floors": [1, 30], "temp": [-5, 35], "stats": {"hp": 50, "atk": 10, "def": 3, "spd": 25, "mdef": 2}, "el": null, "note": "사냥꾼형 · 식성 육식.", "pred": [], "prey": [{"n": "토끼", "id": "mon_rabbit_01"}, {"n": "쥐", "id": "mon_rat_01"}, {"n": "독벌", "id": "mon_bee_01"}], "eco": {"rep": 0.4, "food": 0.6, "agg": 0.7, "soc": 0.3}}, {"id": "mon_inkrat_01", "name": "먹지쥐", "k": "amb", "tier": null, "r": "prey", "d": "omnivore", "bio": ["서고 (구 대도서관)"], "floors": [5, 25], "temp": [10, 25], "stats": {"hp": 25, "atk": 3, "def": 1, "spd": 18, "mdef": 0}, "el": null, "note": "먹광이 밴 페이지를 뜯어 먹는 쥐", "pred": [], "prey": [{"n": "먹광", "id": null}], "eco": {"rep": 0.95, "food": 0.5, "agg": 0.2, "soc": 0.9}}, {"id": "mon_dustbug_01", "name": "먼지벌레", "k": "amb", "tier": null, "r": "swarm", "d": "herbivore", "bio": ["폐허"], "floors": [0, 40], "temp": [2, 32], "stats": {"hp": 40, "atk": 6, "def": 1, "spd": 22, "mdef": 0}, "el": null, "note": "곡물 가루를 먹는 벌레 군체 — 저장고의 1차 소비자", "pred": [], "prey": [{"n": "저장고", "id": null}], "eco": {"rep": 0.85, "food": 0.4, "agg": 0.6, "soc": 0.95}}, {"id": "mon_mongoose_01", "name": "몽구스", "k": "amb", "tier": null, "r": "hunter", "d": "carnivore", "bio": ["초원", "숲"], "floors": [1, 20], "temp": [10, 35], "stats": {"hp": 40, "atk": 10, "def": 4, "spd": 24, "mdef": 2}, "el": null, "note": "사냥꾼형 · 식성 육식.", "pred": [{"n": "매", "id": "mon_hawk_01"}], "prey": [{"n": "독사", "id": "mon_snake_01"}, {"n": "쥐", "id": "mon_rat_01"}], "eco": {"rep": 0.5, "food": 0.5, "agg": 0.6, "soc": 0.3}}, {"id": "mon_tombworm_01", "name": "무덤벌레", "k": "amb", "tier": null, "r": "prey", "d": "herbivore", "bio": ["묘지"], "floors": [-5, 30], "temp": [-2, 25], "stats": {"hp": 60, "atk": 8, "def": 12, "spd": 6, "mdef": 5}, "el": null, "note": "제물 음식을 먹는 딱정벌레 — 무덤 생태의 먹이 바닥", "pred": [], "prey": [{"n": "제물", "id": null}], "eco": {"rep": 0.6, "food": 0.5, "agg": 0.3, "soc": 0.4}}, {"id": "mon_fish_01", "name": "물고기", "k": "amb", "tier": null, "r": "prey", "d": "omnivore", "bio": ["연해", "습지"], "floors": [1, 100], "temp": [2, 35], "stats": {"hp": 20, "atk": 2, "def": 1, "spd": 15, "mdef": 0}, "el": null, "note": "먹이형 · 식성 잡식.", "pred": [{"n": "바다 뱀", "id": "mon_sea_serpent_01"}, {"n": "마녀 해파리", "id": "mon_jellyfish_01"}], "prey": [{"n": "insects", "id": null}, {"n": "algae", "id": null}], "eco": {"rep": 0.85, "food": 0.4, "agg": 0.05, "soc": 0.8}}, {"id": "mon_windseedling_01", "name": "바람모종", "k": "amb", "tier": null, "r": "prey", "d": "herbivore", "bio": ["천공"], "floors": [-20, 20], "temp": [0, 15], "stats": {"hp": 30, "atk": 2, "def": 1, "spd": 20, "mdef": 0}, "el": null, "note": "기류를 타고 떠다니는 모종 — 천공 먹이층의 바닥", "pred": [], "prey": [{"n": "바람씨앗", "id": null}], "eco": {"rep": 0.9, "food": 0.7, "agg": 0.05, "soc": 0.6}}, {"id": "mon_windmushroom_01", "name": "바람버섯", "k": "amb", "tier": null, "r": "decomposer", "d": "none", "bio": ["천공"], "floors": [-20, 20], "temp": [-5, 10], "stats": {"hp": 50, "atk": 8, "def": 3, "spd": 0, "mdef": 10}, "el": null, "note": "상승기류에 떠서 낙하물을 분해하는 부유 균류", "pred": [], "prey": [{"n": "바람씨앗", "id": null}], "eco": {"rep": 0.9, "food": 0.2, "agg": 0.1, "soc": 0.8}}, {"id": "mon_rockmoss_01", "name": "바위이끼", "k": "amb", "tier": null, "r": "decomposer", "d": "none", "bio": ["산맥"], "floors": [-25, 25], "temp": [-20, 20], "stats": {"hp": 50, "atk": 8, "def": 3, "spd": 0, "mdef": 10}, "el": null, "note": "바위 표면을 덮는 이끼 — 고산초를 분해해 토양을 만든다", "pred": [], "prey": [{"n": "고산초", "id": null}], "eco": {"rep": 0.9, "food": 0.2, "agg": 0.1, "soc": 0.8}}, {"id": "mon_cockroach_01", "name": "바퀴벌레", "k": "amb", "tier": null, "r": "decomposer", "d": "omnivore", "bio": ["하수도", "미궁도시"], "floors": [10, 30], "temp": [10, 30], "stats": {"hp": 170, "atk": 11, "def": 4, "spd": 6, "mdef": 4}, "el": null, "note": "r전략종의 왕 — 도시·하수도 어디든", "pred": [], "prey": [{"n": "슬러지", "id": null}], "eco": {"rep": 0.9, "food": 0.4, "agg": 0.2, "soc": 0.9}}, {"id": "mon_moth_01", "name": "박쥐나방", "k": "amb", "tier": null, "r": "prey", "d": "herbivore", "bio": ["숲", "동굴"], "floors": [1, 30], "temp": [10, 30], "stats": {"hp": 20, "atk": 3, "def": 1, "spd": 20, "mdef": 0}, "el": null, "note": "먹이형 · 식성 초식.", "pred": [{"n": "거대 거미", "id": "mon_giant_spider_01"}, {"n": "독벌", "id": "mon_bee_01"}], "prey": [{"n": "flowers", "id": null}, {"n": "fungus", "id": null}], "eco": {"rep": 0.7, "food": 0.3, "agg": 0.05, "soc": 0.7}}, {"id": "mon_stardust_01", "name": "별가루", "k": "amb", "tier": null, "r": "swarm", "d": "mana", "bio": ["정점"], "floors": [-40, 60], "temp": [-35, 50], "stats": {"hp": 40, "atk": 6, "def": 1, "spd": 22, "mdef": 0}, "el": null, "note": "별빛이 응결한 가루 군체 — 정점 생태의 먹이 바닥", "pred": [], "prey": [{"n": "근원 합류", "id": null}], "eco": {"rep": 0.85, "food": 0.4, "agg": 0.6, "soc": 0.95}}, {"id": "mon_voidmoss_01", "name": "보이드이끼", "k": "amb", "tier": null, "r": "decomposer", "d": "none", "bio": ["심연"], "floors": [-30, 30], "temp": [-25, 20], "stats": {"hp": 50, "atk": 8, "def": 3, "spd": 0, "mdef": 10}, "el": null, "note": "심연 바위에 붙는 이끼 — 이슬을 응축해 군체를 부양", "pred": [], "prey": [{"n": "보이드 이슬", "id": null}], "eco": {"rep": 0.9, "food": 0.2, "agg": 0.1, "soc": 0.8}}, {"id": "mon_rotfungus_01", "name": "부패균", "k": "amb", "tier": null, "r": "decomposer", "d": "none", "bio": ["정글"], "floors": [15, 40], "temp": [18, 38], "stats": {"hp": 50, "atk": 8, "def": 3, "spd": 0, "mdef": 10}, "el": null, "note": "낙엽·과실 부스러기를 분해 — 정글 순환의 마침표", "pred": [], "prey": [{"n": "낙엽", "id": null}], "eco": {"rep": 0.9, "food": 0.2, "agg": 0.1, "soc": 0.8}}, {"id": "mon_fireberry_01", "name": "불열매덩굴", "k": "amb", "tier": null, "r": "prey", "d": "mineral", "bio": ["지옥"], "floors": [50, 400], "temp": [80, 380], "stats": {"hp": 80, "atk": 10, "def": 5, "spd": 0, "mdef": 5}, "el": null, "note": "유황을 흡수해 매운 열매를 맺는 덩굴 — 유황파리가 수분", "pred": [], "prey": [{"n": "유황", "id": null}], "eco": {"rep": 0.7, "food": 0.3, "agg": 0.4, "soc": 0.3}}, {"id": "mon_slime_black_01", "name": "블랙 슬라임", "k": "amb", "tier": null, "r": "corruptor", "d": "mana", "bio": ["심연", "심해"], "floors": [1, 2], "temp": [-20, 10], "stats": {"hp": 170, "atk": 11, "def": 4, "spd": 6, "mdef": 4}, "el": null, "note": "오염자형 · 식성 마력.", "pred": [{"n": "리치", "id": "mon_lich_01"}], "prey": [{"n": "mana", "id": null}], "eco": {"rep": 0.7, "food": 0.6, "agg": 0.5, "soc": 0.7}}, {"id": "mon_ruinspigeon_01", "name": "비둘기", "k": "amb", "tier": null, "r": "prey", "d": "omnivore", "bio": ["폐허"], "floors": [0, 40], "temp": [2, 32], "stats": {"hp": 30, "atk": 2, "def": 1, "spd": 20, "mdef": 0}, "el": null, "note": "폐허 저장고를 쪼는 비둘기 — 잔량을 먹고 큰 무리를 이룬다", "pred": [], "prey": [{"n": "저장고", "id": null}], "eco": {"rep": 0.9, "food": 0.7, "agg": 0.05, "soc": 0.6}}, {"id": "mon_desertrat_01", "name": "사막쥐", "k": "amb", "tier": null, "r": "prey", "d": "omnivore", "bio": ["사막"], "floors": [15, 50], "temp": [18, 45], "stats": {"hp": 25, "atk": 3, "def": 1, "spd": 18, "mdef": 0}, "el": null, "note": "선인장 즙으로 수분을 보충하는 사막의 쥐", "pred": [], "prey": [{"n": "선인장", "id": null}], "eco": {"rep": 0.95, "food": 0.5, "agg": 0.2, "soc": 0.9}}, {"id": "mon_coral_01", "name": "산호초", "k": "amb", "tier": null, "r": "guardian", "d": "none", "bio": ["연해"], "floors": [81, 85], "temp": [18, 28], "stats": {"hp": 100, "atk": 5, "def": 15, "spd": 0, "mdef": 10}, "el": null, "note": "수호자형 · 식성 비섭취.", "pred": [], "prey": [], "eco": {"rep": 0.4, "food": 0.0, "agg": 0.0, "soc": 0.9}}, {"id": "mon_holymoss_01", "name": "성수이끼", "k": "amb", "tier": null, "r": "decomposer", "d": "none", "bio": ["신전"], "floors": [0, 30], "temp": [5, 25], "stats": {"hp": 50, "atk": 8, "def": 3, "spd": 0, "mdef": 10}, "el": null, "note": "제단을 덮는 이끼 — 성수 이슬을 흡수", "pred": [], "prey": [{"n": "성수 이슬", "id": null}], "eco": {"rep": 0.9, "food": 0.2, "agg": 0.1, "soc": 0.8}}, {"id": "mon_slime_red_01", "name": "슬라임(레드)", "k": "amb", "tier": null, "r": "decomposer", "d": "omnivore", "bio": ["화산"], "floors": [1, 2], "temp": [50, 200], "stats": {"hp": 170, "atk": 11, "def": 4, "spd": 6, "mdef": 4}, "el": null, "note": "분해자형 · 식성 잡식.", "pred": [{"n": "파이어 엘리멘탈", "id": "mon_fire_elemental_01"}], "prey": [{"n": "organic_waste", "id": null}], "eco": {"rep": 0.8, "food": 0.5, "agg": 0.3, "soc": 0.8}}, {"id": "mon_slime_blue_01", "name": "슬라임(블루)", "k": "amb", "tier": null, "r": "decomposer", "d": "omnivore", "bio": ["연해", "동굴"], "floors": [1, 2], "temp": [0, 25], "stats": {"hp": 170, "atk": 11, "def": 4, "spd": 6, "mdef": 4}, "el": null, "note": "분해자형 · 식성 잡식.", "pred": [{"n": "워터 엘리멘탈", "id": "mon_water_elemental_01"}], "prey": [{"n": "organic_waste", "id": null}], "eco": {"rep": 0.9, "food": 0.4, "agg": 0.2, "soc": 0.9}}, {"id": "mon_templedove_01", "name": "신전비둘기", "k": "amb", "tier": null, "r": "prey", "d": "herbivore", "bio": ["신전"], "floors": [0, 30], "temp": [8, 25], "stats": {"hp": 30, "atk": 2, "def": 1, "spd": 20, "mdef": 0}, "el": null, "note": "성수를 마시고 살찌는 흰 비둘기", "pred": [], "prey": [{"n": "성수 이슬", "id": null}], "eco": {"rep": 0.9, "food": 0.7, "agg": 0.05, "soc": 0.6}}, {"id": "mon_voidworm_01", "name": "심연충", "k": "amb", "tier": null, "r": "prey", "d": "omnivore", "bio": ["심연"], "floors": [-30, 30], "temp": [-25, 20], "stats": {"hp": 20, "atk": 3, "def": 1, "spd": 20, "mdef": 0}, "el": null, "note": "보이드 이슬을 걸러 먹는 심연의 충 — 어둠 속 먹이 바닥", "pred": [], "prey": [{"n": "보이드 이슬", "id": null}], "eco": {"rep": 0.7, "food": 0.3, "agg": 0.05, "soc": 0.7}}, {"id": "mon_deepplankton_01", "name": "심해플랑크톤", "k": "amb", "tier": null, "r": "swarm", "d": "omnivore", "bio": ["심해"], "floors": [0, 15], "temp": [2, 12], "stats": {"hp": 80, "atk": 12, "def": 2, "spd": 4, "mdef": 15}, "el": null, "note": "심해 먹이사슬의 출발점 — 발광 군체", "pred": [], "prey": [{"n": "열수 미네랄", "id": null}], "eco": {"rep": 0.5, "food": 0.4, "agg": 0.4, "soc": 0.2}}, {"id": "mon_carrionbeetle_01", "name": "썩고기갑충", "k": "amb", "tier": null, "r": "decomposer", "d": "omnivore", "bio": ["사막"], "floors": [15, 50], "temp": [18, 45], "stats": {"hp": 60, "atk": 8, "def": 12, "spd": 6, "mdef": 5}, "el": null, "note": "사체를 분해하는 갑충 — 사막의 청소부", "pred": [], "prey": [{"n": "썩은 고기", "id": null}], "eco": {"rep": 0.6, "food": 0.5, "agg": 0.3, "soc": 0.4}}, {"id": "mon_astralmoss_01", "name": "아스트랄 이끼", "k": "amb", "tier": null, "r": "decomposer", "d": "none", "bio": ["정점"], "floors": [-40, 60], "temp": [-35, 50], "stats": {"hp": 50, "atk": 8, "def": 3, "spd": 0, "mdef": 10}, "el": null, "note": "정점 신전 바닥을 덮는 성역 이끼 — 흘러든 근원을 분해", "pred": [], "prey": [{"n": "근원 합류", "id": null}], "eco": {"rep": 0.9, "food": 0.2, "agg": 0.1, "soc": 0.8}}, {"id": "mon_parrotswarm_01", "name": "앵무떼", "k": "amb", "tier": null, "r": "swarm", "d": "herbivore", "bio": ["정글"], "floors": [15, 40], "temp": [18, 38], "stats": {"hp": 40, "atk": 6, "def": 1, "spd": 22, "mdef": 0}, "el": null, "note": "과실을 갈라 먹는 앵무새 군체 — 소란 포식", "pred": [], "prey": [{"n": "과실", "id": null}], "eco": {"rep": 0.85, "food": 0.4, "agg": 0.6, "soc": 0.95}}, {"id": "mon_duskhawk_01", "name": "어스름매", "k": "amb", "tier": null, "r": "hunter", "d": "carnivore", "bio": ["묘지"], "floors": [-5, 30], "temp": [-2, 25], "stats": {"hp": 50, "atk": 10, "def": 3, "spd": 25, "mdef": 2}, "el": null, "note": "황혼에 무덤가를 선회 — 무덤벌레·쥐를 사냥", "pred": [], "prey": [], "eco": {"rep": 0.4, "food": 0.6, "agg": 0.7, "soc": 0.3}}, {"id": "mon_junglemonkey_01", "name": "원숭이", "k": "amb", "tier": null, "r": "prey", "d": "omnivore", "bio": ["정글"], "floors": [15, 40], "temp": [18, 38], "stats": {"hp": 30, "atk": 2, "def": 1, "spd": 20, "mdef": 0}, "el": null, "note": "수관을 오르며 과실을 먹는 영장류 — 잡식", "pred": [], "prey": [{"n": "과실", "id": null}], "eco": {"rep": 0.9, "food": 0.7, "agg": 0.05, "soc": 0.6}}, {"id": "mon_brimstonefly_01", "name": "유황파리", "k": "amb", "tier": null, "r": "swarm", "d": "mineral", "bio": ["지옥"], "floors": [50, 400], "temp": [80, 380], "stats": {"hp": 40, "atk": 6, "def": 1, "spd": 22, "mdef": 0}, "el": null, "note": "유황 결정을 갉는 파리 군체 — 불열매를 수분 (공생)", "pred": [], "prey": [{"n": "유황", "id": null}], "eco": {"rep": 0.85, "food": 0.4, "agg": 0.6, "soc": 0.95}}, {"id": "mon_inkcrow_01", "name": "잉크까마귀", "k": "amb", "tier": null, "r": "hunter", "d": "carnivore", "bio": ["서고 (구 대도서관)"], "floors": [5, 25], "temp": [5, 20], "stats": {"hp": 35, "atk": 6, "def": 2, "spd": 20, "mdef": 3}, "el": null, "note": "책장 사이를 날아 다니며 나방·쥐를 사냥", "pred": [], "prey": [], "eco": {"rep": 0.6, "food": 0.4, "agg": 0.3, "soc": 0.8}}, {"id": "mon_beetle_01", "name": "장수풍뎅이", "k": "amb", "tier": null, "r": "prey", "d": "herbivore", "bio": ["숲", "초원"], "floors": [1, 25], "temp": [10, 35], "stats": {"hp": 60, "atk": 8, "def": 12, "spd": 6, "mdef": 5}, "el": null, "note": "먹이형 · 식성 초식.", "pred": [{"n": "곰", "id": "mon_bear_01"}, {"n": "거대 늑대", "id": "mon_dire_wolf_01"}], "prey": [{"n": "rotten_wood", "id": null}, {"n": "fungus", "id": null}], "eco": {"rep": 0.6, "food": 0.5, "agg": 0.3, "soc": 0.4}}, {"id": "mon_papermoth_01", "name": "종이나방", "k": "amb", "tier": null, "r": "prey", "d": "herbivore", "bio": ["서고 (구 대도서관)"], "floors": [5, 25], "temp": [8, 22], "stats": {"hp": 20, "atk": 3, "def": 1, "spd": 20, "mdef": 0}, "el": null, "note": "글자벌레를 먹는 나방", "pred": [], "prey": [{"n": "먹광", "id": null}], "eco": {"rep": 0.7, "food": 0.3, "agg": 0.05, "soc": 0.7}}, {"id": "mon_rat_01", "name": "쥐", "k": "amb", "tier": null, "r": "scavenger", "d": "omnivore", "bio": ["동굴", "폐허"], "floors": [1, 30], "temp": [0, 35], "stats": {"hp": 25, "atk": 3, "def": 1, "spd": 18, "mdef": 0}, "el": null, "note": "청소부형 · 식성 잡식.", "pred": [{"n": "늑대", "id": "mon_wolf_01"}, {"n": "거미 여왕", "id": "mon_spider_queen_01"}], "prey": [{"n": "organic_waste", "id": null}, {"n": "insects", "id": null}], "eco": {"rep": 0.95, "food": 0.5, "agg": 0.2, "soc": 0.9}}, {"id": "mon_rabbit_01", "name": "토끼", "k": "amb", "tier": null, "r": "prey", "d": "herbivore", "bio": ["초원", "숲"], "floors": [1, 10], "temp": [5, 30], "stats": {"hp": 30, "atk": 2, "def": 1, "spd": 20, "mdef": 0}, "el": null, "note": "먹이형 · 식성 초식.", "pred": [{"n": "늑대", "id": "mon_wolf_01"}, {"n": "매", "id": "mon_hawk_01"}], "prey": [{"n": "grass", "id": null}, {"n": "berries", "id": null}], "eco": {"rep": 0.9, "food": 0.7, "agg": 0.05, "soc": 0.6}}, {"id": "mon_fungus_01", "name": "포자 버섯", "k": "amb", "tier": null, "r": "decomposer", "d": "none", "bio": ["동굴", "습지"], "floors": [16, 25], "temp": [5, 30], "stats": {"hp": 50, "atk": 8, "def": 3, "spd": 0, "mdef": 10}, "el": null, "note": "분해자형 · 식성 비섭취.", "pred": [{"n": "파이어 엘리멘탈", "id": "mon_fire_elemental_01"}], "prey": [{"n": "organic_waste", "id": null}, {"n": "오우즈", "id": "mon_ooze_01"}], "eco": {"rep": 0.9, "food": 0.2, "agg": 0.1, "soc": 0.8}}, {"id": "mon_stormbee_01", "name": "폭풍꿀벌", "k": "amb", "tier": null, "r": "swarm", "d": "herbivore", "bio": ["천공"], "floors": [-20, 20], "temp": [0, 15], "stats": {"hp": 40, "atk": 6, "def": 1, "spd": 22, "mdef": 0}, "el": null, "note": "바람모종 꽂가루를 모은다", "pred": [], "prey": [{"n": "바람씨앗", "id": null}], "eco": {"rep": 0.85, "food": 0.4, "agg": 0.6, "soc": 0.95}}, {"id": "mon_stormhawk_01", "name": "폭풍매", "k": "amb", "tier": null, "r": "hunter", "d": "carnivore", "bio": ["천공"], "floors": [-20, 20], "temp": [-10, 10], "stats": {"hp": 50, "atk": 10, "def": 3, "spd": 25, "mdef": 2}, "el": null, "note": "폭풍 꼭대기에서 벌·모종을 사냥", "pred": [], "prey": [], "eco": {"rep": 0.4, "food": 0.6, "agg": 0.7, "soc": 0.3}}, {"id": "mon_sewersnake_01", "name": "하수뱀", "k": "amb", "tier": null, "r": "ambusher", "d": "carnivore", "bio": ["하수도"], "floors": [10, 30], "temp": [10, 25], "stats": {"hp": 45, "atk": 12, "def": 3, "spd": 22, "mdef": 2}, "el": null, "note": "수면 아래 매복 — 골목쥐·바퀴벌레 포식", "pred": [], "prey": [], "eco": {"rep": 0.5, "food": 0.5, "agg": 0.7, "soc": 0.1}}, {"id": "mon_flameworm_01", "name": "화염벌레", "k": "amb", "tier": null, "r": "prey", "d": "herbivore", "bio": ["화산"], "floors": [20, 300], "temp": [40, 280], "stats": {"hp": 20, "atk": 3, "def": 1, "spd": 20, "mdef": 0}, "el": null, "note": "열수 파이프에 붙어 열조류를 뜯는 내열 유충", "pred": [], "prey": [{"n": "열조류", "id": null}], "eco": {"rep": 0.7, "food": 0.3, "agg": 0.05, "soc": 0.7}}], "nAmb": 53, "nMon": 50, "nPlan": 0, "nSp": 103};
+const ROKO = {"prey": "먹이", "swarm": "군체", "hunter": "사냥꾼", "predator": "포식자", "ambusher": "매복자", "apex": "최상위", "scavenger": "청소부", "decomposer": "분해자", "corruptor": "오염자", "guardian": "수호자", "undead": "언데드", "mimic": "의태자", "elemental": "정령", "warrior": "전사", "producer": "생산자"};
+const KIND_KO = {amb:"야생", mon:"전투", plan:"예정"};
+const DIET_KO = {herbivore:"초식", carnivore:"육식", omnivore:"잡식", none:"비섭취", mana:"마력", blood:"흡혈", mineral:"광물", soul:"영혼", brain:"뇌"};
+const $ = id=>document.getElementById(id);
+
+/* ── 먹이사슬 그래프 (force-directed, canvas) ── */
+const WEB = (()=>{
+  const sp=DATA.species.filter(s=>s.k!=='plan');
+  const byId={}; sp.forEach(s=>byId[s.id]=s);
+  const byName={}; sp.forEach(s=>byName[s.name]=s);
+  const nodes=sp.map((s,i)=>({id:s.id,n:s.name,k:s.k,r:s.r,el:null,x:Math.cos(i/sp.length*6.28)*300+550,y:Math.sin(i/sp.length*6.28)*280+330,vx:0,vy:0}));
+  const nById={}; nodes.forEach(n=>nById[n.id]=n);
+  const edges=[];
+  for(const s of sp){
+    for(const p of (s.prey||[])){
+      if(p.id&&byId[p.id]) edges.push({a:s.id,b:p.id,w:2.2,dashed:false});
+      else if(!p.id){ /* diet-as-resource string → biome resource node */
+        const rid='res:'+p.n;
+        if(!nById[rid]){nById[rid]={id:rid,n:p.n,k:'res',r:'res',x:550+(Math.random()-0.5)*700,y:330+(Math.random()-0.5)*560,vx:0,vy:0};nodes.push(nById[rid]);}
+        edges.push({a:s.id,b:rid,w:1.6,dashed:false});
+      }
+    }
+  }
+  /* 추정 간선 — 같은 바이옴 안에서 포식 역할 → 먹이 역할 (실데이터 관계가 없을 때만) */
+  const PREY=new Set(['prey','swarm','producer']),PRED=new Set(['predator','hunter','ambusher','apex']);
+  const bioNodes={};
+  for(const b of DATA.biomes){
+    const members=nodes.filter(n=>n.k!=='res'&&byId[n.id]&&(byId[n.id].bio||[]).includes(b.name));
+    bioNodes[b.id]=members;
+  }
+  const estPairs=new Set();
+  for(const bid in bioNodes){
+    const ms=bioNodes[bid];
+    for(const p of ms){ if(!PRED.has(p.r))continue;
+      for(const q of ms){ if(!PREY.has(q.r)||p.id===q.id)continue;
+        if(edges.some(e=>(e.a===p.id&&e.b===q.id)||(e.a===q.id&&e.b===p.id)))continue;
+        const key=p.id+'>'+q.id;
+        if(!estPairs.has(key)){estPairs.add(key);edges.push({a:p.id,b:q.id,w:1,dashed:true});}
+      } } }
+  return {nodes,edges};
+})();
+
+/* ── 먹이사슬 그래프 렌더링 ── */
+const ROLECOL={prey:'#8fce6a',swarm:'#8fce6a',producer:'#6ad4c4',predator:'#e06a6a',hunter:'#e06a6a',ambusher:'#e06a6a',apex:'#ff5252',decomposer:'#b08ce0',scavenger:'#b08ce0',corruptor:'#b08ce0',guardian:'#9a90b8',undead:'#9a90b8',mimic:'#9a90b8',elemental:'#9a90b8',warrior:'#9a90b8',res:'#ffd98a'};
+let webSim=null,webDrag=null,webHover=null,webCur=WEB.nodes;
+const webNodeById={};WEB.nodes.forEach(n=>webNodeById[n.id]=n);
+function webBBox(){
+  const bio=$('webBio').value;
+  let ns=WEB.nodes;
+  if(bio!=='all'){
+    const b=DATA.biomes.find(x=>x.id===bio);
+    const names=new Set(b?b.species.map(s=>s.n):[]);
+    const keep=new Set();
+    for(const n of WEB.nodes){ if(names.has(n.n)) keep.add(n.id); }
+    /* 확장 — 종은 늘리지 않는다(연결 그래프라 전체가 유입되는 문제). 유지 종이 직접 먹는 근원자원만 추가 */
+    for(const e of WEB.edges){ if(e.dashed)continue;
+      if(keep.has(e.a)){const o=webNodeById[e.b]; if(o&&o.k==='res')keep.add(e.b);}
+      if(keep.has(e.b)){const o=webNodeById[e.a]; if(o&&o.k==='res')keep.add(e.a);} }
+    ns=WEB.nodes.filter(n=>keep.has(n.id));
+  }
+  return ns;
+}
+function webStep(ns){
+  const ids=new Set(ns.map(n=>n.id));
+  const es=WEB.edges.filter(e=>ids.has(e.a)&&ids.has(e.b));
+  for(const n of ns){ n.fx=0;n.fy=0; }
+  /* 반발 */
+  for(let i=0;i<ns.length;i++)for(let j=i+1;j<ns.length;j++){
+    const a=ns[i],b=ns[j];
+    let dx=b.x-a.x,dy=b.y-a.y; let d2=dx*dx+dy*dy; if(d2<1)d2=1,dx=1,dy=0;
+    const d=Math.sqrt(d2);let f=1800/d2; if(f>4)f=4;
+    a.fx-=dx/d*f;a.fy-=dy/d*f;b.fx+=dx/d*f;b.fy+=dy/d*f;
+  }
+  /* 스프링 */
+  for(const e of es){
+    const a=WEB.nodes.find(x=>x.id===e.a),b=WEB.nodes.find(x=>x.id===e.b);
+    if(!a||!b)continue;
+    let dx=b.x-a.x,dy=b.y-a.y;const d=Math.max(1,Math.hypot(dx,dy));
+    const want=e.dashed?160:130,f=(d-want)*0.012*(e.dashed?0.5:1);
+    dx/=d;dy/=d;
+    a.fx+=dx*d*f*0.5;a.fy+=dy*d*f*0.5;b.fx-=dx*d*f*0.5;b.fy-=dy*d*f*0.5;
+  }
+  /* 중심 인력 + 적분 */
+  for(const n of ns){
+    n.fx+=(550-n.x)*0.045;n.fy+=(330-n.y)*0.045;
+    if(webDrag&&webDrag.id===n.id){n.x=webDrag.x;n.y=webDrag.y;n.vx=n.vy=0;continue;}
+    n.vx=(n.vx+n.fx*0.35)*0.7;n.vy=(n.vy+n.fy*0.35)*0.7;
+    if(n.vx>8)n.vx=8;else if(n.vx<-8)n.vx=-8;if(n.vy>8)n.vy=8;else if(n.vy<-8)n.vy=-8;
+    n.x=Math.max(30,Math.min(1070,n.x+n.vx));n.y=Math.max(26,Math.min(634,n.y+n.vy));
+  }
+  return es;
+}
+function webDraw(es,showLabels){
+  const cv=$('webcv'),g=cv.getContext('2d');
+  g.clearRect(0,0,cv.width,cv.height);
+  /* 간선 — 추정 간선 숨김 옵션 */
+  for(const e of es){
+    if(e._hide)continue;
+    const a=WEB.nodes.find(x=>x.id===e.a),b=WEB.nodes.find(x=>x.id===e.b);
+    if(!a||!b)continue;
+    g.strokeStyle=e.dashed?'rgba(154,144,184,0.35)':'rgba(143,208,255,0.55)';
+    g.lineWidth=e.w; g.setLineDash(e.dashed?[4,5]:[]);
+    g.beginPath();g.moveTo(a.x,a.y);g.lineTo(b.x,b.y);g.stroke();
+  }
+  g.setLineDash([]);
+  /* 노드 */
+  g.font='11px sans-serif'; g.textAlign='center';
+  const inView=new Set();es.forEach(e=>{inView.add(e.a);inView.add(e.b);});
+  for(const n of WEB.nodes){
+    if(n.k!=='res'&&!inView.has(n.id))continue;
+    const col=ROLECOL[n.r]||'#9a90b8';
+    const rad=n.k==='res'?5:(n.k==='mon'?9:7);
+    if(n.k==='res'){ /* 다이아 — 근원자원 */
+      g.save();g.translate(n.x,n.y);g.rotate(Math.PI/4);
+      g.fillStyle=col;g.globalAlpha=.9;g.fillRect(-rad,-rad,rad*2,rad*2);g.restore();
+    }else{
+      g.beginPath();g.arc(n.x,n.y,rad,0,6.28);
+      g.fillStyle=col;g.fill();
+      if(n.k==='mon'){g.strokeStyle='#ffd98a';g.lineWidth=2;g.stroke();}
+    }
+    if(webHover===n.id||showLabels){
+      g.fillStyle=n.k==='res'?'#ffd98a':'#e8e2f4';
+      g.fillText(n.n,n.x,n.y-rad-5);
+    }
+  }
+  g.textAlign='start';
+}
+function webRun(){
+  if($('panel-web').classList.contains('hidden')){webSim=null;return;}
+  const ns=webBBox(); webCur=ns;
+  const es=webStep(ns); webDraw(es.filter(e=>!e._hide), ns.length<=60);
+  $('webInfo').textContent=`노드 ${ns.filter(n=>n.k!=='res').length}종 · 간선 ${es.filter(e=>!e._hide).length}개`;
+  webSim=requestAnimationFrame(webRun);
+}
+function webStart(){ if(!webSim)webSim=requestAnimationFrame(webRun); }
+const webSel=$('webBio');
+for(const b of DATA.biomes){const o=document.createElement('option');o.value=b.id;o.textContent=b.name;webSel.appendChild(o);}
+/* 기본 뷰 — 전체는 헤어볼이라 가장 풍부한 초원부터 */
+webSel.value='biome_plains';
+webSel.addEventListener('change',()=>{webStart();});
+$('webDeriv').addEventListener('click',e=>{
+  e.target.classList.toggle('on');
+  const show=e.target.classList.contains('on');
+  WEB.edges.forEach(x=>x._d=x.dashed);
+  if(!show){WEB.edges.forEach(x=>{if(x.dashed)x._hide=true;});}
+  else WEB.edges.forEach(x=>{x._hide=false;});
+  webStart();
+});
+$('webcv').addEventListener('mousemove',e=>{
+  const r=e.target.getBoundingClientRect(),sc=e.target.width/r.width;
+  const mx=(e.clientX-r.left)*sc,my=(e.clientY-r.top)*sc;
+  let hit=null;
+  for(const n of webCur){ if(Math.hypot(n.x-mx,n.y-my)<12){hit=n.id;break;} }
+  webHover=hit; e.target.style.cursor=hit?'pointer':'default';
+});
+$('webcv').addEventListener('mousedown',e=>{
+  const r=e.target.getBoundingClientRect(),sc=e.target.width/r.width;
+  const mx=(e.clientX-r.left)*sc,my=(e.clientY-r.top)*sc;
+  for(const n of webCur){ if(Math.hypot(n.x-mx,n.y-my)<12){webDrag={...n};webDrag.node=n;break;} }
+});
+$('webcv').addEventListener('mousemove',e=>{
+  if(!webDrag)return;
+  const r=e.target.getBoundingClientRect(),sc=e.target.width/r.width;
+  webDrag.x=(e.clientX-r.left)*sc;webDrag.y=(e.clientY-r.top)*sc;
+});
+window.addEventListener('mouseup',()=>{ if(webDrag&&webDrag._upOnce){/*noop*/} webDrag=null; });
+$('webcv').addEventListener('click',e=>{
+  if(webDragJustMoved)return;
+  const r=e.target.getBoundingClientRect(),sc=e.target.width/r.width;
+  const mx=(e.clientX-r.left)*sc,my=(e.clientY-r.top)*sc;
+  for(const n of webCur){
+    if(Math.hypot(n.x-mx,n.y-my)<12){
+      if(n.k==='res')return;
+      openSp(n.id);break;
+    } }
+});
+let webDragJustMoved=false;
+$('webcv').addEventListener('mousedown',()=>{webDragJustMoved=false;});
+$('webcv').addEventListener('mousemove',e=>{if(webDrag)webDragJustMoved=true;});
+
+/* ── 탭 전환 ── */
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.add('hidden'));
+  const p=$('panel-'+t.dataset.p); p.classList.remove('hidden');
+  if(t.dataset.p==='sim'){draw();try{SIM.render();}catch(e){}}
+  if(t.dataset.p==='web') webStart();
+  window.scrollTo({top:0});
+}));
+
+/* ── 초성 (가나다 색인) ── */
+function chosung(ch){const c=ch.charCodeAt(0);
+  if(c>=0xAC00&&c<=0xD7A3)return "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ"[Math.floor((c-0xAC00)/588)];
+  const u=ch.toUpperCase()[0]; return /[A-Z]/.test(u)?u:null;}
+
+/* ── 종사전 ── */
+const S=DATA.species;
+const fState={q:'',k:'all',cho:null,srt:'imp'};
+function imp(s){return s.k==='mon'?200+(s.tier||0)*10:(s.k==='amb'?100:0);}
+function gaCmp(a,b){return a.name.localeCompare(b.name,'ko');}
+function filtered(){
+  let L=S.filter(s=>{
+    if(fState.k!=='all'&&s.k!==fState.k)return false;
+    if(fState.cho&&chosung(s.name)!==fState.cho)return false;
+    if(fState.q){const q=fState.q.toLowerCase();
+      if(!(s.name.toLowerCase().includes(q)||s.id.toLowerCase().includes(q)||(s.note||'').toLowerCase().includes(q)))return false;}
+    return true;});
+  L=[...L].sort(fState.srt==='ga'?gaCmp:(a,b)=>imp(b)-imp(a)||gaCmp(a,b));
+  return L;
+}
+function roleCls(r){return ['prey','swarm','producer','predator','hunter','ambusher','apex','decomposer','scavenger','corruptor','guardian','undead','mimic','elemental','warrior'].includes(r)?'r-'+r:'';}
+function renderDex(){
+  const L=filtered(),g=$('dexgrid');
+  g.innerHTML=L.map(s=>`<div class="dcard" data-id="${s.id}">
+    <div class="dt"><b>${s.name}</b><span class="did">${s.id}</span></div>
+    <div class="dchips">
+      <span class="mini ${s.k}">${KIND_KO[s.k]}</span>
+      <span class="mini ${roleCls(s.r)}">${ROKO[s.r]||s.r}</span>
+      ${s.tier?`<span class="mini tier">T${s.tier}</span>`:''}
+      ${s.bio[0]?`<span class="mini" style="background:#262035;color:var(--dim)">${s.bio.join('·')}</span>`:''}
+    </div>
+    <p class="dl">${s.note||''}</p></div>`).join('');
+  $('dexempty').classList.toggle('hidden',L.length>0);
+}
+/* 초성 색인 — 현재 필터 결과에 존재하는 초성만 */
+function renderCho(){
+  const base=S.filter(s=>fState.k==='all'||s.k===fState.k);
+  const set=[...new Set(base.map(s=>chosung(s.name)).filter(Boolean))]
+    .sort((a,b)=>"ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ".indexOf(a)-"ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ".indexOf(b));
+  $('choidx').innerHTML=`<button class="cho ${!fState.cho?'on':''}" data-c="">전체</button>`+
+    set.map(c=>`<button class="cho ${fState.cho===c?'on':''}" data-c="${c}">${c}</button>`).join('');
+}
+$('q').addEventListener('input',e=>{fState.q=e.target.value.trim();renderDex();});
+document.querySelectorAll('.chipbtn[data-k]').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.chipbtn[data-k]').forEach(x=>x.classList.toggle('on',x===b));
+  fState.k=b.dataset.k; fState.cho=null; renderCho(); renderDex();}));
+$('choidx').addEventListener('click',e=>{if(!e.target.classList.contains('cho'))return;
+  fState.cho=e.target.dataset.c||null;renderCho();renderDex();});
+$('srt').addEventListener('change',e=>{fState.srt=e.target.value;renderDex();});
+$('dexgrid').addEventListener('click',e=>{const c=e.target.closest('.dcard');if(c)openSp(c.dataset.id);});
+
+/* ── 상세 팝업 (사전 항목) ── */
+function relChips(list,lab){
+  if(!list||!list.length)return '';
+  const chips=list.map(x=>x.id
+    ?`<span class="relchip"><a data-sp="${x.id}">${x.n}</a> ›</span>`
+    :`<span class="relchip res">${x.n} · 자원</span>`).join('');
+  return `<div class="rel"><h4>${lab}</h4>${chips}</div>`;
+}
+function openSp(id){
+  const s=S.find(x=>x.id===id); if(!s)return;
+  const t=s.temp, band=t?`${t[0]}~${t[1]}°C`:(s.k==='plan'?'미정 (소속 바이옴 band 예정)':'—');
+  const st=s.stats?`<table class="stt"><tr><th>HP</th><th>ATK</th><th>DEF</th><th>방어속도</th><th>마방</th></tr>
+    <tr><td>${s.stats.hp??'—'}</td><td>${s.stats.atk??'—'}</td><td>${s.stats.def??'—'}</td><td>${s.stats.aspd??'—'}</td><td>${s.stats.mdef??'—'}</td></tr></table>`:'';
+  $('mcard').innerHTML=`
+    <button class="mclose" onclick="closeSp()">닫기 ✕</button>
+    <div class="mhead"><b>${s.name}</b><span class="mid">${s.id}</span></div>
+    <div class="mbadges">
+      <span class="mini ${s.k}">${KIND_KO[s.k]}</span>
+      <span class="mini ${roleCls(s.r)}">${ROKO[s.r]||s.r}</span>
+      ${s.tier?`<span class="mini tier">티어 T${s.tier}</span>`:''}
+      ${s.el?`<span class="mini" style="background:#262035;color:#ffd98a">${s.el}</span>`:''}
+    </div>
+    <p class="mdef">${s.note||''}</p>
+    <dl class="kv">
+      <dt>식성</dt><dd>${s.d?DIET_KO[s.d]||s.d:'미정'}</dd>
+      <dt>서식 바이옴</dt><dd>${s.bio.join(' · ')||'—'}</dd>
+      <dt>출현층 (참조)</dt><dd>${s.floors?`${s.floors[0]}~${s.floors[1]}층`:'—'}</dd>
+      <dt>온도 내성</dt><dd>${band}</dd>
+    </dl>
+    ${relChips(s.prey,'🍂 먹이 (이 종이 먹는 것)')}
+    ${relChips(s.pred,'🎯 천적 (이 종을 먹는 것)')}
+    ${st}
+    <p class="mnote">※ 출현층은 바이옴 배정 전 참조값 — 실제 스폰은 habitat × 온도 게이트 (06 §3.5)로 결정.</p>`;
+  $('modal').classList.remove('hidden');
+}
+window.openSp=openSp;
+window.closeSp=()=>{$('modal').classList.add('hidden');};
+$('modal').addEventListener('click',e=>{if(e.target===$('modal'))closeSp();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSp();});
+document.addEventListener('click',e=>{
+  const a=e.target.closest('[data-sp]'); if(a){openSp(a.dataset.sp); $('mcard').scrollTop=0;}
+});
+
+/* ── 바이옴 카드 ── */
+const cardsEl=$('cards');
+const GROUPS=[["g1","G1 하부 탑 (1~50층)","var(--g1)"],["g2","G2 중부 탑 (51~95층)","var(--g2)"],["g3","G3 정점 (96~100층)","var(--g3)"]];
+for (const [gid,label,color] of GROUPS){
+  const list=DATA.biomes.filter(b=>b.gid===gid);
+  const h=document.createElement('div');
+  h.className='ghead'; h.innerHTML=`<span class="bar" style="background:${color}"></span>${label}`;
+  cardsEl.appendChild(h);
+  const grid=document.createElement('div'); grid.className='cards';
+  for (const b of list){
+    const groups={"먹이층":["prey","swarm","producer"],"포식층":["predator","hunter","ambusher","apex"],"분해층":["decomposer","scavenger","corruptor"]};
+    let rows='';
+    for (const [lab,roles] of Object.entries(groups)){
+      const mine=b.species.filter(s=>roles.includes(s.r));
+      if(!mine.length)continue;
+      rows+=`<div class="crow"><span class="clabel">${lab}</span><span>`+mine.map(s=>{
+        const t=ROKO[s.r]||s.r;
+        const cn=['predator','hunter','ambusher','apex'].includes(s.r)?'pred':(['decomposer','scavenger','corruptor'].includes(s.r)?'dec':s.r);
+        return `<span class="chip ${cn==='pred'?'predator':(cn==='dec'?'decomposer':cn)} ${s.p?'plan':''}" title="${t}">${s.n} <span style="opacity:.7">· ${t}</span>${s.p?` <span class="src">${s.src||''}</span>`:''}</span>`;
+      }).join('')+`</span></div>`;
+    }
+    const others=b.species.filter(s=>!["prey","swarm","producer","predator","hunter","ambusher","apex","decomposer","scavenger","corruptor"].includes(s.r));
+    if(others.length)rows+=`<div class="crow"><span class="clabel">특수</span><span>`+others.map(s=>`<span class="chip other">${s.n} · ${ROKO[s.r]||s.r}</span>`).join('')+`</span></div>`;
+    const badge=b.complete?'<span class="badge ok">사슬 완결 ✅</span>':`<span class="badge miss">결핍: ${b.missing.join('·')}</span>`;
+    grid.insertAdjacentHTML('beforeend',`
+      <div class="card ${b.gid}">
+        <div class="chead2"><span class="cname">${b.name}</span><span class="cmeta">${b.gname} · 블록 ${b.slots[0]} · 계수 ×${b.mult.toFixed(2)}</span></div>
+        <div>${badge}<span class="badge plan">현행 ${b.curN}종 + 예정 ${b.planN}종</span></div>
+        <div class="res"><b>⟡ 근원자원 — ${b.resName}</b><span class="d">${b.resDesc} · K≈${b.K} · r≈${b.r}</span></div>
+        <div style="font-size:11.5px;color:var(--dim);margin:-2px 0 6px">${b.tempS} · 서식 가능 밴드 밖 종은 스폰 차단 (06 §3.5)</div>
+        <div class="chain">${rows}</div>
+        <div class="cnote">🌱 ${b.note} <button class="jump" data-b="${b.id}">시뮬레이터 ▶</button></div>
+      </div>`);
+  }
+  cardsEl.appendChild(grid);
+}
+
+/* ── 시뮬레이터 ── */
+const sel=$('biomeSel');
+for (const b of DATA.biomes){const o=document.createElement('option');o.value=b.id;o.textContent=`${b.name} (K=${b.K}, r=${b.r})`;sel.appendChild(o);}
+const ctrl={r:$('r'),K:$('K'),a:$('a'),b:$('b'),d:$('d'),N0:$('N0'),P0:$('P0')};
+function preset(){const b=DATA.biomes.find(x=>x.id===sel.value);
+  ctrl.r.value=b.r; ctrl.K.value=b.K; ctrl.a.value=0.02; ctrl.b.value=0.5; ctrl.d.value=0.35;
+  ctrl.N0.value=Math.round(b.K*0.4); ctrl.P0.value=Math.max(1,Math.round(b.K*0.06)); sync(); draw();}
+function sync(){$('vr').textContent=(+ctrl.r.value).toFixed(2);$('vK').textContent=ctrl.K.value;
+  $('va').textContent=(+ctrl.a.value).toFixed(3);$('vb').textContent=(+ctrl.b.value).toFixed(2);
+  $('vd').textContent=(+ctrl.d.value).toFixed(2);$('vN').textContent=ctrl.N0.value;$('vP').textContent=ctrl.P0.value;}
+/* ── 마르코프 기온 상태 — 한파/평년/폭엔 3상태 전이 (06 §3.5 · 07 §8) ── */
+const MK={names:['한파','평년','폭엔'],cols:['#6fa8ff','#9a90b8','#ff9a5a'],
+  P:[[0.60,0.35,0.05],[0.15,0.70,0.15],[0.05,0.35,0.60]],OFF:0.4};
+let seed=1;
+function rand(){seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff;}
+function simulate(){const r0=+ctrl.r.value,K0=+ctrl.K.value,a=+ctrl.a.value,b=+ctrl.b.value,d0=+ctrl.d.value;
+  const noPred=$('noPred').checked,useSeason=$('season').checked;
+  const bio=DATA.biomes.find(x=>x.id===sel.value);
+  const [T0,Tlo,Thi]=bio.cl,bw=Thi-Tlo,Topt=(Tlo+Thi)/2;
+  let N=+ctrl.N0.value,P=noPred?0:+ctrl.P0.value,st=1;
+  const dt=0.02,steps=6000,SEASON=600,ts=[],Ns=[],Ps=[],Ss=[],Ks=[];
+  for(let i=0;i<steps;i++){
+    if(useSeason&&i%SEASON===0){const p=MK.P[st],u=rand();st=u<p[0]?0:(u<p[0]+p[1]?1:2);}
+    const off=useSeason?(st===0?-MK.OFF*bw:(st===2?MK.OFF*bw:0)):0;
+    const T=T0+off;
+    const phi=useSeason?Math.exp(-Math.pow((T-Topt)/(bw/3),2)):1;
+    const r=r0*phi,K=K0*(0.3+0.7*phi),d=d0*(1+0.3*(1-phi));
+    const dN=r*N*(1-N/K)-a*N*P;const dP=noPred?0:(b*a*N*P-d*P);
+    N=Math.max(0.01,N+dN*dt);P=Math.max(0,P+dP*dt);
+    if(i%10===0){ts.push(i*dt);Ns.push(N);Ps.push(P);Ss.push(useSeason?st:-1);Ks.push(K);}}
+  return {ts,Ns,Ps,Ss,Ks,K:K0};}
+function draw(){sync();const {ts,Ns,Ps,Ss,Ks,K}=simulate();const cv=$('cv'),g=cv.getContext('2d');
+  g.clearRect(0,0,cv.width,cv.height);const pad=34,W=cv.width-pad-10,H=cv.height-24;
+  const maxY=Math.max(K,...Ns,...Ps)*1.1;
+  const X=t=>pad+t/ts[ts.length-1]*W,Y=v=>cv.height-12-v/maxY*H;
+  g.font='11px sans-serif';
+  if(Ss[0]!==-1){let s0=0;
+    for(let i=1;i<=Ss.length;i++){
+      if(i===Ss.length||Ss[i]!==Ss[s0]){
+        const x0=X(ts[s0]),x1=X(ts[Math.min(i,ts.length-1)])||pad+W;
+        g.fillStyle=MK.cols[Ss[s0]];g.globalAlpha=.13;g.fillRect(x0,0,x1-x0,cv.height-12);g.globalAlpha=1;
+        g.fillStyle=MK.cols[Ss[s0]];g.fillText(MK.names[Ss[s0]],x0+4,12);
+        s0=i;}}}
+  g.strokeStyle='#ffd98a';g.lineWidth=1;g.globalAlpha=.45;g.beginPath();ts.forEach((t,i)=>{const x=X(t),y=Y(Ks[i]);i?g.lineTo(x,y):g.moveTo(x,y);});g.stroke();g.globalAlpha=1;g.lineWidth=2;
+  g.strokeStyle='#ffd98a';g.setLineDash([5,5]);g.globalAlpha=.55;g.beginPath();g.moveTo(pad,Y(K));g.lineTo(pad+W,Y(K));g.stroke();g.setLineDash([]);g.globalAlpha=1;
+  g.strokeStyle='#8fce6a';g.beginPath();ts.forEach((t,i)=>{const x=X(t),y=Y(Ns[i]);i?g.lineTo(x,y):g.moveTo(x,y);});g.stroke();
+  g.strokeStyle='#e06a6a';g.beginPath();ts.forEach((t,i)=>{const x=X(t),y=Y(Ps[i]);i?g.lineTo(x,y):g.moveTo(x,y);});g.stroke();
+  g.fillStyle='#9a90b8';g.fillText('개체수',pad-26,14);g.fillText('시간 →',pad+W-30,cv.height-2);
+  g.fillStyle='#ffd98a';g.globalAlpha=.8;g.fillText('K='+K,pad+4,Y(K)-5);g.globalAlpha=1;
+  const bio=DATA.biomes.find(x=>x.id===sel.value),a=+ctrl.a.value,bb=+ctrl.b.value,d=+ctrl.d.value;
+  const Nstar=d/(bb*a),Pstar=(+ctrl.r.value/a)*(1-Math.min(1,Nstar/K));
+  const seasonNote=$('season').checked
+    ?` <b style="color:#8fd0ff">│ 마르코프 계절:</b> 전이확률 P(평년→한파)=0.35·P(평년→폭엔)=0.15·유지 0.60 — 계절 온도가 열성능 φ를 통해 <b>r·K·d를 진폭</b>시켜 파동이 계절마다 달라진다`
+    :'';
+  $('eq').innerHTML=$('noPred').checked
+    ?`순수 로지스틱: 개체수는 <b>K=${K}</b>로 수렴 (S자 곡선) — 실제 N≈${Ns[Ns.length-1].toFixed(0)}${seasonNote}`
+    :`평형점: 먹이 N* = d/(b·a) = ${Nstar.toFixed(1)} · 포식자 P* = (r/a)(1−N*/K) = ${Math.max(0,Pstar).toFixed(1)} — 두 파동이 이 주위를 도는 구조 (전환 효율 b·a·N* > d면 포식자 생존)${seasonNote}`;}
+sel.addEventListener('change',preset);$('noPred').addEventListener('change',draw);$('season').addEventListener('change',draw);
+$('reroll').addEventListener('click',()=>{seed=(Date.now()%2147483647)||1;draw();});
+for(const id in ctrl)ctrl[id].addEventListener('input',draw);
+
+/* ── 실데이터 시즌 시뮬레이터 — ambient.json ecology 필드 기반 (07 §8 로지스틱·LV·마르코프) ── */
+const SIM=(()=>{
+  /* 1) 종별 파라미터 도출 — 전부 실측 필드에서 */
+  const sp=DATA.species.filter(s=>s.eco&&s.temp);
+  const TIER_PRED=new Set(['predator','hunter','ambusher','apex']);
+  for(const s of sp){
+    s.tl=s.temp[0]+(s.temp[1]-s.temp[0])*0.5;  /* 최적온도 = 밴드 중심 */
+    s.tw=Math.max(2,(s.temp[1]-s.temp[0])/2);  /* 밴드 반경 */
+    s.pred_=TIER_PRED.has(s.r);
+    if(s.temp[1]-s.temp[0]>=45)s.hardy=true; /* 넓은 밴드 내성종 — 계절에 둔감 (audit 검증 기준) */
+  }
+  const byId={};sp.forEach(s=>byId[s.id]=s);
+  /* 2) 바이옴별 출연 종 + K 배분(10% 법칙 — 하위층 위주, 최상위 포식자는 전체의 약 10%를 나눠 가짐) */
+  const bioSp={};
+  for(const b of DATA.biomes){
+    const ms=sp.filter(s=>s.bio.includes(b.name));
+    const low=ms.filter(s=>!s.pred_),hi=ms.filter(s=>s.pred_);
+    for(const s of low) s.Kb=Math.max(5,Math.round(b.K*0.55/Math.max(1,low.length)));
+    for(const s of hi)  s.Kb=Math.max(2,Math.round(b.K*0.10/Math.max(1,hi.length))); /* 최상위 포식자는 희소 — 단 최소 2 */
+    bioSp[b.id]=ms.map(s=>s.id);
+  }
+  /* 3) 시즌 굴리기 — 마르코프 이상기후 + 종별 φ + LV 교차항 */
+  function run(bid,nSeasons,reroll){
+    if(reroll)seed=(Date.now()%2147483647)||1;
+    const bio=DATA.biomes.find(x=>x.id===bid);
+    const ids=bioSp[bid]||[];
+    const st=ids.map(id=>({s:byId[id],N:byId[id].Kb*0.6,ext:false}));
+    const [T0,Tlo,Thi]=bio.cl,bw=Thi-Tlo,Topt=(Tlo+Thi)/2;
+    let season=1,anom=1; /* 1=평년 */
+    const hist=[{se:1,nm:'평년',cols:'#9a90b8',pop:st.map(o=>({id:o.s.id,n:o.N}))}];
+    const dt=0.05,STEPS=400;
+    for(let se=0;se<nSeasons;se++){
+      /* 마르코프 이상기후 전이 */
+      const p=MK.P[anom],u=rand();anom=u<p[0]?0:(u<p[0]+p[1]?1:2);
+      const off=anom===0?-MK.OFF*bw:(anom===2?MK.OFF*bw:0),T=T0+off;
+      for(const o of st){
+        if(o.ext)continue;
+        const phi=Math.exp(-Math.pow((T-o.s.tl)/o.s.tw,2));
+        const r=Math.max(0.05,o.s.eco.rep*phi);
+        const K=Math.max(2,o.s.Kb*(0.25+0.75*phi));
+        const d=Math.min(0.9,0.05+o.s.eco.food*0.8*(1+0.4*(1-phi)));
+        o.r=r;o.K=K;o.d=d;
+      }
+      for(let i=0;i<STEPS;i++){
+        for(const o of st){
+          if(o.ext)continue;
+          let loss=0;
+          for(const q of st){
+            if(q.ext||q===o)continue;
+            const eats=o.s.prey.some(pp=>pp.id===q.s.id);
+            if(eats){
+              const aff=0.004+0.012*(o.s.eco.agg||0.3);
+              loss+=aff*q.N/(20+q.N); /* Holling II 스케일 */
+            }
+          }
+          const dN=o.r*o.N*(1-o.N/o.K)-loss*o.N-o.d*o.N*0.2;
+          o.N=Math.max(0,o.N+dN*dt);
+        }
+      }
+      /* 국소절멸 · 이주 재유입 */
+      for(const o of st){
+        if(o.N<0.05){o.ext=true;o.N=0;}
+        else if(o.ext===true&&se>0){/* no revive mid-season */}
+        if(!o.ext&&o.N>o.K*1.02)o.N=o.K*1.02;
+      }
+      if(se<nSeasons-1){
+        for(const o of st){
+          if(o.ext&&rand()<0.25){o.ext=false;o.N=byId[o.s.id].Kb*0.05+0.05;} /* 이주 재유입 */
+        }
+      }
+      hist.push({se:se+2,nm:MK.names[anom],cols:MK.cols[anom],pop:st.map(o=>({id:o.s.id,n:o.N}))});
+    }
+    return {hist,ids,T0};
+  }
+  /* 4) 렌더링 — 캔버스(층별 총량) + 표(종별 시즌 개체수) */
+  const sel2=$('simBio');
+  for(const b of DATA.biomes){const o=document.createElement('option');o.value=b.id;o.textContent=`${b.name} (${(bioSp[b.id]||[]).length}종)`;sel2.appendChild(o);}
+  const TCOL={amb:'#8fce6a',dec:'#b08ce0'};
+  let last=null;
+  function render(){
+    const nS=+$('simSeasons').value;
+    last=run(sel2.value,nS,true);
+    const cv=$('simcv'),g=cv.getContext('2d');
+    g.clearRect(0,0,cv.width,cv.height);
+    const hist=last.hist,pad=34,W=cv.width-pad-10;
+    const maxY=Math.max(...hist.map(h=>Math.max(1,...h.pop.map(p=>p.n))))*1.1;
+    const X=se=>pad+(se-0.5)/(hist.length-1)*W,Y=v=>cv.height-12-v/maxY*(cv.height-24);
+    /* 계절 배경 */
+    g.font='11px sans-serif';
+    for(let i=0;i<hist.length;i++){
+      const x0=pad+(Math.max(0,i-0.5))/(hist.length-1)*W,x1=pad+(Math.min(hist.length-1,i+0.5))/(hist.length-1)*W;
+      g.fillStyle=hist[i].cols;g.globalAlpha=.12;g.fillRect(x0,0,x1-x0,cv.height-12);g.globalAlpha=1;
+      g.fillStyle=hist[i].cols;g.fillText(hist[i].nm,x0+4,12);
+    }
+    /* 층별 총량 곡선 — 하위(먹이·분해·생산) / 중위·최상위(포식 역할 전체) */
+    const layer=()=>{
+      const L=[[],[],[]];
+      for(const h of hist){let a=0,b2=0,c=0;
+        for(const p of h.pop){const s=byId[p.id];
+          if(s.pred_){if(s.k==='mon'&&(s.tier||0)>=4)c+=p.n;else b2+=p.n;}
+          else a+=p.n;}
+        L[0].push(a);L[1].push(b2);L[2].push(c);}
+      return L;};
+    const L=layer();
+    const COLS=['#8fce6a','#e06a6a','#ff5252'];
+    L.forEach((arr,li)=>{g.strokeStyle=COLS[li];g.lineWidth=li===0?2.4:2;g.beginPath();
+      arr.forEach((v,i)=>{const x=X(i+1),y=Y(v);i?g.lineTo(x,y):g.moveTo(x,y);});g.stroke();});
+    g.fillStyle='#9a90b8';g.fillText('개체수',pad-26,14);g.fillText('시즌 →',pad+W-34,cv.height-2);
+    /* 표 */
+    const rows=last.ids.map(id=>{
+      const s=byId[id];
+      const cells=hist.map(h=>{const p=h.pop.find(x=>x.id===id);const v=p?p.n:0;
+        const col=v<0.05?'#5a5470':(v>s.Kb*0.8?'#ffd98a':'#cfc6ee');
+        return `<td style="text-align:right;color:${col};padding:2px 6px">${v<0.05?'✝':v.toFixed(1)}</td>`;}).join('');
+      const clr=s.k==='mon'?'#ffd98a':(TCOL[s.r]||'#cfc6ee');
+      return `<tr><td style="color:${clr};padding:2px 6px;white-space:nowrap">${s.name}</td><td style="color:#5a5470;padding:2px 4px">K${s.Kb}</td>${cells}</tr>`;
+    }).join('');
+    const head=hist.map((h,i)=>`<th style="color:${h.cols};text-align:right;padding:2px 6px">S${i+1} ${h.nm}</th>`).join('');
+    $('simTable').innerHTML=`<tr><th style="text-align:left;color:var(--dim)">종</th><th></th>${head}</tr>${rows}`;
+    const ext=last.ids.filter(id=>hist[hist.length-1].pop.find(p=>p.id===id).n<0.05).length;
+    $('simInfo').textContent=`${last.ids.length}종 · 최종 생존 ${last.ids.length-ext} · 절멸 ${ext}`;
+  }
+  sel2.addEventListener('change',render);
+  $('simRun').addEventListener('click',render);
+  $('simSeasons').addEventListener('change',render);
+  return {render};
+})();
+document.addEventListener('click',e=>{
+  if(e.target.classList.contains('jump')){
+    sel.value=e.target.dataset.b;
+    document.querySelector('[data-p="sim"]').click();
+    preset();}});
+renderCho();renderDex();renderBioDex();preset();
+</script>
+</body>
+</html>
