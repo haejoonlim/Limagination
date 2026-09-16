@@ -17,8 +17,7 @@
   "population": {
     "initial": 30,
     "max_by_stage": [60, 150, 400, 1300],
-    "natural_growth_rate_per_island_day": 0.02,
-    "housing_beds_per_building": 20
+    "natural_growth_rate_per_island_day": 0.02
   },
   "food": {
     "consumption_per_pop_per_island_day": 1
@@ -51,10 +50,10 @@
       { "id": "herb", "name_ko": "약초", "yield_food": 0, "yield_herb": 3, "growth_island_days": 3 }
     ],
     "seasons": [
-      { "id": "spring", "months": [3, 4, 5], "food_yield_mul": 1.0, "natural_growth_mul": 1.5, "growth_mul": 1.0 },
-      { "id": "summer", "months": [6, 7, 8], "food_yield_mul": 1.0, "natural_growth_mul": 1.0, "growth_mul": 1.0 },
-      { "id": "autumn", "months": [9, 10, 11], "food_yield_mul": 1.1, "natural_growth_mul": 1.0, "growth_mul": 1.0 },
-      { "id": "winter", "months": [12, 1, 2], "food_yield_mul": 0.7, "natural_growth_mul": 1.0, "growth_mul": 0.0 }
+      { "id": "spring", "months": [3, 4, 5], "harvest_mul": 1.0, "food_yield_mul": 1.0, "natural_growth_mul": 1.5, "growth_mul": 1.0 },
+      { "id": "summer", "months": [6, 7, 8], "harvest_mul": 1.0, "food_yield_mul": 1.0, "natural_growth_mul": 1.0, "growth_mul": 1.0 },
+      { "id": "autumn", "months": [9, 10, 11], "harvest_mul": 1.1, "food_yield_mul": 1.0, "natural_growth_mul": 1.0, "growth_mul": 1.0 },
+      { "id": "winter", "months": [12, 1, 2], "harvest_mul": 1.0, "food_yield_mul": 0.7, "natural_growth_mul": 1.0, "growth_mul": 0.0 }
     ]
   },
   "edicts": {

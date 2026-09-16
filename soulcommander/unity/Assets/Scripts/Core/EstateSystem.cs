@@ -30,11 +30,17 @@ namespace SoulCommander.Core
             return null;
         }
 
+        public static int HousingBedsPerLevel(int level)
+        {
+            level = Mathf.Clamp(level, 1, 7);
+            return 20 + (level - 1) * 15; // 04 §3.10: 20,35,50,65,80,95,110
+        }
+
         public static int Beds(SaveData d)
         {
-            var root = DataLoader.LoadEstate();
-            int bedsPer = root?.population?.housing_beds_per_building ?? 20;
-            return d.estate.housingCount * bedsPer;
+            var housing = GetFacilityState(d, "housing");
+            int lv = housing?.level ?? 1;
+            return d.estate.housingCount * HousingBedsPerLevel(lv);
         }
 
         public static int MaxPopulation(SaveData d)
@@ -369,12 +375,15 @@ namespace SoulCommander.Core
             if (g?.base_yield == null || team == null) return result;
             float floorMul = 1f + team.floor / 50f;
             float edictMul = GetActiveGatheringMultiplier(d);
-            float seasonMul = CurrentSeason(nowUtc)?.food_yield_mul ?? 1f;
-            result.food = (int)Math.Floor(g.base_yield.food * floorMul * edictMul * seasonMul);
-            result.herb = (int)Math.Floor(g.base_yield.herb * edictMul);
-            result.wood = (int)Math.Floor(g.base_yield.wood * edictMul);
+            var season = CurrentSeason(nowUtc);
+            float harvestMul = season?.harvest_mul ?? 1f;
+            float foodMul = (season?.food_yield_mul ?? 1f) * harvestMul;
+            float materialMul = harvestMul;
+            result.food = (int)Math.Floor(g.base_yield.food * floorMul * edictMul * foodMul);
+            result.herb = (int)Math.Floor(g.base_yield.herb * edictMul * materialMul);
+            result.wood = (int)Math.Floor(g.base_yield.wood * edictMul * materialMul);
             // 광석 채굴은 광부 적성 티어 5+ 필요 — 05 §6 적성 시스템 후속 연동 예정
-            result.ore = (int)Math.Floor(g.base_yield.ore * edictMul);
+            result.ore = (int)Math.Floor(g.base_yield.ore * edictMul * materialMul);
             return result;
         }
 
@@ -449,8 +458,10 @@ namespace SoulCommander.Core
             var crop = GetCrop(plot?.cropId);
             if (crop == null) return result;
             var season = CurrentSeason(nowUtc);
-            float foodMul = (season?.food_yield_mul ?? 1f) * GetActiveGatheringMultiplier(d);
-            float herbMul = GetActiveGatheringMultiplier(d);
+            float harvestMul = season?.harvest_mul ?? 1f;
+            float edictMul = GetActiveGatheringMultiplier(d);
+            float foodMul = (season?.food_yield_mul ?? 1f) * harvestMul * edictMul;
+            float herbMul = harvestMul * edictMul;
             // 농부 적성 티어 배율 — 05 §6 적성 시스템 후속 연동 예정
             result.food = (int)Math.Floor(crop.yield_food * foodMul);
             result.herb = (int)Math.Floor(crop.yield_herb * herbMul);

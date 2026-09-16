@@ -243,7 +243,6 @@ namespace SoulCommander.Data
         public int initial;
         public List<int> max_by_stage;
         public float natural_growth_rate_per_island_day;
-        public int housing_beds_per_building;
     }
 
     [Serializable]
@@ -310,9 +309,10 @@ namespace SoulCommander.Data
     {
         public string id;
         public List<int> months;
-        public float food_yield_mul;
-        public float natural_growth_mul;
-        public float growth_mul;
+        public float harvest_mul;          // 채집·농사 전체 수확 배율 (가을 +10% — 04 §3.13)
+        public float food_yield_mul;       // 식량 전용 배율 (겨울 -30%)
+        public float natural_growth_mul;   // 자연증가 배율 (봄 +50%)
+        public float growth_mul;           // 0이면 농사 불가 (겨울)
     }
 
     [Serializable]
