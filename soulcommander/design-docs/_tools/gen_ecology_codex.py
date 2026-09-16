@@ -151,6 +151,16 @@ def resolve(refs):
             out.append({"n": x, "id": None})
     return out
 
+REL_KO = {"predation": "포식", "scavenge": "청소", "ether": "에테르",
+          "parasitism": "기생", "grazing": "섭취"}  # 08 §4 경로 유형 (T-08-5)
+
+def resolve_relt(refs, relt):
+    """prey/predators 목록 + relationTypes 맵 → [{n,id,rel}] — 유형 병합."""
+    out = resolve(refs)
+    for o in out:
+        o["rel"] = relt.get(o["id"] or o["n"], "predation")
+    return out
+
 def biome_names(habs):
     seen, out = set(), []
     for h in habs:
@@ -169,7 +179,9 @@ for s in amb:
                     "bio": biome_names(ec["habitat"]), "floors": s["spawn"]["floors"],
                     "temp": [t.get("min"), t.get("max")] if t else None,
                     "stats": s.get("stats"), "el": None, "note": note,
-                    "pred": resolve(ec.get("predators")), "prey": resolve(ec.get("prey")),
+                    "pred": resolve(ec.get("predators")),
+                    "prey": resolve_relt(ec.get("prey"), ec.get("relationTypes") or {}),
+                    "rel": ec.get("relationTypes") or {},
                     "eco": {"rep": ec.get("reproduction", 0.6), "food": ec.get("food_need", 0.4),
                             "agg": ec.get("aggression", 0.3), "soc": ec.get("sociality", 0.5)}})
 for m in mon:
@@ -181,7 +193,9 @@ for m in mon:
                     "bio": biome_names(ec["habitat"]), "floors": m["spawn"]["floors"],
                     "temp": [t.get("min"), t.get("max")] if t else None,
                     "stats": m.get("stats"), "el": m.get("element"), "note": note,
-                    "pred": resolve(ec.get("predators")), "prey": resolve(ec.get("prey")),
+                    "pred": resolve(ec.get("predators")),
+                    "prey": resolve_relt(ec.get("prey"), ec.get("relationTypes") or {}),
+                    "rel": ec.get("relationTypes") or {},
                     "eco": {"rep": ec.get("reproduction", 0.5), "food": ec.get("food_need", 0.4),
                             "agg": ec.get("aggression", 0.4), "soc": ec.get("sociality", 0.5)}})
 for bid, lst in PLANNED.items():
@@ -410,6 +424,11 @@ html = """<!DOCTYPE html>
   .rel{margin:10px 0}
   .rel h4{font-size:12.5px;color:var(--dim);margin:8px 0 5px}
   .relchip{display:inline-block;font-size:12px;border-radius:16px;padding:3px 11px;margin:2px 4px 2px 0;background:#262035;border:1px solid var(--line)}
+  .relchip.rel-pred{border-color:#7a4a5a}   /* 🎯 포식 */
+  .relchip.rel-scav{border-color:#8a6a3a}   /* 🦴 청소 */
+  .relchip.rel-ether{border-color:#5a4a8a}  /* 👻 에테르 */
+  .relchip.rel-para{border-color:#8a4a7a}   /* 🪱 기생 */
+  .relchip.rel-graze{border-color:#4a7a4a}  /* 🌱 섭취 */
   .relchip a{color:#8fd0ff;cursor:pointer}
   .relchip.res{border-style:dashed;color:var(--dim)}
   table.stt{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
@@ -590,12 +609,13 @@ html = """<!DOCTYPE html>
   <!-- ⑤ 먹이사슬 그래프 -->
   <section id="panel-web" class="panel hidden">
     <h2>먹이사슬 그래프 <span class="sub">누가 누구를 먹는지 — 종 단위 연결 · 노드를 누르면 사전 항목으로</span></h2>
-    <p class="lead">노드 색 = 역할 (초록 먹이 · 빨강 포식 · 보라 분해 · 금 테두리 전투종 · 회색 다이아 근원자원). <b>실선</b> = 데이터에 명시된 관계(predators/prey), <b>점선</b> = 같은 바이옴 안의 역할 기반 추정 관계. 노드를 <b>클릭</b>하면 그 종의 사전 항목이 열립니다.</p>
+    <p class="lead">노드 색 = 역할 (초록 먹이 · 빨강 포식 · 보라 분해 · 금 테두리 전투종 · 회색 다이아 근원자원). <b>선 색 = 관계 유형</b> (08 §4): <span style="color:#8fd0ff">하늘 포식</span> · <span style="color:#e0a050">주황 청소(사체)</span> · <span style="color:#aa8cff">보라 에테르(영혼·마력)</span> · <span style="color:#78c878">초록 섭취(근원자원)</span>. <b>점선</b> = 역할 기반 추정 관계. 노드를 <b>클릭</b>하면 그 종의 사전 항목이 열립니다.</p>
     <div class="dexbar">
       <select id="webBio"><option value="all">전체 바이옴</option></select>
       <button class="chipbtn on" id="webDeriv">추정 간선 표시</button>
       <span style="font-size:12px;color:var(--dim)" id="webInfo"></span>
     </div>
+    <div class="legend"><i style="background:#8fd0ff"></i>포식 predation<i style="background:#e0a050"></i>청소 scavenge (사체)<i style="background:#aa8cff"></i>에테르 ether (영혼·마력)<i style="background:#78c878"></i>섭취 grazing (근원자원)<i style="background:#f06ebe"></i>기생 parasitism (예정)</div>
     <canvas id="webcv" width="1100" height="660"></canvas>
   </section>
 
@@ -608,6 +628,7 @@ html = """<!DOCTYPE html>
 <script>
 const DATA = __DATA__;
 const ROKO = __ROKO__;
+const REL = __REL__;
 const KIND_KO = {amb:"야생", mon:"전투", plan:"예정"};
 const DIET_KO = {herbivore:"초식", carnivore:"육식", omnivore:"잡식", none:"비섭취", mana:"마력", blood:"흡혈", mineral:"광물", soul:"영혼", brain:"뇌"};
 const $ = id=>document.getElementById(id);
@@ -622,11 +643,12 @@ const WEB = (()=>{
   const edges=[];
   for(const s of sp){
     for(const p of (s.prey||[])){
-      if(p.id&&byId[p.id]) edges.push({a:s.id,b:p.id,w:2.2,dashed:false});
+      const rt=p.rel||'predation';  /* relationTypes — 08 §4 (T-08-7 선 색상) */
+      if(p.id&&byId[p.id]) edges.push({a:s.id,b:p.id,w:2.2,dashed:false,rt});
       else if(!p.id){ /* diet-as-resource string → biome resource node */
         const rid='res:'+p.n;
         if(!nById[rid]){nById[rid]={id:rid,n:p.n,k:'res',r:'res',x:550+(Math.random()-0.5)*700,y:330+(Math.random()-0.5)*560,vx:0,vy:0};nodes.push(nById[rid]);}
-        edges.push({a:s.id,b:rid,w:1.6,dashed:false});
+        edges.push({a:s.id,b:rid,w:1.6,dashed:false,rt});
       }
     }
   }
@@ -644,7 +666,7 @@ const WEB = (()=>{
       for(const q of ms){ if(!PREY.has(q.r)||p.id===q.id)continue;
         if(edges.some(e=>(e.a===p.id&&e.b===q.id)||(e.a===q.id&&e.b===p.id)))continue;
         const key=p.id+'>'+q.id;
-        if(!estPairs.has(key)){estPairs.add(key);edges.push({a:p.id,b:q.id,w:1,dashed:true});}
+        if(!estPairs.has(key)){estPairs.add(key);edges.push({a:p.id,b:q.id,w:1,dashed:true,rt:'predation'});}
       } } }
   return {nodes,edges};
 })();
@@ -702,12 +724,13 @@ function webStep(ns){
 function webDraw(es,showLabels){
   const cv=$('webcv'),g=cv.getContext('2d');
   g.clearRect(0,0,cv.width,cv.height);
-  /* 간선 — 추정 간선 숨김 옵션 */
+  /* 간선 — 관계 유형 색상 (T-08-7) + 추정 간선 숨김 옵션 */
+  const ECOL={predation:'rgba(143,208,255,0.55)',scavenge:'rgba(224,160,80,0.6)',ether:'rgba(170,140,255,0.6)',parasitism:'rgba(240,110,190,0.6)',grazing:'rgba(120,200,120,0.45)'};
   for(const e of es){
     if(e._hide)continue;
     const a=WEB.nodes.find(x=>x.id===e.a),b=WEB.nodes.find(x=>x.id===e.b);
     if(!a||!b)continue;
-    g.strokeStyle=e.dashed?'rgba(154,144,184,0.35)':'rgba(143,208,255,0.55)';
+    g.strokeStyle=e.dashed?'rgba(154,144,184,0.35)':(ECOL[e.rt]||ECOL.predation);
     g.lineWidth=e.w; g.setLineDash(e.dashed?[4,5]:[]);
     g.beginPath();g.moveTo(a.x,a.y);g.lineTo(b.x,b.y);g.stroke();
   }
@@ -849,11 +872,18 @@ $('srt').addEventListener('change',e=>{fState.srt=e.target.value;renderDex();});
 $('dexgrid').addEventListener('click',e=>{const c=e.target.closest('.dcard');if(c)openSp(c.dataset.id);});
 
 /* ── 상세 팝업 (사전 항목) ── */
+/* 관계 유형 아이콘·색 (08 §4 — T-08-5) */
+const REL_ICON={predation:'🎯',scavenge:'🦴',ether:'👻',parasitism:'🪱',grazing:'🌱'};
+const REL_CLS={predation:'rel-pred',scavenge:'rel-scav',ether:'rel-ether',parasitism:'rel-para',grazing:'rel-graze'};
 function relChips(list,lab){
   if(!list||!list.length)return '';
-  const chips=list.map(x=>x.id
-    ?`<span class="relchip"><a data-sp="${x.id}">${x.n}</a> ›</span>`
-    :`<span class="relchip res">${x.n} · 자원</span>`).join('');
+  const chips=list.map(x=>{
+    const ic=REL_ICON[x.rel]||'';
+    const tip=ic?` title="${REL[x.rel]||x.rel}"`:'';
+    return x.id
+      ?`<span class="relchip ${REL_CLS[x.rel]||''}"${tip}><a data-sp="${x.id}">${ic} ${x.n}</a> ›</span>`
+      :`<span class="relchip res ${REL_CLS[x.rel]||''}"${tip}>${ic} ${x.n} · 자원</span>`;
+  }).join('');
   return `<div class="rel"><h4>${lab}</h4>${chips}</div>`;
 }
 function openSp(id){
@@ -877,7 +907,7 @@ function openSp(id){
       <dt>출현층 (참조)</dt><dd>${s.floors?`${s.floors[0]}~${s.floors[1]}층`:'—'}</dd>
       <dt>온도 내성</dt><dd>${band}</dd>
     </dl>
-    ${relChips(s.prey,'🍂 먹이 (이 종이 먹는 것)')}
+    ${relChips(s.prey,'🍂 먹이 (이 종이 먹는 것 — 아이콘 = 관계 유형)')}
     ${relChips(s.pred,'🎯 천적 (이 종을 먹는 것)')}
     ${st}
     <p class="mnote">※ 출현층은 바이옴 배정 전 참조값 — 실제 스폰은 habitat × 온도 게이트 (06 §3.5)로 결정.</p>`;
@@ -1198,10 +1228,12 @@ renderCho();renderDex();renderBioDex();preset();
 </html>"""
 
 ROKO_JSON = json.dumps(ROLE_KO, ensure_ascii=False)
+REL_JSON = json.dumps(REL_KO, ensure_ascii=False)
 ok = sum(1 for b in biomes if b["complete"])
 html = (html.replace("__CONCEPTS__", concepts_html)
             .replace("__DATA__", json.dumps(data, ensure_ascii=False))
             .replace("__ROKO__", ROKO_JSON)
+            .replace("__REL__", REL_JSON)
             .replace("__NAMB__", str(len(amb)))
             .replace("__NMON__", str(len(mon)))
             .replace("__NPLAN__", str(data["nPlan"]))

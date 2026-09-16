@@ -89,7 +89,11 @@
         "prey": [
           "grass",
           "berries"
-        ]
+        ],
+        "relationTypes": {
+          "grass": "grazing",
+          "berries": "grazing"
+        }
       }
     },
     {
@@ -186,7 +190,12 @@
           "organic_waste",
           "insects",
           "corpse"
-        ]
+        ],
+        "relationTypes": {
+          "corpse": "scavenge",
+          "organic_waste": "grazing",
+          "insects": "grazing"
+        }
       }
     },
     {
@@ -276,7 +285,11 @@
         "prey": [
           "insects",
           "algae"
-        ]
+        ],
+        "relationTypes": {
+          "insects": "grazing",
+          "algae": "grazing"
+        }
       }
     },
     {
@@ -366,7 +379,11 @@
         "prey": [
           "insects",
           "mon_rat_01"
-        ]
+        ],
+        "relationTypes": {
+          "insects": "grazing",
+          "mon_rat_01": "predation"
+        }
       }
     },
     {
@@ -455,7 +472,12 @@
           "flowers",
           "nectar",
           "mon_moth_01"
-        ]
+        ],
+        "relationTypes": {
+          "flowers": "grazing",
+          "nectar": "grazing",
+          "mon_moth_01": "predation"
+        }
       }
     },
     {
@@ -543,7 +565,11 @@
         "prey": [
           "flowers",
           "fungus"
-        ]
+        ],
+        "relationTypes": {
+          "flowers": "grazing",
+          "fungus": "grazing"
+        }
       }
     },
     {
@@ -633,7 +659,11 @@
         "prey": [
           "rotten_wood",
           "fungus"
-        ]
+        ],
+        "relationTypes": {
+          "rotten_wood": "grazing",
+          "fungus": "grazing"
+        }
       }
     },
     {
@@ -725,7 +755,12 @@
           "mon_fish_01",
           "mon_crab_01",
           "mon_deepplankton_01"
-        ]
+        ],
+        "relationTypes": {
+          "mon_deepplankton_01": "predation",
+          "mon_fish_01": "predation",
+          "mon_crab_01": "predation"
+        }
       }
     },
     {
@@ -817,7 +852,13 @@
           "algae",
           "organic_waste",
           "corpse"
-        ]
+        ],
+        "relationTypes": {
+          "corpse": "scavenge",
+          "mon_fish_01": "predation",
+          "algae": "grazing",
+          "organic_waste": "grazing"
+        }
       }
     },
     {
@@ -907,7 +948,15 @@
           "mon_frog_01",
           "mon_snake_01",
           "mon_mongoose_01"
-        ]
+        ],
+        "relationTypes": {
+          "mon_rabbit_01": "predation",
+          "mon_rat_01": "predation",
+          "mon_bee_01": "predation",
+          "mon_frog_01": "predation",
+          "mon_snake_01": "predation",
+          "mon_mongoose_01": "predation"
+        }
       }
     },
     {
@@ -995,7 +1044,13 @@
           "organic_waste",
           "mon_rat_01",
           "corpse"
-        ]
+        ],
+        "relationTypes": {
+          "corpse": "scavenge",
+          "mon_rabbit_01": "predation",
+          "organic_waste": "grazing",
+          "mon_rat_01": "predation"
+        }
       }
     },
     {
@@ -1085,7 +1140,11 @@
         "prey": [
           "mon_rabbit_01",
           "mon_frog_01"
-        ]
+        ],
+        "relationTypes": {
+          "mon_rabbit_01": "predation",
+          "mon_frog_01": "predation"
+        }
       }
     },
     {
@@ -1177,7 +1236,12 @@
           "organic_waste",
           "mon_ooze_01",
           "corpse"
-        ]
+        ],
+        "relationTypes": {
+          "corpse": "scavenge",
+          "organic_waste": "grazing",
+          "mon_ooze_01": "predation"
+        }
       }
     },
     {
@@ -1265,7 +1329,10 @@
         "predators": [],
         "prey": [
           "mon_deepplankton_01"
-        ]
+        ],
+        "relationTypes": {
+          "mon_deepplankton_01": "predation"
+        }
       }
     },
     {
@@ -1357,7 +1424,12 @@
           "mon_rabbit_01",
           "mon_rat_01",
           "mon_frog_01"
-        ]
+        ],
+        "relationTypes": {
+          "mon_rabbit_01": "predation",
+          "mon_rat_01": "predation",
+          "mon_frog_01": "predation"
+        }
       }
     },
     {
@@ -1446,7 +1518,11 @@
         "prey": [
           "mon_snake_01",
           "mon_rat_01"
-        ]
+        ],
+        "relationTypes": {
+          "mon_snake_01": "predation",
+          "mon_rat_01": "predation"
+        }
       }
     },
     {
@@ -1548,7 +1624,11 @@
         "prey": [
           "organic_waste",
           "corpse"
-        ]
+        ],
+        "relationTypes": {
+          "corpse": "scavenge",
+          "organic_waste": "grazing"
+        }
       }
     },
     {
@@ -1650,7 +1730,11 @@
         "prey": [
           "organic_waste",
           "corpse"
-        ]
+        ],
+        "relationTypes": {
+          "corpse": "scavenge",
+          "organic_waste": "grazing"
+        }
       }
     },
     {
@@ -1751,7 +1835,10 @@
         ],
         "prey": [
           "mana"
-        ]
+        ],
+        "relationTypes": {
+          "mana": "ether"
+        }
       }
     },
     {
@@ -1838,7 +1925,10 @@
         "prey": [
           "바람씨앗"
         ],
-        "note": "기류를 타고 떠다니는 모종 — 천공 먹이층의 바닥"
+        "note": "기류를 타고 떠다니는 모종 — 천공 먹이층의 바닥",
+        "relationTypes": {
+          "바람씨앗": "grazing"
+        }
       }
     },
     {
@@ -1924,7 +2014,10 @@
         "prey": [
           "바람씨앗"
         ],
-        "note": "바람모종 꽂가루를 모은다"
+        "note": "바람모종 꽂가루를 모은다",
+        "relationTypes": {
+          "바람씨앗": "grazing"
+        }
       }
     },
     {
@@ -2012,7 +2105,11 @@
           "바람씨앗",
           "corpse"
         ],
-        "note": "상승기류에 떠서 낙하물을 분해하는 부유 균류"
+        "note": "상승기류에 떠서 낙하물을 분해하는 부유 균류",
+        "relationTypes": {
+          "corpse": "scavenge",
+          "바람씨앗": "grazing"
+        }
       }
     },
     {
@@ -2098,7 +2195,12 @@
           "mon_windseedling_01",
           "mon_stormbee_01"
         ],
-        "note": "폭풍 꼭대기에서 벌·모종을 사냥"
+        "note": "폭풍 꼭대기에서 벌·모종을 사냥",
+        "relationTypes": {
+          "mon_windseedling_01": "predation",
+          "mon_stormbee_01": "predation",
+          "바람씨앗": "grazing"
+        }
       }
     },
     {
@@ -2183,7 +2285,10 @@
         "prey": [
           "시장 잔반"
         ],
-        "note": "미궁도시 대표 소음원 — 잔반을 먹고 번식"
+        "note": "미궁도시 대표 소음원 — 잔반을 먹고 번식",
+        "relationTypes": {
+          "시장 잔반": "grazing"
+        }
       }
     },
     {
@@ -2286,7 +2391,11 @@
           "슬러지",
           "corpse"
         ],
-        "note": "r전략종의 왕 — 도시·하수도 어디든"
+        "note": "r전략종의 왕 — 도시·하수도 어디든",
+        "relationTypes": {
+          "corpse": "scavenge",
+          "슬러지": "grazing"
+        }
       }
     },
     {
@@ -2375,7 +2484,10 @@
         "prey": [
           "시장 잔반"
         ],
-        "note": "미궁도시·하수도 공유종"
+        "note": "미궁도시·하수도 공유종",
+        "relationTypes": {
+          "시장 잔반": "grazing"
+        }
       }
     },
     {
@@ -2463,7 +2575,12 @@
           "mon_alleyrat_01",
           "mon_cockroach_01"
         ],
-        "note": "수면 아래 매복 — 골목쥐·바퀴벌레 포식"
+        "note": "수면 아래 매복 — 골목쥐·바퀴벌레 포식",
+        "relationTypes": {
+          "mon_alleyrat_01": "predation",
+          "mon_cockroach_01": "predation",
+          "슬러지": "grazing"
+        }
       }
     },
     {
@@ -2550,7 +2667,10 @@
         "prey": [
           "성수 이슬"
         ],
-        "note": "성수를 마시고 살찌는 흰 비둘기"
+        "note": "성수를 마시고 살찌는 흰 비둘기",
+        "relationTypes": {
+          "성수 이슬": "grazing"
+        }
       }
     },
     {
@@ -2638,7 +2758,11 @@
           "성수 이슬",
           "corpse"
         ],
-        "note": "제단을 덮는 이끼 — 성수 이슬을 흡수"
+        "note": "제단을 덮는 이끼 — 성수 이슬을 흡수",
+        "relationTypes": {
+          "corpse": "scavenge",
+          "성수 이슬": "grazing"
+        }
       }
     },
     {
@@ -2725,7 +2849,11 @@
           "성수 이슬",
           "mon_templedove_01"
         ],
-        "note": "기둥 그늘에 매복해 비둘기 사냥"
+        "note": "기둥 그늘에 매복해 비둘기 사냥",
+        "relationTypes": {
+          "mon_templedove_01": "predation",
+          "성수 이슬": "grazing"
+        }
       }
     },
     {
@@ -2814,7 +2942,10 @@
         "prey": [
           "열수 미네랄"
         ],
-        "note": "심해 먹이사슬의 출발점 — 발광 군체"
+        "note": "심해 먹이사슬의 출발점 — 발광 군체",
+        "relationTypes": {
+          "열수 미네랄": "grazing"
+        }
       }
     },
     {
@@ -2902,7 +3033,11 @@
           "먹광",
           "corpse"
         ],
-        "note": "책 표지·접착제를 먹는 해충 — 서고 생태의 바닥"
+        "note": "책 표지·접착제를 먹는 해충 — 서고 생태의 바닥",
+        "relationTypes": {
+          "corpse": "scavenge",
+          "먹광": "grazing"
+        }
       }
     },
     {
@@ -2988,7 +3123,10 @@
         "prey": [
           "먹광"
         ],
-        "note": "글자벌레를 먹는 나방"
+        "note": "글자벌레를 먹는 나방",
+        "relationTypes": {
+          "먹광": "grazing"
+        }
       }
     },
     {
@@ -3075,7 +3213,10 @@
         "prey": [
           "먹광"
         ],
-        "note": "먹광이 밴 페이지를 뜯어 먹는 쥐"
+        "note": "먹광이 밴 페이지를 뜯어 먹는 쥐",
+        "relationTypes": {
+          "먹광": "grazing"
+        }
       }
     },
     {
@@ -3161,7 +3302,12 @@
           "mon_inkrat_01",
           "mon_papermoth_01"
         ],
-        "note": "책장 사이를 날아 다니며 나방·쥐를 사냥"
+        "note": "책장 사이를 날아 다니며 나방·쥐를 사냥",
+        "relationTypes": {
+          "mon_inkrat_01": "predation",
+          "mon_papermoth_01": "predation",
+          "먹광": "grazing"
+        }
       }
     },
     {
@@ -3246,7 +3392,10 @@
         "prey": [
           "저장고"
         ],
-        "note": "폐허 저장고를 쪼는 비둘기 — 잔량을 먹고 큰 무리를 이룬다"
+        "note": "폐허 저장고를 쪼는 비둘기 — 잔량을 먹고 큰 무리를 이룬다",
+        "relationTypes": {
+          "저장고": "grazing"
+        }
       }
     },
     {
@@ -3332,7 +3481,10 @@
         "prey": [
           "저장고"
         ],
-        "note": "곡물 가루를 먹는 벌레 군체 — 저장고의 1차 소비자"
+        "note": "곡물 가루를 먹는 벌레 군체 — 저장고의 1차 소비자",
+        "relationTypes": {
+          "저장고": "grazing"
+        }
       }
     },
     {
@@ -3420,7 +3572,10 @@
         "prey": [
           "제물"
         ],
-        "note": "제물 음식을 먹는 딱정벌레 — 무덤 생태의 먹이 바닥"
+        "note": "제물 음식을 먹는 딱정벌레 — 무덤 생태의 먹이 바닥",
+        "relationTypes": {
+          "제물": "grazing"
+        }
       }
     },
     {
@@ -3505,7 +3660,11 @@
           "제물·향유 잔여",
           "mon_tombworm_01"
         ],
-        "note": "황혼에 무덤가를 선회 — 무덤벌레·쥐를 사냥"
+        "note": "황혼에 무덤가를 선회 — 무덤벌레·쥐를 사냥",
+        "relationTypes": {
+          "mon_tombworm_01": "predation",
+          "제물·향유 잔여": "grazing"
+        }
       }
     },
     {
@@ -3595,7 +3754,11 @@
           "고산초",
           "corpse"
         ],
-        "note": "바위 표면을 덮는 이끼 — 고산초를 분해해 토양을 만든다"
+        "note": "바위 표면을 덮는 이끼 — 고산초를 분해해 토양을 만든다",
+        "relationTypes": {
+          "corpse": "scavenge",
+          "고산초": "grazing"
+        }
       }
     },
     {
@@ -3683,7 +3846,10 @@
         "prey": [
           "선인장"
         ],
-        "note": "선인장 즙으로 수분을 보충하는 사막의 쥐"
+        "note": "선인장 즙으로 수분을 보충하는 사막의 쥐",
+        "relationTypes": {
+          "선인장": "grazing"
+        }
       }
     },
     {
@@ -3770,7 +3936,11 @@
           "썩은 고기",
           "corpse"
         ],
-        "note": "사체를 분해하는 갑충 — 사막의 청소부"
+        "note": "사체를 분해하는 갑충 — 사막의 청소부",
+        "relationTypes": {
+          "corpse": "scavenge",
+          "썩은 고기": "grazing"
+        }
       }
     },
     {
@@ -3854,7 +4024,10 @@
         "prey": [
           "열조류"
         ],
-        "note": "열수 파이프에 붙어 열조류를 뜯는 내열 유충"
+        "note": "열수 파이프에 붙어 열조류를 뜯는 내열 유충",
+        "relationTypes": {
+          "열조류": "grazing"
+        }
       }
     },
     {
@@ -3941,7 +4114,10 @@
         "prey": [
           "과실"
         ],
-        "note": "수관을 오르며 과실을 먹는 영장류 — 잡식"
+        "note": "수관을 오르며 과실을 먹는 영장류 — 잡식",
+        "relationTypes": {
+          "과실": "grazing"
+        }
       }
     },
     {
@@ -4025,7 +4201,10 @@
         "prey": [
           "과실"
         ],
-        "note": "과실을 갈라 먹는 앵무새 군체 — 소란 포식"
+        "note": "과실을 갈라 먹는 앵무새 군체 — 소란 포식",
+        "relationTypes": {
+          "과실": "grazing"
+        }
       }
     },
     {
@@ -4113,7 +4292,11 @@
           "낙엽",
           "corpse"
         ],
-        "note": "낙엽·과실 부스러기를 분해 — 정글 순환의 마침표"
+        "note": "낙엽·과실 부스러기를 분해 — 정글 순환의 마침표",
+        "relationTypes": {
+          "corpse": "scavenge",
+          "낙엽": "grazing"
+        }
       }
     },
     {
@@ -4197,7 +4380,10 @@
         "prey": [
           "보이드 이슬"
         ],
-        "note": "보이드 이슬을 걸러 먹는 심연의 충 — 어둠 속 먹이 바닥"
+        "note": "보이드 이슬을 걸러 먹는 심연의 충 — 어둠 속 먹이 바닥",
+        "relationTypes": {
+          "보이드 이슬": "grazing"
+        }
       }
     },
     {
@@ -4285,7 +4471,11 @@
           "보이드 이슬",
           "corpse"
         ],
-        "note": "심연 바위에 붙는 이끼 — 이슬을 응축해 군체를 부양"
+        "note": "심연 바위에 붙는 이끼 — 이슬을 응축해 군체를 부양",
+        "relationTypes": {
+          "corpse": "scavenge",
+          "보이드 이슬": "grazing"
+        }
       }
     },
     {
@@ -4371,7 +4561,10 @@
         "prey": [
           "유황"
         ],
-        "note": "유황 결정을 갉는 파리 군체 — 불열매를 수분 (공생)"
+        "note": "유황 결정을 갉는 파리 군체 — 불열매를 수분 (공생)",
+        "relationTypes": {
+          "유황": "grazing"
+        }
       }
     },
     {
@@ -4460,7 +4653,10 @@
         "prey": [
           "유황"
         ],
-        "note": "유황을 흡수해 매운 열매를 맺는 덩굴 — 유황파리가 수분"
+        "note": "유황을 흡수해 매운 열매를 맺는 덩굴 — 유황파리가 수분",
+        "relationTypes": {
+          "유황": "grazing"
+        }
       }
     },
     {
@@ -4544,7 +4740,10 @@
         "prey": [
           "근원 합류"
         ],
-        "note": "별빛이 응결한 가루 군체 — 정점 생태의 먹이 바닥"
+        "note": "별빛이 응결한 가루 군체 — 정점 생태의 먹이 바닥",
+        "relationTypes": {
+          "근원 합류": "grazing"
+        }
       }
     },
     {
@@ -4632,7 +4831,11 @@
           "근원 합류",
           "corpse"
         ],
-        "note": "정점 신전 바닥을 덮는 성역 이끼 — 흘러든 근원을 분해"
+        "note": "정점 신전 바닥을 덮는 성역 이끼 — 흘러든 근원을 분해",
+        "relationTypes": {
+          "corpse": "scavenge",
+          "근원 합류": "grazing"
+        }
       }
     },
     {
@@ -4719,7 +4922,10 @@
         "prey": [
           "근원 합류"
         ],
-        "note": "구름을 짜는 이끼 — 해충(별가루)을 가두는 생산자 가안"
+        "note": "구름을 짜는 이끼 — 해충(별가루)을 가두는 생산자 가안",
+        "relationTypes": {
+          "근원 합류": "grazing"
+        }
       }
     }
   ]

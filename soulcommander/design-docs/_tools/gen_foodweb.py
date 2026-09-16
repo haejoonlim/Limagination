@@ -1,12 +1,25 @@
 #!/usr/bin/env python3
-"""복합 먹이 그물 1차 실행 — 08 문서 T-08-1~4 (2026-09-15 승인본).
+"""복합 먹이 그물 1차 실행 — 08 문서 T-08-1~5 (2026-09-15 승인본).
 
 T-08-1  전역 자원 corpse·soul·mana — 분해자·청소부 + 언데드·정령(미정N 승인)
 T-08-2  서식종 34종 간선 부여 — 근원자원 + 바이옴 내 포식 관계
 T-08-3  predators/prey 비대칭 전수 쌍방 정합
 T-08-4  전투몬 생물 사슬 편입 (관계만 공유 — 미정M 승인, 개체수 비연동)
+T-08-5  relationTypes 필드 — 모든 prey 간선에 관계 유형 태깅
+        (predation 포식 / scavenge 청소·사체 / ether 에테르·영혼·마력 /
+         parasitism 기생 — 예약 / grazing 근원자원 섭취)
 
-멱등 — 재실행해도 같은 결과. 실행 후 gen_ecology_codex.py로 도감 재생성.
+관계 유형 판정 규칙 (rel_type_for — 08 §4):
+  soul·mana 섭취          → ether    (에테르 경로, 미정N)
+  corpse + 분해·청소 역할 → scavenge (① 청소 경로)
+  corpse + 그 외 역할     → ether    (언데드의 사체 흡수, 08 §5.1)
+  detritus (골렘)        → scavenge (사체 경로 계열 — 무기물)
+  피식자가 종(id)        → predation (기본)
+  그 외 자원             → grazing (② 근원자원 섭취)
+
+relationTypes는 prey와 1:1 대응 사전({피식자id|자원명: 유형}) — check_docs가
+완전 태깅·무효값·stale 키를 상시 검증. 멱등 — 재실행해도 같은 결과.
+실행 후 gen_ecology_codex.py로 도감 재생성.
 """
 import json
 import os
@@ -41,6 +54,7 @@ BIO_RES = {
     "library": "먹광",  # 서고(구 대도서관) habitat
 }
 EXCLUDE_ROLES = {"elemental", "mimic"}  # 그물 밖 원칙 (08 §5.3)
+ETHER_RES = {"soul", "mana"}            # 에테르 경로 자원 (미정N)
 
 def habitats(s):
     return set(s["ecology"].get("habitat") or [])
@@ -51,11 +65,34 @@ def res_for(s):
             return BIO_RES[h]
     return None
 
+def rel_type_for(eater, item):
+    """먹는 종 + 먹힘 항목 → 관계 유형 (08 §4 판정 규칙 — docstring 참조)."""
+    if item in ETHER_RES:
+        return "ether"
+    role = eater["ecology"]["role"]
+    if item == "corpse":
+        return "scavenge" if role in ("decomposer", "scavenger") else "ether"
+    if item == "detritus":
+        return "scavenge"
+    if item in by_id:
+        return "predation"
+    return "grazing"
+
 def add_prey(s, item):
     """prey에 추가 (중복 방지). species id 또는 자원 문자열."""
     lst = s["ecology"].setdefault("prey", [])
     if item not in lst:
         lst.append(item)
+        return True
+    return False
+
+def tag_prey(s, item, rtype=None):
+    """prey 추가 + relationTypes 태깅 (rtype=None이면 규칙으로 자동 판정)."""
+    add_prey(s, item)
+    want = rtype or rel_type_for(s, item)
+    rt = s["ecology"].setdefault("relationTypes", {})
+    if rt.get(item) != want:
+        rt[item] = want
         return True
     return False
 
@@ -90,11 +127,11 @@ ETHER = {  # 이름 → 섭취 자원 (08 §5.1, 미정N 승인)
 for s in all_sp:
     role = s["ecology"]["role"]
     if role in ("decomposer", "scavenger"):
-        if add_prey(s, "corpse"):
+        if tag_prey(s, "corpse"):
             changed += 1
     if s["name"] in ETHER:
         for r in ETHER[s["name"]]:
-            if add_prey(s, r):
+            if tag_prey(s, r):
                 changed += 1
 
 # ── T-08-2: 서식종 근원자원 + 바이옴 내 포식 관계 ───────────────
@@ -104,7 +141,7 @@ for s in all_sp:
         continue
     if not (s["ecology"].get("prey") or []):
         r = res_for(s)
-        if r and add_prey(s, r):
+        if r and tag_prey(s, r):
             changed += 1
 
 # 2-b) 포식 관계 (이름 기반 — 존재하는 종만, 멱등)
@@ -140,19 +177,19 @@ for pred_name, preys in CHAINS:
         if q is None:
             skipped.append(f"{pred_name}→{py}")
             continue
-        if add_prey(pred, q["id"]):
+        if tag_prey(pred, q["id"]):
             changed += 1
         wired += 1
 
 # 골렘류 — detritus(무기물) 섭취
 for s in mon:
     if "골렘" in s["name"]:
-        if add_prey(s, "detritus"):
+        if tag_prey(s, "detritus"):
             changed += 1
 # 스톰 자이언트 — 뇌전(mana)
 for s in mon:
     if s["name"] == "스톰 자이언트":
-        if add_prey(s, "mana"):
+        if tag_prey(s, "mana"):
             changed += 1
 
 # ── T-08-3: 쌍방 정합 ──────────────────────────────────────────
@@ -175,6 +212,29 @@ asym_before = sum(
     if pid in by_id and s["id"] not in (by_id[pid]["ecology"].get("prey") or []))
 fixed = symmetrize()
 
+# ── T-08-5: relationTypes 정규화 — 태그 없는 간선(원본 데이터·쌍방 보정분) 전수 재분류 ──
+# add 시점 태그와 무관하게 "최종 데이터 상태"에서 규칙 재판정 — 멱등 + 규칙 일원화.
+# prey에 없는 stale 태그도 정리.
+n_tag = 0
+for s in all_sp:
+    prey_list = s["ecology"].get("prey") or []
+    rt = s["ecology"].get("relationTypes")
+    if rt and not prey_list:
+        s["ecology"]["relationTypes"] = {}
+        changed += 1
+        continue
+    if not prey_list:
+        continue
+    rt = s["ecology"].setdefault("relationTypes", {})
+    for item in prey_list:
+        want = rel_type_for(s, item)
+        if rt.get(item) != want:
+            rt[item] = want
+            n_tag += 1
+    for k in [k for k in rt if k not in prey_list]:
+        del rt[k]
+changed += n_tag
+
 # ── 저장 ───────────────────────────────────────────────────────
 json.dump({"monsters": mon}, open(mon_f, "w"), ensure_ascii=False, indent=2)
 json.dump({"ambient": amb}, open(amb_f, "w"), ensure_ascii=False, indent=2)
@@ -194,3 +254,13 @@ if skipped:
 print(f"비대칭: {asym_before} → {asym_after} (쌍방 보정 {fixed})")
 print(f"종간 간선: 64 → {edges}")
 print(f"고아종(생물): {len(orphans)} {orphans[:8]}")
+
+# T-08-5 — 관계 유형 분포 + 완전 태깅 확인
+type_count = {}
+for s in all_sp:
+    for t in (s["ecology"].get("relationTypes") or {}).values():
+        type_count[t] = type_count.get(t, 0) + 1
+print("relationTypes 분포:", dict(sorted(type_count.items(), key=lambda x: -x[1])))
+untagged = sum(1 for s in all_sp for x in (s["ecology"].get("prey") or [])
+               if x not in (s["ecology"].get("relationTypes") or {}))
+print(f"미태그 간선: {untagged}")

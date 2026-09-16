@@ -102,7 +102,12 @@
           "mon_slime_green_01",
           "mon_kobold_01",
           "corpse"
-        ]
+        ],
+        "relationTypes": {
+          "corpse": "scavenge",
+          "mon_slime_green_01": "predation",
+          "mon_kobold_01": "predation"
+        }
       }
     },
     {
@@ -204,7 +209,14 @@
           "mon_wolf_01",
           "mon_dire_wolf_01",
           "mon_dire_boar_01"
-        ]
+        ],
+        "relationTypes": {
+          "mon_bear_01": "predation",
+          "mon_ogre_01": "predation",
+          "mon_wolf_01": "predation",
+          "mon_dire_wolf_01": "predation",
+          "mon_dire_boar_01": "predation"
+        }
       }
     },
     {
@@ -310,7 +322,12 @@
           "mon_goblin_01",
           "mon_boar_01",
           "mon_wolf_01"
-        ]
+        ],
+        "relationTypes": {
+          "mon_goblin_01": "predation",
+          "mon_boar_01": "predation",
+          "mon_wolf_01": "predation"
+        }
       }
     },
     {
@@ -413,7 +430,11 @@
         "prey": [
           "mon_slime_green_01",
           "corpse"
-        ]
+        ],
+        "relationTypes": {
+          "corpse": "scavenge",
+          "mon_slime_green_01": "predation"
+        }
       }
     },
     {
@@ -516,7 +537,11 @@
         "prey": [
           "mon_goblin_01",
           "mon_kobold_01"
-        ]
+        ],
+        "relationTypes": {
+          "mon_goblin_01": "predation",
+          "mon_kobold_01": "predation"
+        }
       }
     },
     {
@@ -621,7 +646,11 @@
         "prey": [
           "mon_goblin_01",
           "mon_wolf_01"
-        ]
+        ],
+        "relationTypes": {
+          "mon_goblin_01": "predation",
+          "mon_wolf_01": "predation"
+        }
       }
     },
     {
@@ -725,7 +754,12 @@
           "mon_rat_01",
           "mon_giant_spider_01",
           "mon_junglemonkey_01"
-        ]
+        ],
+        "relationTypes": {
+          "mon_junglemonkey_01": "predation",
+          "mon_rat_01": "predation",
+          "mon_giant_spider_01": "predation"
+        }
       }
     },
     {
@@ -828,7 +862,10 @@
         "predators": [],
         "prey": [
           "mon_wolf_01"
-        ]
+        ],
+        "relationTypes": {
+          "mon_wolf_01": "predation"
+        }
       }
     },
     {
@@ -926,7 +963,10 @@
         "predators": [],
         "prey": [
           "corpse"
-        ]
+        ],
+        "relationTypes": {
+          "corpse": "ether"
+        }
       }
     },
     {
@@ -1024,7 +1064,10 @@
         "predators": [],
         "prey": [
           "corpse"
-        ]
+        ],
+        "relationTypes": {
+          "corpse": "ether"
+        }
       }
     },
     {
@@ -1122,7 +1165,11 @@
         "prey": [
           "corpse",
           "soul"
-        ]
+        ],
+        "relationTypes": {
+          "corpse": "ether",
+          "soul": "ether"
+        }
       }
     },
     {
@@ -1219,7 +1266,10 @@
         "predators": [],
         "prey": [
           "corpse"
-        ]
+        ],
+        "relationTypes": {
+          "corpse": "ether"
+        }
       }
     },
     {
@@ -1317,7 +1367,11 @@
         "prey": [
           "soul",
           "mana"
-        ]
+        ],
+        "relationTypes": {
+          "soul": "ether",
+          "mana": "ether"
+        }
       }
     },
     {
@@ -1421,7 +1475,12 @@
           "mon_goblin_01",
           "mon_kobold_01",
           "corpse"
-        ]
+        ],
+        "relationTypes": {
+          "corpse": "scavenge",
+          "mon_goblin_01": "predation",
+          "mon_kobold_01": "predation"
+        }
       }
     },
     {
@@ -1518,7 +1577,10 @@
         "predators": [],
         "prey": [
           "soul"
-        ]
+        ],
+        "relationTypes": {
+          "soul": "ether"
+        }
       }
     },
     {
@@ -1620,7 +1682,10 @@
         "predators": [],
         "prey": [
           "mana"
-        ]
+        ],
+        "relationTypes": {
+          "mana": "ether"
+        }
       }
     },
     {
@@ -1736,7 +1801,12 @@
           "soul",
           "mana",
           "mon_slime_black_01"
-        ]
+        ],
+        "relationTypes": {
+          "soul": "ether",
+          "mana": "ether",
+          "mon_slime_black_01": "predation"
+        }
       }
     },
     {
@@ -1842,7 +1912,13 @@
           "mon_goblin_01",
           "mon_rabbit_01",
           "mon_rat_01"
-        ]
+        ],
+        "relationTypes": {
+          "mon_boar_01": "predation",
+          "mon_goblin_01": "predation",
+          "mon_rabbit_01": "predation",
+          "mon_rat_01": "predation"
+        }
       }
     },
     {
@@ -1939,7 +2015,13 @@
           "mon_bear_01",
           "mon_dire_boar_01",
           "mon_beetle_01"
-        ]
+        ],
+        "relationTypes": {
+          "mon_wolf_01": "predation",
+          "mon_bear_01": "predation",
+          "mon_dire_boar_01": "predation",
+          "mon_beetle_01": "predation"
+        }
       }
     },
     {
@@ -2038,7 +2120,13 @@
           "mon_bugbear_01",
           "mon_bee_01",
           "mon_beetle_01"
-        ]
+        ],
+        "relationTypes": {
+          "mon_boar_01": "predation",
+          "mon_bugbear_01": "predation",
+          "mon_bee_01": "predation",
+          "mon_beetle_01": "predation"
+        }
       }
     },
     {
@@ -2153,7 +2241,12 @@
           "mon_bear_01",
           "mon_wolf_01",
           "mon_rockmoss_01"
-        ]
+        ],
+        "relationTypes": {
+          "mon_rockmoss_01": "predation",
+          "mon_bear_01": "predation",
+          "mon_wolf_01": "predation"
+        }
       }
     },
     {
@@ -2253,7 +2346,11 @@
         "prey": [
           "grass",
           "roots"
-        ]
+        ],
+        "relationTypes": {
+          "grass": "grazing",
+          "roots": "grazing"
+        }
       }
     },
     {
@@ -2349,7 +2446,11 @@
         "prey": [
           "grass",
           "roots"
-        ]
+        ],
+        "relationTypes": {
+          "grass": "grazing",
+          "roots": "grazing"
+        }
       }
     },
     {
@@ -2446,7 +2547,12 @@
           "mon_kobold_01",
           "mon_giant_ant_01",
           "mon_moth_01"
-        ]
+        ],
+        "relationTypes": {
+          "mon_kobold_01": "predation",
+          "mon_giant_ant_01": "predation",
+          "mon_moth_01": "predation"
+        }
       }
     },
     {
@@ -2562,7 +2668,13 @@
           "mon_kobold_01",
           "mon_dustbug_01",
           "mon_rat_01"
-        ]
+        ],
+        "relationTypes": {
+          "mon_dustbug_01": "predation",
+          "mon_giant_spider_01": "predation",
+          "mon_kobold_01": "predation",
+          "mon_rat_01": "predation"
+        }
       }
     },
     {
@@ -2660,7 +2772,11 @@
         "prey": [
           "mon_giant_ant_01",
           "mon_desertrat_01"
-        ]
+        ],
+        "relationTypes": {
+          "mon_desertrat_01": "predation",
+          "mon_giant_ant_01": "predation"
+        }
       }
     },
     {
@@ -2754,7 +2870,12 @@
           "mon_scorpion_01",
           "mon_giant_ant_01",
           "mon_desertrat_01"
-        ]
+        ],
+        "relationTypes": {
+          "mon_desertrat_01": "predation",
+          "mon_scorpion_01": "predation",
+          "mon_giant_ant_01": "predation"
+        }
       }
     },
     {
@@ -2851,7 +2972,11 @@
         "prey": [
           "plants",
           "insects"
-        ]
+        ],
+        "relationTypes": {
+          "plants": "grazing",
+          "insects": "grazing"
+        }
       }
     },
     {
@@ -2955,7 +3080,11 @@
         "prey": [
           "organic_waste",
           "corpse"
-        ]
+        ],
+        "relationTypes": {
+          "corpse": "scavenge",
+          "organic_waste": "grazing"
+        }
       }
     },
     {
@@ -3058,7 +3187,12 @@
           "organic_waste",
           "corpse",
           "mon_slime_green_01"
-        ]
+        ],
+        "relationTypes": {
+          "corpse": "scavenge",
+          "organic_waste": "grazing",
+          "mon_slime_green_01": "predation"
+        }
       }
     },
     {
@@ -3270,7 +3404,14 @@
           "mon_vine_01",
           "mon_fungus_01",
           "mon_slime_red_01"
-        ]
+        ],
+        "relationTypes": {
+          "mon_ice_spawn_01": "predation",
+          "mon_water_elemental_01": "predation",
+          "mon_vine_01": "predation",
+          "mon_fungus_01": "predation",
+          "mon_slime_red_01": "predation"
+        }
       }
     },
     {
@@ -3376,7 +3517,11 @@
         "prey": [
           "mon_fire_elemental_01",
           "mon_slime_blue_01"
-        ]
+        ],
+        "relationTypes": {
+          "mon_fire_elemental_01": "predation",
+          "mon_slime_blue_01": "predation"
+        }
       }
     },
     {
@@ -3481,7 +3626,10 @@
         ],
         "prey": [
           "mon_earth_elemental_01"
-        ]
+        ],
+        "relationTypes": {
+          "mon_earth_elemental_01": "predation"
+        }
       }
     },
     {
@@ -3586,7 +3734,11 @@
         "prey": [
           "mon_air_elemental_01",
           "mon_lightning_elemental_01"
-        ]
+        ],
+        "relationTypes": {
+          "mon_air_elemental_01": "predation",
+          "mon_lightning_elemental_01": "predation"
+        }
       }
     },
     {
@@ -3796,7 +3948,11 @@
         "prey": [
           "soul",
           "corpse"
-        ]
+        ],
+        "relationTypes": {
+          "corpse": "scavenge",
+          "soul": "ether"
+        }
       }
     },
     {
@@ -3902,7 +4058,11 @@
         "prey": [
           "mon_imp_01",
           "soul"
-        ]
+        ],
+        "relationTypes": {
+          "mon_imp_01": "predation",
+          "soul": "ether"
+        }
       }
     },
     {
@@ -4009,7 +4169,12 @@
           "mon_wolf_01",
           "mon_imp_01",
           "mon_fireberry_01"
-        ]
+        ],
+        "relationTypes": {
+          "mon_fireberry_01": "predation",
+          "mon_wolf_01": "predation",
+          "mon_imp_01": "predation"
+        }
       }
     },
     {
@@ -4115,7 +4280,14 @@
           "mon_brimstonefly_01",
           "mon_lesser_demon_01",
           "mon_hell_hound_01"
-        ]
+        ],
+        "relationTypes": {
+          "mon_brimstonefly_01": "predation",
+          "mon_fire_elemental_01": "predation",
+          "mon_imp_01": "predation",
+          "mon_lesser_demon_01": "predation",
+          "mon_hell_hound_01": "predation"
+        }
       }
     },
     {
@@ -4216,7 +4388,10 @@
         "predators": [],
         "prey": [
           "mana"
-        ]
+        ],
+        "relationTypes": {
+          "mana": "ether"
+        }
       }
     },
     {
@@ -4319,7 +4494,11 @@
         "prey": [
           "mon_goblin_01",
           "mon_kobold_01"
-        ]
+        ],
+        "relationTypes": {
+          "mon_goblin_01": "predation",
+          "mon_kobold_01": "predation"
+        }
       }
     },
     {
@@ -4423,7 +4602,11 @@
           "mon_goblin_01",
           "mon_alleyrat_01"
         ],
-        "note": "전투층 중보스 (T4 모방형) — 도시에서 지나가는 사람으로 위장하는 전투 설계 존재. 생태 개체수 시뮬레이션 대상이 아니며, 고블린 사냥 관계만 참조용으로 표기."
+        "note": "전투층 중보스 (T4 모방형) — 도시에서 지나가는 사람으로 위장하는 전투 설계 존재. 생태 개체수 시뮬레이션 대상이 아니며, 고블린 사냥 관계만 참조용으로 표기.",
+        "relationTypes": {
+          "mon_goblin_01": "predation",
+          "mon_alleyrat_01": "predation"
+        }
       }
     },
     {
@@ -4531,7 +4714,10 @@
         "predators": [],
         "prey": [
           "mon_fire_elemental_01"
-        ]
+        ],
+        "relationTypes": {
+          "mon_fire_elemental_01": "predation"
+        }
       }
     },
     {
@@ -4634,7 +4820,11 @@
         "prey": [
           "mon_mindflayer_01",
           "mon_imp_01"
-        ]
+        ],
+        "relationTypes": {
+          "mon_mindflayer_01": "predation",
+          "mon_imp_01": "predation"
+        }
       }
     },
     {
@@ -4747,7 +4937,13 @@
           "mon_sea_serpent_01",
           "mon_jellyfish_01",
           "mon_crab_01"
-        ]
+        ],
+        "relationTypes": {
+          "mon_crab_01": "predation",
+          "mon_water_elemental_01": "predation",
+          "mon_sea_serpent_01": "predation",
+          "mon_jellyfish_01": "predation"
+        }
       }
     },
     {
@@ -4836,7 +5032,11 @@
         "prey": [
           "mon_air_elemental_01",
           "mana"
-        ]
+        ],
+        "relationTypes": {
+          "mana": "ether",
+          "mon_air_elemental_01": "predation"
+        }
       }
     },
     {
@@ -4923,7 +5123,10 @@
         "predators": [],
         "prey": [
           "mana"
-        ]
+        ],
+        "relationTypes": {
+          "mana": "ether"
+        }
       }
     },
     {
@@ -5016,7 +5219,12 @@
           "mon_fish_01",
           "mon_crab_01",
           "mon_jellyfish_01"
-        ]
+        ],
+        "relationTypes": {
+          "mon_fish_01": "predation",
+          "mon_crab_01": "predation",
+          "mon_jellyfish_01": "predation"
+        }
       }
     },
     {
@@ -5117,7 +5325,12 @@
           "mon_kraken_tentacle_01",
           "mon_sea_serpent_01",
           "mon_jellyfish_01"
-        ]
+        ],
+        "relationTypes": {
+          "mon_kraken_tentacle_01": "predation",
+          "mon_sea_serpent_01": "predation",
+          "mon_jellyfish_01": "predation"
+        }
       }
     }
   ]

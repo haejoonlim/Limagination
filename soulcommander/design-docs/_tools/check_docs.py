@@ -68,15 +68,17 @@ try:
                 lo, hi = clim[x["id"]]
                 if t2 < lo or t1 > hi:
                     fail(f"온도 부정합: {sp['id']} 내성 {t1}~{t2} vs {x['id']} band {lo}~{hi}")
-    # 먹이그물 메트릭 (08 문서 T-08 — 고아 0 · 비대칭 0 · 간선 >=100)
+    # 먹이그물 메트릭 (08 문서 T-08 — 고아 0 · 비대칭 0 · 간선 >=100 · relationTypes 완전 태깅)
     sp = {x["id"]: x for x in m}
     sp.update({x["id"]: x for x in a})
     web_out = 0
     orph = []
+    VALID_REL = {"predation", "scavenge", "ether", "parasitism", "grazing"}
     for sid, s in sp.items():
         eco = s["ecology"]
         prey_ids = [x for x in eco.get("prey") or [] if x in sp]
         pred_ids = eco.get("predators") or []
+        rt = eco.get("relationTypes") or {}
         web_out += len(prey_ids)
         # 고아 판정은 자원 간선(corpse/soul/mana 등 에테르·분해 경로)도 연결로 인정 (08 §5.1)
         if not (eco.get("prey") or []) and not pred_ids and eco["role"] not in ("elemental", "mimic"):
@@ -84,9 +86,16 @@ try:
         for q in prey_ids:
             if sid not in (sp[q]["ecology"].get("predators") or []):
                 fail(f"그물 비대칭: {sid} → {q} (predators 역방향 누락)")
+            if q not in rt:
+                fail(f"relationTypes 미태그: {sid} → {q}")
+            elif rt[q] not in VALID_REL:
+                fail(f"relationTypes 무효값: {sid} → {q} = {rt[q]}")
         for p in pred_ids:
             if p in sp and sid not in (sp[p]["ecology"].get("prey") or []):
                 fail(f"그물 비대칭: {p} 먹이에 {sid} 누락")
+        stale = [k for k in rt if k not in (eco.get("prey") or [])]
+        if stale:
+            fail(f"relationTypes stale 키 (prey에 없음): {sid} {stale[:4]}")
     if orph:
         fail(f"그물 고아종 (elemental/mimic 제외): {orph[:10]}")
     if web_out < 100:
