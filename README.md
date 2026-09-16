@@ -12,14 +12,14 @@ Limagination의 **브랜드 자산 + orch 오케스트레이터** 공식 저장�
 ```
 ├── brand/           # 브랜드 자산 (헌장·리포트·폰트·로고) — 이 저장소 소유
 ├── orch/            # langgraph 자율 코딩 오케스트레이터 — 이 저장소 소유
-└── (작업 공간에 함께 체크아웃된 별도 저장소)
+└── (작업 공간에 형제로 체크아웃된 별도 저장소: ~/soul-commander)
     ├── soul-commander/   → https://github.com/haejoonlim/soul-commander
-    │                        ★ 게임 본체 (Godot 4.7.2 · GDD v7.12)
-    │                        진입점: soul-commander/docs/STATUS.md
+    │                        ★ 게임 본체 (Unity · GDD v8.0)
+    │                        진입점: ~/soul-commander/CLAUDE.md
     └── RecallInfinity/   → https://github.com/haejoonlim/RecallInfinity
 ```
 
 ## 참고
 
 - **soul-commander · RecallInfinity는 별도 저장소** — 이 저장소에서 커밋·푸시하지 않고 각자 원격에서 관리합니다.
-- 작업 공간 내부의 `soul-commander/sprite-workspace/`는 또 다른 별도 저장소(`limagination-workspace` 원격)의 에셋 작업장입니다.
+- 형제 체크아웃 `~/soul-commander/sprite-workspace/`는 또 다른 별도 저장소(`limagination-workspace` 원격)의 에셋 작업장입니다.
