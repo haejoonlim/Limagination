@@ -3,14 +3,14 @@ Limagination Sans v3 · 견본 시트 생성 프롬프트 (image-to-fonts 스킬
 ================================================================
 버전: v3.0 · 작성일: 2026-08-05
 기반 문서: LIMAGINATION_BRAND_CONSTITUTION.txt (브랜드 헌장 v3.0)
-디자인 참고: 산돌구름 무료폰트 (sandollcloud.com/freefonts)
+참고 사례 기록: brand/research/LIMAGINATION_SANS_REFERENCE_NOTES.md (조사 전용이며 복제 기준이 아님)
 
 v3.0 변경 (중요): "단순하고 창의성이 없다" 피드백 반영 —
-기본 산세리프 + 살짝 둥글게라는 접근을 버렸다. 한국 창의 폰트들의
-DNA를 3층으로 결합한 '말랑꾸불 산세리프'로 전면 재작성:
-① 꾸불림체의 곡선 에너지(획이 숨 쉰다) ② Ok Mallang의 쫀득한 둥글림
-③ 을지로체의 한국적 자신감(단단하고 당당한 무게) — 그리고 Apple 수준의
-마감으로 정제. 절대 기본 폰트처럼 보이면 안 된다.
+기본 산세리프에 둥근 끝만 더하는 접근을 버렸다. LIMAGINATION만의 독립적인
+세 가지 조형 특성을 결합한 '말랑꾸불 산세리프'를 목표로 한다:
+① 살아 있는 곡선 에너지 ② 쫀득하고 부드러운 둥근 끝맺음
+③ 단단하고 당당한 구조적 무게. 정밀한 비례와 마감으로 정제하되
+특정 서체의 형태나 브랜드 고유 요소를 복제하지 않는다.
 
 목적: AI 이미지 생성기(Midjourney / DALL·E / Stable Diffusion 등)로
 폰트 견본 시트 이미지를 만든 뒤, image-to-fonts 스킬 파이프라인
@@ -46,7 +46,7 @@ DNA를 3층으로 결합한 '말랑꾸불 산세리프'로 전면 재작성:
     contact_sheet.py → contact.png를 눈으로 확인해 글자 하나하나를 검증하고,
     깨진 칸은 patch 또는 시트 재생성으로 교체한다.
   - 한글 곡선 표현이 강해질수록 AI 오타 위험이 커진다. 안정성을 우선하려면
-    Pretendard Rounded / Cafe24 Ssurround 같은 둥근 한글을 큰 사이즈로
+    라이선스와 사용 조건이 확인된 둥근 한글 글꼴을 큰 사이즈로
     렌더링해 시트로 넣는 방법도 있다 (파이프라인은 그려진 모양을 그대로
     추적하므로 생성기 오타 위험이 없음).
 
@@ -76,12 +76,12 @@ gradients, no shadows, no 3D, no background patterns, no frames.
 ----------------------------------------------------------------
 1) 공통 디자인 언어 (모든 시트에 동일하게 적용)
 ----------------------------------------------------------------
-LIMAGINATION brand typeface — a Korean-born soft rounded grotesque with
-real creative energy. Inspired by Korea's most characterful fonts:
-the playful CURVED ENERGY of Baemin Ggureullim (꾸불림체), the CHEWY
-SQUISHY SOFTNESS of Ok Mallang (말랑), and the CONFIDENT SOLID presence
-of Korean retro signage (을지로체) — refined to Apple-level premium.
-It must never look like a default font.
+LIMAGINATION brand typeface — an original Korean soft rounded grotesque
+with a distinctive, confident visual rhythm. Build its own design language
+from three observable qualities: lively curved strokes, tactile rounded
+terminals, and solid structural weight. Refine them with balanced proportions,
+consistent spacing, precise alignment, and clear rendering.
+It must never look like a default font or imitate an existing typeface.
 
 THREE LAYERS OF CHARACTER (make them VISIBLY present):
 
@@ -108,11 +108,11 @@ KOREAN — rounded, confident, characterful:
    - ㅇ is a big perfect circle;
    - jamo stroke ends are squishy rounded; corners where strokes meet
      are softly curved, never sharp;
-   - horizontal strokes carry a gentle upward curve (을지로의 자신감),
+   - horizontal strokes carry a gentle upward curve that adds a confident, solid character,
      vertical strokes breathe with a soft bend;
    - solid even weight, balanced vertical and horizontal rhythm.
 
-THE FINISH (Apple-level): optically even stroke weight, zero contrast,
+THE FINISH: optically even stroke weight, zero contrast,
 precise alignment, clean and crafted — playful personality, premium
 finish.
 
@@ -301,8 +301,8 @@ LIMAGINATION 브랜드 폰트 견본 시트를 만들어줘. 배경은 순수한
   4 는 열린 형태, 0 은 둥글게, 7 은 부드러운 평평한 상단.
 - 한글: ㅇ 은 크고 완벽한 원. 자모 획 끝은 쫀득하게 둥글게.
   획이 만나는 모서리는 날카롭지 않게 부드럽게. 가로 획은 위로
-  살짝 휘고(을지로체의 자신감), 세로 획은 숨 쉬듯 부드럽게.
-- 마감: 균일한 굵기, 대비 없음, 정밀한 정렬, 프리미엄 (Apple 수준) —
+  살짝 휘어 당당한 인상을 주고, 세로 획은 숨 쉬듯 부드럽게.
+- 마감: 균일한 굵기, 대비 없음, 정밀한 정렬, 세련된 완성도 —
   따뜻하고 자신 있고, 결코 차갑거나 밋밋하지 않게.
 
 금지: 세리프, 필기체, 캘리그라피, 픽셀 폰트, 3D, 그라데이션, 그림자,
@@ -344,47 +344,24 @@ LIMAGINATION 브랜드 폰트 견본 시트를 만들어줘. 배경은 순수한
      "모든 가능성은 상상에서 시작된다. We Imagine First 2026!"
 
 ----------------------------------------------------------------
-5) 디자인 레퍼런스
+5) 독립적인 조형 목표와 참고 자료의 경계
 ----------------------------------------------------------------
 
-[산돌구름 무료폰트에서 얻은 영감 (sandollcloud.com/freefonts)]
-  폰트                    얻은 디자인 DNA                              적용
-  배달의민족 꾸불림체      획 자체가 꾸불거리는 곡선 에너지             1번째 층: CURVY ENERGY
-                          — 죽은 직선 금지
-  Ok Mallang (말랑)       쫀득하고 통통한 둥글림, 부드러운 볼          2번째 층: CHEWY SOFTNESS
-  배민 을지로체            한국 간판의 단단하고 당당한 무게감,            한글 ㅗ/ㅏ/ㅣ 처리
-                          가로획의 자신감                              + 고른 무게
-  둥글둥글체/꾸러기체/     한국 특유의 발랄한 둥근 글꼴 감성            따뜻함의 베이스
-  해맑음체
-  퍼즐체/갈무리9/검은고딕  (참고) 극단적 개성 — 브랜드 톤과               금지 리스트에서
-                          안 맞으면 과함                               제외 원칙 확인용
+참고 사례와 조사 출처는 다음 문서에 별도로 기록한다.
+  brand/research/LIMAGINATION_SANS_REFERENCE_NOTES.md
 
-  > 한 단계 더 창의적으로: 산돌에서 영감을 받되 그대로 따라 하지 않는다
-    (헌장 원칙: 새로움은 기존 패턴 위의 변주로만). 꾸불림·말랑·을지로의
-    에너지를 섞고 Apple 수준의 마감으로 정제하는 것이 이 폰트의 독자성이다.
+해당 자료는 디자인 분석의 출발점일 뿐 최종 서체의 형태를 결정하지 않는다.
+특정 서체의 글리프, 비례, 고유한 획 처리나 조합을 추적·복제하지 않는다.
 
-[브랜드 헌장 v3.0에서 서체에 적용할 원칙 추출]
-- We Begin with Imagination. — 호기심에서 출발해 상상하고, 창의로 표현하며,
-  세련됨과 책임을 기준으로 완성한다.
-- 상상의 순환 (The Imagination Cycle): 호기심 → 상상 → 창조 → 다듬음 →
-  의미 → 피드백과 재탐색. 서체 설계에서도 형태를 탐색하고, 글리프를 만들고,
-  작은 크기와 다양한 환경에서 검증한 뒤 개선을 반복한다.
-- 브랜드 원칙 (Brand Principles):
-  - Imagine First — 익숙한 형태를 그대로 반복하지 않고 새로운 조형을 탐색한다.
-  - Make it Human — 손으로 그린 듯한 생동감과 편안한 인상을 만든다.
-  - Keep it Clear — 작은 크기와 다양한 문자 조합에서도 읽히게 한다.
-  - Refine Relentlessly — 글리프의 균형·간격·기준선·렌더링을 검증하고 다듬는다.
-  - Leave Wonder — 가독성을 해치지 않는 절제된 시그니처 디테일을 남긴다.
-- 책임과 정직 — 글리프 커버리지, 지원 환경, 품질의 한계를 과장하지 않고 정확히 기록한다.
-- 행동 (Behaviors): 질문한다 · 탐색한다 · 상상한다 · 실험한다 · 만든다 · 검증하고 다듬는다 · 공유하고 배운다.
-- 이 폰트의 한 문장 정의: "독자적인 조형 언어와 읽기 쉬운 구조를 함께 추구하고,
-  검증과 개선을 거쳐 오래 사용할 수 있도록 다듬은 LIMAGINATION의 서체."
-- 설계 기준: 이 폰트의 형태와 사용성은 LIMAGINATION 브랜드 헌장 v3.0에서
-  도출한다. 특정 제품의 UI·색상·말투·캐릭터를 회사 서체의 설계 원칙에 포함하지 않는다.
-- 참고 이미지와 서체는 분석 자료일 뿐 최종 조형의 기준이나 복제 대상이 아니다.
-  최종 글리프는 독립적인 비례·곡률·획 연결·리듬을 갖추어야 한다.
-- 브랜드 서명: "Made with LIMAGINATION"은 실제 제작·개발·창작 참여 관계가
-  정확할 때만 사용한다. 서체가 사용되었다는 이유만으로 모든 문장에 서명을 붙이지 않는다.
+최종 설계는 다음의 독립적인 기준으로 판단한다.
+  - 곡선의 방향과 강도, 획 끝의 형태, 내부 공간의 비례
+  - 한글 자모가 결합될 때의 균형과 연결감
+  - 라틴·숫자·한글 사이의 시각적 리듬
+  - 작은 크기에서의 가독성과 다양한 렌더링 환경의 안정성
+  - 글리프 간 일관성과 오래 사용할 수 있는 완성도
+
+참고 사례와 최종 결과가 비슷해 보인다면 이름이나 인상을 설명하는 데 그치지 말고
+비례·곡률·획 연결·터미널·자간을 다시 검토해 독자적인 형태로 조정한다.
 
 ================================================================
 본 프롬프트는 LIMAGINATION 브랜드 헌장 v3.0을 기반으로 제작되었다.
