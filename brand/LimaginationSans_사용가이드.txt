@@ -2,7 +2,7 @@
 LIMAGINATION SANS — 사용 가이드
 ================================================================
 버전      : 1.2 (전체 한글 11,172자 + 진짜 듀얼 웨이트 + 기호 전수 재건)
-배포 버전 : v13 (Regular) / v12 (Bold)   ← 앱 @font-face 캐시버스트와 일치
+배포 버전 : v13 (Regular) / v12 (Bold)
 패밀리명  : Limagination Sans
 스타일    : Regular, Bold
 설계 철학 : LIMAGINATION 브랜드 헌장 v2.0 — '말랑꾸불' 모던 산세리프
@@ -105,10 +105,10 @@ LIMAGINATION SANS — 사용 가이드
 /* 폰트 스택 예시 — 라틴·숫자·기호는 Limagination Sans, 한글은 Pretendard */
 body { font-family: 'Limagination Sans', 'Pretendard', -apple-system, sans-serif; }
 
-  ※ 앱(Recall Infinity)에서는 한글을 Pretendard로 폴백시키고 Limagination Sans를
-    라틴·숫자·기호·로고·서명(브랜드 순간)에 사용한다 (한글 전체 TTF는 디스플레이
-    ·포스터·로고용으로 이 패키지에 보존). 전체 한글을 브랜드 폰트로 쓰려면
-    unicode-range에 U+AC00-D7A3 를 추가하면 된다.
+  ※ 위 폰트 스택은 사용 예시다. 긴 한글 본문은 가독성이 검증된 본문용 글꼴을
+    우선하고, Limagination Sans는 로고·브랜드 헤드라인·짧은 강조 표현에 사용한다.
+    제품별 폴백 글꼴과 unicode-range 설정은 각 제품의 구현 문서와 소스 코드에서
+    별도로 결정한다. 모든 제품에 동일한 글꼴 조합을 강제하지 않는다.
 
 ----------------------------------------------------------------
 5. 굵기(볼드) 안내
@@ -116,8 +116,7 @@ body { font-family: 'Limagination Sans', 'Pretendard', -apple-system, sans-serif
 진짜 Bold 웨이트가 포함되어 있다 (자모 엔진 스템 160 + 라틴 pyclipper 외곽
 확장, OS/2 weight 700). Bold TTF/woff2를 함께 배포하면 가짜 볼드(font-synthesis)
 없이 굵은 텍스트가 브랜드 톤 그대로 두꺼워진다. 톤 조정 시
-scripts/recall-font/build_limagination_full.py 의 STEM 상수 하나만 바꾸면
-전 자모·기호에 일괄 반영된다.
+해당 서체의 빌드 스크립트에서 STEM 상수를 조정하면 전 자모·기호에 일괄 반영된다.
 
 ----------------------------------------------------------------
 6. 배포 버전 이력 (캐시버스트 ?v= 와 일치)
