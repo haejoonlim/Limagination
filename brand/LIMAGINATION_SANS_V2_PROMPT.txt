@@ -380,10 +380,12 @@ LIMAGINATION 브랜드 폰트 견본 시트를 만들어줘. 배경은 순수한
 - 이 폰트의 한 문장 정의: "한국의 창의적 폰트 DNA에서 태어나, 손으로
   그린 듯 꾸불거리고, 말랑하게 부풀고, 끝까지 다듬어 잊히지 않는 —
   LIMAGINATION의 폰트."
-- Apple × Recall × LIMAGINATION 적용: 구조(격자·비례·타이포)는 Apple
-  수준의 명료함(L1), 둥근 모서리·부드러운 획·따뜻함은 Recall(L2),
-  꾸불림·말린 꼬리·원형 점의 개성은 LIMAGINATION(L3) — 세 층위가 하나의
-  글자 안에 공존한다.
+- 설계 기준: 이 폰트의 형태와 사용성은 LIMAGINATION 브랜드 헌장 v2.0에서
+  도출한다. Imagine First는 익숙한 형태를 새롭게 해석하는 방향으로,
+  Make it Human은 손으로 그린 듯한 생동감으로, Keep it Clear는 작은 크기에서도
+  유지되는 가독성으로, Refine Relentlessly는 균일하고 정밀한 마감으로,
+  Leave Wonder는 절제된 시그니처 디테일로 표현한다.
+  특정 제품의 UI·색상·말투·캐릭터는 회사 서체의 설계 원칙에 포함하지 않는다.
 - 브랜드 서명: "Made with LIMAGINATION" — 이 폰트로 쓰는 모든 문장은
   그 서명이 된다.
 
