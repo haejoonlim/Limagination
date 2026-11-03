@@ -116,8 +116,7 @@ body { font-family: 'Limagination Sans', 'Pretendard', -apple-system, sans-serif
 진짜 Bold 웨이트가 포함되어 있다 (자모 엔진 스템 160 + 라틴 pyclipper 외곽
 확장, OS/2 weight 700). Bold TTF/woff2를 함께 배포하면 가짜 볼드(font-synthesis)
 없이 굵은 텍스트가 브랜드 톤 그대로 두꺼워진다. 톤 조정 시
-scripts/recall-font/build_limagination_full.py 의 STEM 상수 하나만 바꾸면
-전 자모·기호에 일괄 반영된다.
+해당 서체의 빌드 스크립트에서 STEM 상수를 조정하면 전 자모·기호에 일괄 반영된다.
 
 ----------------------------------------------------------------
 6. 배포 버전 이력 (캐시버스트 ?v= 와 일치)
