@@ -13,6 +13,7 @@ LIMAGINATION의 회사 브랜드 자산과 개발 오케스트레이터를 관�
 │   ├── LIMAGINATION_BRANDING_REPORT.txt
 │   ├── LIMAGINATION_SANS_V2_PROMPT.txt
 │   ├── LimaginationSans_사용가이드.txt
+│   ├── research/                  # 외부 사례 조사 기록 (신조·규칙 아님)
 │   └── logo / specimen
 │
 ├── products/
