@@ -5,7 +5,7 @@ LIMAGINATION SANS — 사용 가이드
 배포 버전 : v13 (Regular) / v12 (Bold)
 패밀리명  : Limagination Sans
 스타일    : Regular, Bold
-설계 철학 : LIMAGINATION 브랜드 헌장 v2.0 — '말랑꾸불' 모던 산세리프
+설계 철학 : LIMAGINATION 브랜드 헌장 v3.0 — '말랑꾸불' 모던 산세리프
             (호기심에서 시작해 상상으로 태어나, 끝까지 다듬어 잊히지 않는)
 제작      : image-to-fonts 추출(라틴/기호) + 자모 합성 엔진(한글 전체)
             + 기호 전수 재건(추출 파이프라인 손상 복구)
@@ -136,7 +136,8 @@ body { font-family: 'Limagination Sans', 'Pretendard', -apple-system, sans-serif
 ----------------------------------------------------------------
 LIMAGINATION 브랜드 자산입니다. LIMAGINATION 제품·홍보·브랜드 자료에
 자유롭게 사용하세요. 재판매·폰트 파일 단독 배포는 브랜드 가이드라인을
-따르세요. 문의: "Made with LIMAGINATION"
+따르세요. 브랜드 서명은 실제 제작·개발·창작 참여 관계가 정확한 결과물에만
+사용합니다: "Made with LIMAGINATION"
 
 ================================================================
   We imagine first. We are LIMAGINATION.
