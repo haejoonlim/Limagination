@@ -1,8 +1,8 @@
 ================================================================
 LIMAGINATION — 회사 브랜딩 운영 보고서
 ================================================================
-버전: v3.1
-작성일: 2026-11-03
+버전: v3.2
+작성일: 2026-11-23
 상위 기준:
   - LIMAGINATION_BRAND_CONSTITUTION.txt — 브랜드 헌장 v3.0
   - LIMAGINATION_SANS_V2_PROMPT.txt — 회사 브랜드 서체 설계 기준
@@ -12,6 +12,11 @@ LIMAGINATION — 회사 브랜딩 운영 보고서
   이 보고서는 브랜드 헌장 v3.0을 실제 운영·디자인에 적용하기 위한 안내서다.
   회사의 정체성·철학·가치·책임 원칙은 브랜드 헌장을 단일 기준으로 삼는다.
   개별 제품의 기능·UI·말투·색상·캐릭터·기술 선택은 제품별 문서에서 관리한다.
+
+v3.2 변경 (2026-11-23):
+  - 회사 축약 워드마크 LIMA. 및 컴팩트 심볼 L/의 사용을 승인했다.
+  - 승인된 배경/문자 색 조합과 원본 SVG·비주얼 가이드 경로를 문서화했다.
+  - 공식 명칭 LIMAGINATION, 브랜드 헌장 v3.0, 제품별 디자인 독립성은 유지한다.
 
 v3.1 변경:
   - 브랜드 헌장 v3.0의 미션·비전·믿음·상상의 순환을 반영했다.
@@ -181,9 +186,18 @@ v3.1 변경:
 
 6.1 로고와 서명
 
-  - 공식 표기: LIMAGINATION
+  - 공식 브랜드 이름: LIMAGINATION (LIM + IMAGINATION)
+  - 승인된 축약 워드마크: LIMA. (끝 마침표 포함)
+  - 승인된 컴팩트 심볼: L/
   - 브랜드 서명: Made with LIMAGINATION
+  - 축약 워드마크와 심볼은 공식 명칭의 대체 표기가 아니라 시각적 자산이다.
+  - 원본 SVG:
+      brand/visual/LIMAGINATION_WORDMARK_LIMA.svg
+      brand/visual/LIMAGINATION_SYMBOL_L_SLASH.svg
+  - 상세 사용 가이드: brand/LIMAGINATION_VISUAL_IDENTITY.md
   - 로고의 비례·여백·색상은 승인된 원본 자산을 기준으로 한다.
+  - 현재 SVG는 범용 서체 텍스트를 포함하므로 출력·상표 등록 등 정밀한 재현 전에는
+    아웃라인 벡터 마스터를 별도로 검수한다.
   - 제품 로고와 앱 아이콘은 제품별로 설계할 수 있다.
   - 서명은 실제 제작·개발·창작 참여 관계가 정확할 때만 사용한다.
 
@@ -195,6 +209,9 @@ v3.1 변경:
 
 6.3 색상과 형태
 
+  - 승인 워드마크 색상: 배경 #F1F2F3 / 문자 #11151B.
+  - 승인 심볼 색상: 배경 #192B33 / 문자 #A9E6D5.
+  - 위 색상 조합은 회사의 해당 로고 자산에 적용되며 모든 제품 UI에 강제하지 않는다.
   - 색은 의미와 기능을 가져야 한다.
   - 형태는 목적에 맞게 단순하고 명확해야 한다.
   - 움직임은 자연스럽고 이해 가능해야 한다.
@@ -296,6 +313,9 @@ v3.1 변경:
 
   회사 브랜드 운영 안내:
     brand/LIMAGINATION_BRANDING_REPORT.txt
+    brand/LIMAGINATION_VISUAL_IDENTITY.md
+    brand/visual/LIMAGINATION_WORDMARK_LIMA.svg
+    brand/visual/LIMAGINATION_SYMBOL_L_SLASH.svg
 
   회사 브랜드 서체:
     brand/LIMAGINATION_SANS_V2_PROMPT.txt
