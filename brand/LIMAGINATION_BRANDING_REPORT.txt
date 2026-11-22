@@ -1,7 +1,7 @@
 ================================================================
 LIMAGINATION — 회사 브랜딩 운영 보고서
 ================================================================
-버전: v3.2
+버전: v3.3
 작성일: 2026-11-23
 상위 기준:
   - LIMAGINATION_BRAND_CONSTITUTION.txt — 브랜드 헌장 v3.0
@@ -12,6 +12,11 @@ LIMAGINATION — 회사 브랜딩 운영 보고서
   이 보고서는 브랜드 헌장 v3.0을 실제 운영·디자인에 적용하기 위한 안내서다.
   회사의 정체성·철학·가치·책임 원칙은 브랜드 헌장을 단일 기준으로 삼는다.
   개별 제품의 기능·UI·말투·색상·캐릭터·기술 선택은 제품별 문서에서 관리한다.
+
+v3.3 변경 (2026-11-23):
+  - Threads 공식 프로필 사진으로 기존 L/ 심볼을 확정했다.
+  - 스레드 소개글·첫 고정 게시글·커뮤니케이션 지침을 별도 문서로 관리한다.
+  - 기존 회사 철학, 공식 명칭, 제품 브랜드 독립성은 변경하지 않았다.
 
 v3.2 변경 (2026-11-23):
   - 회사 축약 워드마크 LIMA. 및 컴팩트 심볼 L/의 사용을 승인했다.
@@ -195,6 +200,8 @@ v3.1 변경:
       brand/visual/LIMAGINATION_WORDMARK_LIMA.svg
       brand/visual/LIMAGINATION_SYMBOL_L_SLASH.svg
   - 상세 사용 가이드: brand/LIMAGINATION_VISUAL_IDENTITY.md
+  - Threads 공식 프로필: brand/LIMAGINATION_THREADS_PROFILE.md
+  - Threads 원형 프로필 사진: 승인된 L/ 심볼을 그대로 사용 (PNG 1024×1024 변환 가능)
   - 로고의 비례·여백·색상은 승인된 원본 자산을 기준으로 한다.
   - 현재 SVG는 범용 서체 텍스트를 포함하므로 출력·상표 등록 등 정밀한 재현 전에는
     아웃라인 벡터 마스터를 별도로 검수한다.
@@ -314,6 +321,7 @@ v3.1 변경:
   회사 브랜드 운영 안내:
     brand/LIMAGINATION_BRANDING_REPORT.txt
     brand/LIMAGINATION_VISUAL_IDENTITY.md
+    brand/LIMAGINATION_THREADS_PROFILE.md
     brand/visual/LIMAGINATION_WORDMARK_LIMA.svg
     brand/visual/LIMAGINATION_SYMBOL_L_SLASH.svg
 
