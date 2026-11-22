@@ -32,6 +32,19 @@ LIMAGINATION의 회사 브랜드 자산과 개발 오케스트레이터를 관�
 - 제품은 LIMAGINATION의 철학을 바탕으로 만들 수 있지만, 한 제품의 디자인이나 사용 경험을 회사 전체의 신조로 승격하지 않습니다.
 - 제품별 기술 문서와 앱 코드는 각 제품 저장소에서 관리합니다.
 
+## 확정된 회사 워드마크와 심볼 (2026-11-23)
+
+- **공식 브랜드명:** `LIMAGINATION` (기존 브랜드 헌장 표기 유지)
+- **워드마크:** `LIMA.` · 밝은 회색 `#F1F2F3` / 짙은 글자 `#11151B`
+- **심볼:** `L/` · 짙은 청록 `#192B33` / 민트 `#A9E6D5`
+- **브랜드 철학:** We Begin with Imagination. (기존 유지)
+
+| 워드마크 | 심볼 |
+| --- | --- |
+| ![LIMA.](brand/visual/LIMAGINATION_WORDMARK_LIMA.svg) | ![L/](brand/visual/LIMAGINATION_SYMBOL_L_SLASH.svg) |
+
+[회사 비주얼 아이덴티티 가이드](brand/LIMAGINATION_VISUAL_IDENTITY.md)에서 사용 규칙·원본 SVG·명칭 구분을 확인할 수 있습니다. `LIMA.`는 축약형이며 공식 회사명은 계속 `LIMAGINATION`입니다. 제품별 디자인 시스템은 독립적으로 유지합니다.
+
 ## 별도 제품 저장소
 
 - **RecallInfinity** — Recall Infinity 앱 본체: https://github.com/haejoonlim/RecallInfinity
