@@ -36,6 +36,12 @@ These SVGs are **approved color/composition source assets** for current web and 
 - **Product brands:** FONS, Harbor, RESONA and other product identities may keep separate design systems. Do not automatically impose company colors or symbols on each product.
 - **Voice/behavior:** Keep the company constitution's accuracy, accessibility, user-centered responsibility, and honest claims. Avoid making the brand appear to be a registered legal company if that has not been established.
 
+### 3.1 Official Threads profile avatar — confirmed 2026-11-23
+
+The officially selected Threads profile avatar is **L/** in its approved dark-teal/mint composition: [original SVG](visual/LIMAGINATION_SYMBOL_L_SLASH.svg). For profile upload, render a square 1024×1024 PNG without changing the SVG's arrangement or colors. Keep the glyph fully visible after the platform's circular crop. The **LIMA.** wordmark remains a separate brand asset for headers and promotional graphics.
+
+Approved bio, first pinned post, and editing rules: [LIMAGINATION_THREADS_PROFILE.md](LIMAGINATION_THREADS_PROFILE.md). GitHub documentation does not itself update the live Threads account.
+
 ## 4. Do not
 
 - Change `LIMA.` to `LIMA` or `L/` to a different character arrangement in the approved variants.
@@ -45,4 +51,5 @@ These SVGs are **approved color/composition source assets** for current web and 
 
 ## 5. Change record
 
+- **2026-11-23:** Confirmed `L/` as the official Threads profile avatar and published the approved social bio/pinned post in the Threads guide.
 - **2026-11-23:** Approved the `LIMA.` wordmark and `L/` symbol from Threads brand exploration. Added SVG source assets, color palette, usage rules, and distinction from the existing official name. The Brand Constitution v3.0 and Limagination Sans technical specifications remain unchanged.
