@@ -45,6 +45,14 @@ LIMAGINATION의 회사 브랜드 자산과 개발 오케스트레이터를 관�
 
 [회사 비주얼 아이덴티티 가이드](brand/LIMAGINATION_VISUAL_IDENTITY.md)에서 사용 규칙·원본 SVG·명칭 구분을 확인할 수 있습니다. `LIMA.`는 축약형이며 공식 회사명은 계속 `LIMAGINATION`입니다. 제품별 디자인 시스템은 독립적으로 유지합니다.
 
+## Threads 공식 프로필 (2026-11-23)
+
+- **표시 이름:** LIMAGINATION
+- **공식 프로필 로고:** [L/ 심볼](brand/visual/LIMAGINATION_SYMBOL_L_SLASH.svg) — 원형 아이콘용
+- **LIMA. 워드마크:** [원본 SVG](brand/visual/LIMAGINATION_WORDMARK_LIMA.svg) — 브랜드 소개용
+- **소개글·첫 고정 게시글·운영 규칙:** [Threads 프로필 가이드](brand/LIMAGINATION_THREADS_PROFILE.md)
+- 스레드 계정의 실제 프로필 수정과 고정 게시 작업은 계정 소유자가 진행합니다.
+
 ## 별도 제품 저장소
 
 - **RecallInfinity** — Recall Infinity 앱 본체: https://github.com/haejoonlim/RecallInfinity
