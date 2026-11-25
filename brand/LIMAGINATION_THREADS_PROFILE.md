@@ -18,7 +18,7 @@ LIMAGINATION의 공식 개발 기록 및 소통용 Threads 프로필. 인디 개
 - **분야:** Games · Software · AI
 - **프로필 로고:** [공식 L/ 심볼](visual/LIMAGINATION_SYMBOL_L_SLASH.svg)
 - **축약 워드마크:** [LIMA.](visual/LIMAGINATION_WORDMARK_LIMA.svg) — 웹/소개 이미지용; 원형 프로필은 L/ 사용
-- **배경 색:** `#192B33` / **심볼 색:** `#A9E6D5`
+- **배경 색:** `#222025` / **심볼 색:** `#C9B5DB`
 - **형식:** 1:1 정사각형 PNG 1024×1024 권장, 원형 크롭에서도 L/ 전체가 보이도록 유지. SVG가 원본이며 색상·배치는 변경하지 않는다.
 
 ### 소개글 (복사하여 사용)
