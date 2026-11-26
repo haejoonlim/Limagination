@@ -18,7 +18,9 @@ Recall은 학습 계획, 복습, 집중, 학습 진척을 통합 관리하는 AI
 
 ## 기술 및 디자인
 
-React 19, TypeScript, Vite, Zustand, Motion, Capacitor 기반. 제품 디자인 시스템은 정보 밀도, 명료한 계층, 접근성 및 정교한 인터랙션을 지향한다. 기존 제품 액센트 #8B5CF6은 상위 브랜드 Muted Amethyst와 별도로 관리한다.
+React 19, TypeScript, Vite, Zustand, Motion, Capacitor 기반. 제품 디자인 시스템은 정보 밀도, 명료한 계층, 접근성 및 정교한 인터랙션을 지향한다. 2026-11-26 사용자 결정에 따라 기존 선명한 보라색을 상위 브랜드 Muted Amethyst에 맞추었다. 공식 팔레트는 #222025, #62516F, #9D84B7, #C9B5DB, #F4F1F5이며, 가독성을 고려한 파생 강조색 #826D95와 중립 표면 색을 사용한다. 제품의 레이아웃, 학습 기능, 의미 색상 및 독립적인 디자인 구조는 유지한다.
+
+2026-11-26 Recall main의 [테마 및 컴포넌트 변경](https://github.com/haejoonlim/recall/commit/67f7d399888f48b21acd35d65dc84fa77f193f39)을 확인했다. 테마, 디자인 토큰, 공통 CSS 및 웹 메타데이터 변경이며, 전체 시각 회귀 테스트와 실제 배포는 아직 검증하지 않았다. 기존 PNG 아이콘 및 모든 개별 인라인 색상은 별도 점검 대상이다.
 
 ## 근거 및 검증 상태
 
