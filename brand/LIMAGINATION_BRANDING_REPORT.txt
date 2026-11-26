@@ -216,8 +216,9 @@ v3.1 변경:
 
 6.3 색상과 형태
 
-  - 승인 워드마크 색상: 배경 #F1F2F3 / 문자 #11151B.
-  - 승인 심볼 색상: 배경 #192B33 / 문자 #A9E6D5.
+  - 2026-11-25 확정 Muted Amethyst (2026-11-26 동기화): Amethyst Noir #222025, Deep Amethyst #62516F, Muted Violet #9D84B7, Soft Amethyst #C9B5DB, Porcelain #F4F1F5.
+  - 승인 워드마크 색상: 배경 #F4F1F5 / 문자 #222025.
+  - 승인 심볼 색상: 배경 #222025 / 문자 #C9B5DB.
   - 위 색상 조합은 회사의 해당 로고 자산에 적용되며 모든 제품 UI에 강제하지 않는다.
   - 색은 의미와 기능을 가져야 한다.
   - 형태는 목적에 맞게 단순하고 명확해야 한다.
@@ -339,3 +340,5 @@ We Begin with Imagination.
 We Imagine Before We Create.
 We are LIMAGINATION.
 ================================================================
+
+2026-11-26 개정 기록: 회사 시각 자산을 Muted Amethyst로 갱신. 기존 헌장 v3.0 및 제품 독립성 유지. 공식 프로젝트 목록과 자산 사용 기준은 README 및 LIMAGINATION_VISUAL_IDENTITY.md를 따른다.

@@ -1,6 +1,6 @@
 # LIMAGINATION — Threads 공식 프로필 가이드
 
-> Status: **Approved** · 2026-11-23  
+> Status: **Approved identity** · 2026-11-23; palette synchronized 2026-11-26  
 > Official brand name: **LIMAGINATION**  
 > Brand philosophy: **We Begin with Imagination.**  
 > Brand constitution: [LIMAGINATION_BRAND_CONSTITUTION.txt](LIMAGINATION_BRAND_CONSTITUTION.txt)
@@ -18,19 +18,19 @@ LIMAGINATION의 공식 개발 기록 및 소통용 Threads 프로필. 인디 개
 - **분야:** Games · Software · AI
 - **프로필 로고:** [공식 L/ 심볼](visual/LIMAGINATION_SYMBOL_L_SLASH.svg)
 - **축약 워드마크:** [LIMA.](visual/LIMAGINATION_WORDMARK_LIMA.svg) — 웹/소개 이미지용; 원형 프로필은 L/ 사용
-- **배경 색:** `#192B33` / **심볼 색:** `#A9E6D5`
+- **배경 색:** `#222025` / **심볼 색:** `#C9B5DB`
 - **형식:** 1:1 정사각형 PNG 1024×1024 권장, 원형 크롭에서도 L/ 전체가 보이도록 유지. SVG가 원본이며 색상·배치는 변경하지 않는다.
 
-### 소개글 (복사하여 사용)
+### 소개글 (2026-11-26 프로젝트 목록 반영 문안; 게시 전 검토)
 
 ```text
 상상에서 시작해, 실제로 만듭니다.
 게임 · macOS 앱 · AI 도구
-FONS · Harbor · RESONA 개발 기록
+게임 · 소프트웨어 · AI · 학습 및 생활정보 프로젝트
 We Begin with Imagination.
 ```
 
-## 3. 첫 고정 게시글 — 확정 문구
+## 3. 첫 고정 게시글 — 프로젝트 목록 갱신 문안 (게시 전 검토)
 
 ```text
 LIMAGINATION | We Begin with Imagination.
@@ -46,6 +46,10 @@ LIMAGINATION | We Begin with Imagination.
 • FONS — 게임 개발
 • Harbor — macOS 생산성 도구
 • RESONA — 음악·오디오 소프트웨어
+• VESTRA — 투자 연구 소프트웨어
+• Recall — AI 학습 플래너
+• LIMA TOOLKIT — 디지털 생활정보
+• 첫방절약 — 생활비 절약 정보
 
 아이디어가 실제로 작동하는 순간까지, 만들고 검증하고 다듬겠습니다.
 
@@ -56,7 +60,7 @@ LIMAGINATION | We Begin with Imagination.
 
 1. 친근한 한국어로 소통하되, 회사의 가치와 표현 기준은 [브랜딩 운영 보고서](LIMAGINATION_BRANDING_REPORT.txt)를 따른다.
 2. 완성작·프로토타입·개발 예정 기능의 상태를 구분한다.
-3. 제품 FONS / Harbor / RESONA의 각자 다른 UI 및 제품 브랜드를 유지한다.
+3. [공식 프로젝트 목록](../README.md)의 제품별 UI 및 브랜드 정체성을 유지한다.
 4. 스크린샷·코드·사용 후기 등은 실제 자료만 사용한다.
 5. 개인정보·보안정보·비공개 자료는 게시하지 않는다.
 6. 게시와 프로필 수정은 소유자가 최종 검토하고 진행한다. 이 문서 반영 자체는 Threads 계정의 실시간 변경을 의미하지 않는다.
@@ -72,3 +76,5 @@ LIMAGINATION | We Begin with Imagination.
 ## 변경 기록
 
 - **2026-11-23:** Threads 소개글과 첫 고정 게시글을 브랜드 헌장과 개발 기록 콘셉트에 맞춰 확정. 기존 L/ 심볼을 공식 Threads 프로필 로고로 지정.
+
+- **2026-11-26:** Muted Amethyst SVG 및 색상 동기화, 공식 프로젝트 7개 반영. 소개글·고정 글 변경은 게시 전 검토 대상으로 유지하며 실제 계정은 변경하지 않음.
