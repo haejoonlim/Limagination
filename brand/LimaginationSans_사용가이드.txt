@@ -5,7 +5,7 @@ LIMAGINATION SANS — 사용 가이드
 배포 버전 : v13 (Regular) / v12 (Bold)
 패밀리명  : Limagination Sans
 스타일    : Regular, Bold
-설계 철학 : LIMAGINATION 브랜드 헌장 v3.0 — '말랑꾸불' 모던 산세리프
+설계 철학 : LIMAGINATION 브랜드 헌장 v4.0 (모토 동기화; 기존 서체 규격 유지) — '말랑꾸불' 모던 산세리프
             (호기심에서 시작해 상상으로 태어나, 끝까지 다듬어 잊히지 않는)
 제작      : image-to-fonts 추출(라틴/기호) + 자모 합성 엔진(한글 전체)
             + 기호 전수 재건(추출 파이프라인 손상 복구)

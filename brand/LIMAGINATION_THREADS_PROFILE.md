@@ -2,7 +2,8 @@
 
 > Status: **Approved identity** · 2026-11-23; palette synchronized 2026-11-26  
 > Official brand name: **LIMAGINATION**  
-> Brand philosophy: **We Begin with Imagination.**  
+> Official motto: **Dare to Imagine.**
+> Brand essence: **We Begin with Imagination.**
 > Brand constitution: [LIMAGINATION_BRAND_CONSTITUTION.txt](LIMAGINATION_BRAND_CONSTITUTION.txt)
 
 ## 1. 계정의 역할
@@ -21,19 +22,18 @@ LIMAGINATION의 공식 개발 기록 및 소통용 Threads 프로필. 인디 개
 - **배경 색:** `#222025` / **심볼 색:** `#C9B5DB`
 - **형식:** 1:1 정사각형 PNG 1024×1024 권장, 원형 크롭에서도 L/ 전체가 보이도록 유지. SVG가 원본이며 색상·배치는 변경하지 않는다.
 
-### 소개글 (2026-11-26 프로젝트 목록 반영 문안; 게시 전 검토)
+### 소개글 (2026-11-27 모토 반영 문안; 게시 전 검토)
 
 ```text
 상상에서 시작해, 실제로 만듭니다.
-게임 · macOS 앱 · AI 도구
-게임 · 소프트웨어 · AI · 학습 및 생활정보 프로젝트
-We Begin with Imagination.
+게임 · 소프트웨어 · AI · 학습 · 생활정보
+Dare to Imagine.
 ```
 
 ## 3. 첫 고정 게시글 — 프로젝트 목록 갱신 문안 (게시 전 검토)
 
 ```text
-LIMAGINATION | We Begin with Imagination.
+LIMAGINATION | Dare to Imagine.
 
 상상만 하던 것을 직접 만드는 작은 독립 개발 스튜디오입니다.
 
@@ -51,7 +51,7 @@ LIMAGINATION | We Begin with Imagination.
 • LIMA TOOLKIT — 디지털 생활정보
 • 첫방절약 — 생활비 절약 정보
 
-아이디어가 실제로 작동하는 순간까지, 만들고 검증하고 다듬겠습니다.
+스스로 질문하고 자유롭게 상상하되, 결과에는 책임을 지겠습니다. 아이디어가 실제로 작동하는 순간까지 만들고 검증하고 다듬겠습니다.
 
 여러분은 요즘 어떤 걸 만들고 있나요?
 ```
@@ -74,6 +74,8 @@ LIMAGINATION | We Begin with Imagination.
 - 고해상도 PNG는 위 승인 SVG를 그대로 렌더링하여 생성하되, SVG 자체의 모양은 바꾸지 않는다.
 
 ## 변경 기록
+
+- **2026-11-27:** 공식 모토 Dare to Imagine. 및 운영 격률을 소개글·고정 글 문안에 반영. 실제 게시 또는 프로필 수정은 별도 검토 후 진행.
 
 - **2026-11-23:** Threads 소개글과 첫 고정 게시글을 브랜드 헌장과 개발 기록 콘셉트에 맞춰 확정. 기존 L/ 심볼을 공식 Threads 프로필 로고로 지정.
 

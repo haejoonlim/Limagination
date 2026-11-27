@@ -1,7 +1,7 @@
 # LIMAGINATION — Visual Identity
 
 > Status: **Approved for company brand use** · Identity approved 2026-11-23 · Muted Amethyst approved 2026-11-25 · synchronized 2026-11-26  
-> Governing document: [Brand Constitution v3.0](LIMAGINATION_BRAND_CONSTITUTION.txt)  
+> Governing document: [Brand Constitution v4.0](LIMAGINATION_BRAND_CONSTITUTION.txt)
 > Implementation guide: [Branding Report](LIMAGINATION_BRANDING_REPORT.txt)
 
 ## 1. Naming and identity
@@ -9,6 +9,9 @@
 - **Official brand name:** `LIMAGINATION` (LIM + IMAGINATION)
 - **Approved abbreviated wordmark:** `LIMA.`
 - **Approved compact brand symbol:** `L/`
+- **Official motto:** Dare to Imagine.
+- **Philosophical inspiration:** Sapere Aude.
+- **Operating maxim:** Think Freely. Create Responsibly.
 - **Brand essence:** We Begin with Imagination.
 - **Manifesto:** We Imagine Before We Create.
 - **Attribution signature:** Made with LIMAGINATION — only where actual creative/development participation is accurately represented.
@@ -17,7 +20,7 @@ The new wordmark and symbol are visual shorthand, **not a renaming** of the bran
 
 ## 2. Approved visual assets — Muted Amethyst
 
-LIMAGINATION 2.0 replaces the former company mint/teal palette. The company constitution v3.0, wordmark and symbol geometry remain unchanged.
+LIMAGINATION 2.0 replaces the former company mint/teal palette. The 2026-11-25 palette decision preserved the wordmark and symbol geometry. The 2026-11-27 constitution v4.0 motto update also leaves these visual assets unchanged.
 
 | Token | HEX | Use |
 | --- | --- | --- |
@@ -62,6 +65,8 @@ Approved bio, first pinned post, and editing rules: [LIMAGINATION_THREADS_PROFIL
 - Use branding to imply ownership, sponsorship or a partnership that does not exist.
 
 ## 5. Change record
+
+- **2026-11-27:** Adopted Dare to Imagine. as the official motto and documented its philosophical inspiration and operating maxim; existing visual assets remain approved. New symbol exploration is not an approved replacement.
 
 - **2026-11-23:** Confirmed `L/` as the official Threads profile avatar and published the approved social bio/pinned post in the Threads guide.
 - **2026-11-23:** Approved the `LIMA.` wordmark and `L/` symbol from Threads brand exploration. Added SVG source assets, color palette, usage rules, and distinction from the existing official name. The Brand Constitution v3.0 and Limagination Sans technical specifications remain unchanged.

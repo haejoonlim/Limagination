@@ -1,6 +1,8 @@
 # Limagination
 
-> **We Begin with Imagination.**
+> **Dare to Imagine.** — 상상할 용기를 가져라.
+>
+> We Begin with Imagination.
 > 호기심이 우리의 시작이다. 상상이 우리의 언어다.
 
 LIMAGINATION의 회사 브랜드 자산과 개발 오케스트레이터를 관리하는 저장소입니다. 회사의 철학과 개별 제품의 정체성을 분리해 관리합니다.
@@ -37,7 +39,14 @@ LIMAGINATION의 회사 브랜드 자산과 개발 오케스트레이터를 관�
 - **공식 브랜드명:** `LIMAGINATION` (기존 브랜드 헌장 표기 유지)
 - **워드마크:** `LIMA.` · Porcelain `#F4F1F5` / Amethyst Noir `#222025`
 - **심볼:** `L/` · Amethyst Noir `#222025` / Soft Amethyst `#C9B5DB`
-- **브랜드 철학:** We Begin with Imagination. (기존 유지)
+- **공식 모토:** Dare to Imagine. (2026-11-27)
+- **철학적 근원:** Sapere Aude. — 스스로 생각할 용기
+- **브랜드 본질:** We Begin with Imagination.
+- **매니페스토:** We Imagine Before We Create.
+- **운영 격률:** Think Freely. Create Responsibly.
+- **브랜드 서명:** Made with LIMAGINATION
+
+[브랜드 헌장 v4.0](brand/LIMAGINATION_BRAND_CONSTITUTION.txt) · [철학적 근원 해설](brand/research/KANT_PHILOSOPHICAL_FOUNDATION.md)
 
 | 워드마크 | 심볼 |
 | --- | --- |
