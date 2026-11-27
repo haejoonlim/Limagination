@@ -62,7 +62,7 @@ LIMAGINATION의 회사 브랜드 자산과 개발 오케스트레이터를 관�
 - **소개글·첫 고정 게시글·운영 규칙:** [Threads 프로필 가이드](brand/LIMAGINATION_THREADS_PROFILE.md)
 - 실제 프로필 이미지는 소유자가 승인한 Pickle 작업으로 교체합니다. 저장소 반영만으로 실제 계정이 변경되는 것은 아닙니다.
 
-## 공식 프로젝트 (2026-11-26)
+## 공식 프로젝트 및 콘텐츠 브랜드 (2026-11-27)
 
 | 프로젝트 | 분야 | 제품 자료 |
 | --- | --- | --- |
@@ -73,5 +73,35 @@ LIMAGINATION의 회사 브랜드 자산과 개발 오케스트레이터를 관�
 | Recall | AI 학습 플래너 · 복습 · 학습 관리 | [제품 안내](products/recall/PRODUCT_OVERVIEW.md) |
 | LIMA TOOLKIT | AI · IT · 디지털 생활정보 | 네이버 블로그 |
 | 첫방절약 | 생활비 절약 · 가격 비교 | Threads · 웹사이트 |
+| Koreal Bits | 영어권 대상 한국 문화 콘텐츠 | YouTube |
+| LIMAGINATION 공식 Threads | 회사 브랜드 · 공식 커뮤니케이션 | Threads |
+| Mildly Massive | 가상 크리에이티브 광고 회사 · 레트로 3D 코미디 IP | YouTube 중심 · 개발 단계 |
 
 저장소 링크는 접근 권한이 필요할 수 있습니다. 이 목록은 제품의 소속을 정의하며 출시 또는 모든 기능의 구현 완료를 뜻하지 않습니다. 기존 Recall Infinity 가이드는 역사적 제품 자료로 보존하고 현재 Recall 제품 안내와 구분합니다. 과거 게임 및 내부 도구는 공식 제품 목록에 포함하지 않습니다.
+
+## 사업 포트폴리오
+
+```mermaid
+flowchart TD
+    A[LIMAGINATION · Quiet Compass] --> B[Software & AI]
+    A --> C[Games & IP]
+    A --> D[Media & Commerce]
+    B --> E[VESTRA]
+    B --> F[RESONA]
+    B --> G[Harbor]
+    B --> H[Recall]
+    C --> I[FONS]
+    D --> J[LIMAGINATION 공식 Threads]
+    D --> K[Koreal Bits]
+    D --> L[LIMA TOOLKIT]
+    D --> M[첫방절약]
+    D -. 개발 단계 .-> N[Mildly Massive]
+```
+
+위 구조는 브랜드와 프로젝트의 관리상 분류이며 별도 법인 설립이나 출시 완료를 의미하지 않습니다. 내부 도구 및 과거 프로젝트는 공식 활성 포트폴리오와 구분합니다.
+
+### Mildly Massive
+
+**Making a big deal out of little things.**
+
+평범한 제품을 터무니없이 거창하게 홍보하는 가상의 크리에이티브 회사 세계관을 기반으로 한 영어권 3D 코미디 콘텐츠 IP입니다. 독립적인 외부 브랜드 정체성을 유지하며, 일반 콘텐츠 및 향후 광고 협업을 위한 제작 역량을 개발합니다. 현재 개발 단계이며 명칭의 상표권 검토와 공개 채널 준비는 별도 절차로 진행합니다.
