@@ -19,6 +19,8 @@ LIMAGINATION의 회사 브랜드 자산과 개발 오케스트레이터를 관�
 │   └── logo / specimen
 │
 ├── products/
+│   ├── recall/                     # 현재 Recall 제품 안내
+│   │   └── PRODUCT_OVERVIEW.md
 │   └── recall-infinity/            # 이전 Recall Infinity 제품 기록
 │       ├── PRODUCT_BRAND_GUIDE.md
 │       └── HANGUL_FONT_HANDOFF.md
@@ -75,7 +77,7 @@ LIMAGINATION의 회사 브랜드 자산과 개발 오케스트레이터를 관�
 | 첫방절약 | 생활비 절약 · 가격 비교 | Threads · 웹사이트 |
 | Koreal Bits | 영어권 대상 한국 문화 콘텐츠 | YouTube |
 | LIMAGINATION 공식 Threads | 회사 브랜드 · 공식 커뮤니케이션 | Threads |
-| Mildly Massive | 가상 크리에이티브 광고 회사 · 레트로 3D 코미디 IP | YouTube 중심 · 개발 단계 |
+| Mildly Massive | 가상 크리에이티브 광고 회사 · 레트로 3D 코미디 IP | YouTube · Instagram 계획 · 개발 단계 |
 
 저장소 링크는 접근 권한이 필요할 수 있습니다. 이 목록은 제품의 소속을 정의하며 출시 또는 모든 기능의 구현 완료를 뜻하지 않습니다. 기존 Recall Infinity 가이드는 역사적 제품 자료로 보존하고 현재 Recall 제품 안내와 구분합니다. 과거 게임 및 내부 도구는 공식 제품 목록에 포함하지 않습니다.
 
@@ -104,4 +106,4 @@ flowchart TD
 
 **Making a big deal out of little things.**
 
-평범한 제품을 터무니없이 거창하게 홍보하는 가상의 크리에이티브 회사 세계관을 기반으로 한 영어권 3D 코미디 콘텐츠 IP입니다. 독립적인 외부 브랜드 정체성을 유지하며, 일반 콘텐츠 및 향후 광고 협업을 위한 제작 역량을 개발합니다. 현재 개발 단계이며 명칭의 상표권 검토와 공개 채널 준비는 별도 절차로 진행합니다.
+평범한 제품을 터무니없이 거창하게 홍보하는 가상의 크리에이티브 회사 세계관을 기반으로 한 영어권 3D 코미디 콘텐츠 IP입니다. 독립적인 외부 브랜드 정체성을 유지하며, 일반 콘텐츠 및 향후 광고 협업을 위한 제작 역량을 개발합니다. YouTube와 Instagram을 운영 채널로 준비하며, Instagram 계정명은 `mildly.massive`로 지정합니다. 대외 프로필·영상·소개에는 LIMAGINATION 표기나 상위 브랜드 로고를 넣지 않습니다. 실제 계정 개설·프로필 적용·공개 상태는 별도 확인이 필요합니다. 현재 개발 단계이며 명칭의 상표권 검토와 공개 채널 준비는 별도 절차로 진행합니다.
