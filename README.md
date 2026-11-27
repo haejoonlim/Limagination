@@ -34,11 +34,11 @@ LIMAGINATION의 회사 브랜드 자산과 개발 오케스트레이터를 관�
 - 제품은 LIMAGINATION의 철학을 바탕으로 만들 수 있지만, 한 제품의 디자인이나 사용 경험을 회사 전체의 신조로 승격하지 않습니다.
 - 제품별 기술 문서와 앱 코드는 각 제품 저장소에서 관리합니다.
 
-## 확정된 회사 워드마크와 심볼 — LIMAGINATION 2.0 (2026-11-25 결정, 2026-11-26 동기화)
+## 공식 회사 시각 자산 — Quiet Compass (2026-11-27 채택)
 
 - **공식 브랜드명:** `LIMAGINATION` (기존 브랜드 헌장 표기 유지)
-- **워드마크:** `LIMA.` · Porcelain `#F4F1F5` / Amethyst Noir `#222025`
-- **심볼:** `L/` · Amethyst Noir `#222025` / Soft Amethyst `#C9B5DB`
+- **워드마크:** `LIMAGINATION` · 승인 시안의 글자 윤곽 및 넓은 자간을 벡터화
+- **심볼:** Quiet Compass (클레마티스 × 나침반) · Amethyst Noir `#222025` / Soft Amethyst `#C9B5DB`
 - **공식 모토:** Dare to Imagine. (2026-11-27)
 - **철학적 근원:** Sapere Aude. — 스스로 생각할 용기
 - **브랜드 본질:** We Begin with Imagination.
@@ -50,17 +50,17 @@ LIMAGINATION의 회사 브랜드 자산과 개발 오케스트레이터를 관�
 
 | 워드마크 | 심볼 |
 | --- | --- |
-| ![LIMA.](brand/visual/LIMAGINATION_WORDMARK_LIMA.svg) | ![L/](brand/visual/LIMAGINATION_SYMBOL_L_SLASH.svg) |
+| ![LIMAGINATION](brand/visual/limagination-wordmark-light.svg) | ![Quiet Compass](brand/visual/quiet-compass-light.svg) |
 
-[회사 비주얼 아이덴티티 가이드](brand/LIMAGINATION_VISUAL_IDENTITY.md)에서 사용 규칙·원본 SVG·명칭 구분을 확인할 수 있습니다. `LIMA.`는 축약형이며 공식 회사명은 계속 `LIMAGINATION`입니다. 제품별 디자인 시스템은 독립적으로 유지합니다.
+[회사 비주얼 아이덴티티 가이드](brand/LIMAGINATION_VISUAL_IDENTITY.md)에서 사용 규칙·원본 SVG·명칭 구분을 확인할 수 있습니다. 이전 L/ 및 LIMA. 로고는 역사적 자산으로 보존합니다. 제품별 디자인 시스템은 독립적으로 유지합니다. 상표권 선행조사는 일부 완료되었으나 법적 권리 확보를 의미하지 않습니다. [조사 기록](brand/research/QUIET_COMPASS_TRADEMARK_REVIEW.md)
 
-## Threads 공식 프로필 (2026-11-26 자산 개정)
+## Threads 공식 프로필 (2026-11-27 자산 개정)
 
 - **표시 이름:** LIMAGINATION
-- **공식 프로필 로고:** [L/ 심볼](brand/visual/LIMAGINATION_SYMBOL_L_SLASH.svg) — 원형 아이콘용
-- **LIMA. 워드마크:** [원본 SVG](brand/visual/LIMAGINATION_WORDMARK_LIMA.svg) — 브랜드 소개용
+- **공식 프로필 로고:** [Quiet Compass PNG](brand/visual/threads-avatar.png) — 원형 크롭용 1024×1024
+- **LIMAGINATION 워드마크:** [원본 SVG](brand/visual/limagination-wordmark.svg) — 브랜드 소개용
 - **소개글·첫 고정 게시글·운영 규칙:** [Threads 프로필 가이드](brand/LIMAGINATION_THREADS_PROFILE.md)
-- 스레드 계정의 실제 프로필 수정과 고정 게시 작업은 계정 소유자가 진행합니다.
+- 실제 프로필 이미지는 소유자가 승인한 Pickle 작업으로 교체합니다. 저장소 반영만으로 실제 계정이 변경되는 것은 아닙니다.
 
 ## 공식 프로젝트 (2026-11-26)
 

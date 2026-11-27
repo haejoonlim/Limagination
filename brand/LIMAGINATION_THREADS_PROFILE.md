@@ -1,6 +1,6 @@
 # LIMAGINATION — Threads 공식 프로필 가이드
 
-> Status: **Approved identity** · 2026-11-23; palette synchronized 2026-11-26  
+> Status: **Quiet Compass identity approved** · 2026-11-27
 > Official brand name: **LIMAGINATION**  
 > Official motto: **Dare to Imagine.**
 > Brand essence: **We Begin with Imagination.**
@@ -17,10 +17,10 @@ LIMAGINATION의 공식 개발 기록 및 소통용 Threads 프로필. 인디 개
 - **표시 이름:** `LIMAGINATION`
 - **희망 아이디:** `@limagination` (사용 가능 여부 확인 전; 실제 아이디는 별도 기록)
 - **분야:** Games · Software · AI
-- **프로필 로고:** [공식 L/ 심볼](visual/LIMAGINATION_SYMBOL_L_SLASH.svg)
-- **축약 워드마크:** [LIMA.](visual/LIMAGINATION_WORDMARK_LIMA.svg) — 웹/소개 이미지용; 원형 프로필은 L/ 사용
+- **프로필 로고:** [공식 Quiet Compass PNG](visual/threads-avatar.png) · [SVG](visual/threads-avatar.svg)
+- **워드마크:** [LIMAGINATION](visual/limagination-wordmark.svg) — 웹/소개 이미지용; 원형 프로필은 Quiet Compass 사용
 - **배경 색:** `#222025` / **심볼 색:** `#C9B5DB`
-- **형식:** 1:1 정사각형 PNG 1024×1024 권장, 원형 크롭에서도 L/ 전체가 보이도록 유지. SVG가 원본이며 색상·배치는 변경하지 않는다.
+- **형식:** 1:1 정사각형 PNG 1024×1024 권장, 원형 크롭에서도 Quiet Compass 전체가 보이도록 유지. SVG가 원본이며 색상·배치는 변경하지 않는다.
 
 ### 소개글 (2026-11-27 모토 반영 문안; 게시 전 검토)
 
@@ -63,17 +63,19 @@ LIMAGINATION | Dare to Imagine.
 3. [공식 프로젝트 목록](../README.md)의 제품별 UI 및 브랜드 정체성을 유지한다.
 4. 스크린샷·코드·사용 후기 등은 실제 자료만 사용한다.
 5. 개인정보·보안정보·비공개 자료는 게시하지 않는다.
-6. 게시와 프로필 수정은 소유자가 최종 검토하고 진행한다. 이 문서 반영 자체는 Threads 계정의 실시간 변경을 의미하지 않는다.
+6. 2026-11-27 소유자는 Pickle을 통한 LIMAGINATION 프로필 이미지 교체를 승인했다. 해당 계정만 변경하고 실제 저장·재확인 증거를 보고한다. 기타 게시·프로필 항목은 기존 승인 범위를 따른다.
 
 ## 5. 브랜드 자산 사용 규칙
 
-- 작은 원형 아바타: **L/** (공식 프로필 로고).
-- 브랜드 소개 카드·웹 히어로: **LIMA.** (축약 워드마크).
+- 작은 원형 아바타: **Quiet Compass** (공식 프로필 로고).
+- 브랜드 소개 카드·웹 히어로: **LIMAGINATION** (아웃라인 워드마크).
 - 공식 이름 표기: **LIMAGINATION**; `LIMAGINANTION` 등 오탈자 사용 금지.
 - 상세 색상·여백·사용 제한: [LIMAGINATION_VISUAL_IDENTITY.md](LIMAGINATION_VISUAL_IDENTITY.md).
 - 고해상도 PNG는 위 승인 SVG를 그대로 렌더링하여 생성하되, SVG 자체의 모양은 바꾸지 않는다.
 
 ## 변경 기록
+
+- **2026-11-27:** Quiet Compass 프로필 PNG 및 전체 워드마크 채택. 이전 L/ 자산은 보존. 실제 계정 변경은 Pickle 확인 보고 필요.
 
 - **2026-11-27:** 공식 모토 Dare to Imagine. 및 운영 격률을 소개글·고정 글 문안에 반영. 실제 게시 또는 프로필 수정은 별도 검토 후 진행.
 

@@ -1,7 +1,7 @@
 ================================================================
 LIMAGINATION — 회사 브랜딩 운영 보고서
 ================================================================
-버전: v4.0
+버전: v4.1
 작성일: 2026-11-27
 상위 기준:
   - LIMAGINATION_BRAND_CONSTITUTION.txt — 브랜드 헌장 v4.0
@@ -12,6 +12,11 @@ LIMAGINATION — 회사 브랜딩 운영 보고서
   이 보고서는 브랜드 헌장 v4.0을 실제 운영·디자인에 적용하기 위한 안내서다.
   회사의 정체성·철학·가치·책임 원칙은 브랜드 헌장을 단일 기준으로 삼는다.
   개별 제품의 기능·UI·말투·색상·캐릭터·기술 선택은 제품별 문서에서 관리한다.
+
+v4.1 변경 (2026-11-27):
+  - Quiet Compass 심볼과 전체 LIMAGINATION 아웃라인 워드마크를 시각 정본으로 채택.
+  - 기존 L/ 및 LIMA. 로고를 legacy에 보존. Muted Amethyst 및 v4.0 철학 유지.
+  - 상표 선행조사 미완료 항목과 Limagin 제42류 선등록 위험을 기록.
 
 v4.0 변경 (2026-11-27):
   - 공식 모토 Dare to Imagine. 및 철학적 근원 Sapere Aude. 채택.
@@ -212,19 +217,19 @@ v3.1 변경:
 6.1 로고와 서명
 
   - 공식 브랜드 이름: LIMAGINATION (LIM + IMAGINATION)
-  - 승인된 축약 워드마크: LIMA. (끝 마침표 포함)
-  - 승인된 컴팩트 심볼: L/
+  - 승인 워드마크: LIMAGINATION (승인 시안의 글자 아웃라인, 넓은 자간)
+  - 승인 심볼: Quiet Compass (클레마티스 × 나침반)
   - 브랜드 서명: Made with LIMAGINATION
-  - 축약 워드마크와 심볼은 공식 명칭의 대체 표기가 아니라 시각적 자산이다.
+  - 워드마크와 심볼은 시각적 자산이며 상표 등록 완료를 뜻하지 않는다.
   - 원본 SVG:
-      brand/visual/LIMAGINATION_WORDMARK_LIMA.svg
-      brand/visual/LIMAGINATION_SYMBOL_L_SLASH.svg
+      brand/visual/limagination-wordmark.svg
+      brand/visual/quiet-compass-reference.svg
   - 상세 사용 가이드: brand/LIMAGINATION_VISUAL_IDENTITY.md
   - Threads 공식 프로필: brand/LIMAGINATION_THREADS_PROFILE.md
-  - Threads 원형 프로필 사진: 승인된 L/ 심볼을 그대로 사용 (PNG 1024×1024 변환 가능)
+  - Threads 원형 프로필 사진: brand/visual/threads-avatar.png (1024×1024, Quiet Compass)
   - 로고의 비례·여백·색상은 승인된 원본 자산을 기준으로 한다.
-  - 현재 SVG는 범용 서체 텍스트를 포함하므로 출력·상표 등록 등 정밀한 재현 전에는
-    아웃라인 벡터 마스터를 별도로 검수한다.
+  - 새 SVG는 글자와 심볼의 아웃라인 벡터다. 원본 형태·여백을 보존한다.
+  - 워드마크는 설치형 전용 서체가 아니다. 상표 조사 및 출력 조건은 별도 검토한다.
   - 제품 로고와 앱 아이콘은 제품별로 설계할 수 있다.
   - 서명은 실제 제작·개발·창작 참여 관계가 정확할 때만 사용한다.
 
@@ -237,7 +242,7 @@ v3.1 변경:
 6.3 색상과 형태
 
   - 2026-11-25 확정 Muted Amethyst (2026-11-26 동기화): Amethyst Noir #222025, Deep Amethyst #62516F, Muted Violet #9D84B7, Soft Amethyst #C9B5DB, Porcelain #F4F1F5.
-  - 승인 워드마크 색상: 배경 #F4F1F5 / 문자 #222025.
+  - 승인 워드마크 밝은 배경 색상: 배경 #F4F1F5 / 문자 #62516F. 어두운 배경: #222025 / #C9B5DB.
   - 승인 심볼 색상: 배경 #222025 / 문자 #C9B5DB.
   - 위 색상 조합은 회사의 해당 로고 자산에 적용되며 모든 제품 UI에 강제하지 않는다.
   - 색은 의미와 기능을 가져야 한다.
@@ -344,8 +349,10 @@ v3.1 변경:
     brand/LIMAGINATION_BRANDING_REPORT.txt
     brand/LIMAGINATION_VISUAL_IDENTITY.md
     brand/LIMAGINATION_THREADS_PROFILE.md
-    brand/visual/LIMAGINATION_WORDMARK_LIMA.svg
-    brand/visual/LIMAGINATION_SYMBOL_L_SLASH.svg
+    brand/visual/limagination-wordmark.svg
+    brand/visual/quiet-compass-reference.svg
+    brand/visual/threads-avatar.png
+    brand/research/QUIET_COMPASS_TRADEMARK_REVIEW.md
 
   회사 브랜드 서체:
     brand/LIMAGINATION_SANS_V2_PROMPT.txt

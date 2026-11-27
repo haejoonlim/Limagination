@@ -1,74 +1,62 @@
 # LIMAGINATION — Visual Identity
 
-> Status: **Approved for company brand use** · Identity approved 2026-11-23 · Muted Amethyst approved 2026-11-25 · synchronized 2026-11-26  
+> 2026-11-27 · Quiet Compass adopted by owner for brand use; trademark clearance incomplete.
 > Governing document: [Brand Constitution v4.0](LIMAGINATION_BRAND_CONSTITUTION.txt)
-> Implementation guide: [Branding Report](LIMAGINATION_BRANDING_REPORT.txt)
+> Implementation: [Branding Report v4.1](LIMAGINATION_BRANDING_REPORT.txt)
 
-## 1. Naming and identity
+## 1. Identity
 
-- **Official brand name:** `LIMAGINATION` (LIM + IMAGINATION)
-- **Approved abbreviated wordmark:** `LIMA.`
-- **Approved compact brand symbol:** `L/`
-- **Official motto:** Dare to Imagine.
-- **Philosophical inspiration:** Sapere Aude.
-- **Operating maxim:** Think Freely. Create Responsibly.
-- **Brand essence:** We Begin with Imagination.
-- **Manifesto:** We Imagine Before We Create.
-- **Attribution signature:** Made with LIMAGINATION — only where actual creative/development participation is accurately represented.
+- Official brand name and wordmark: LIMAGINATION (LIM + IMAGINATION).
+- Official symbol: Quiet Compass — clematis and compass, with four petals, central directional negative space and four segmented circular arcs.
+- Motto: Dare to Imagine.
+- Philosophical inspiration: Sapere Aude.
+- Brand essence: We Begin with Imagination.
+- Manifesto: We Imagine Before We Create.
+- Operating maxim: Think Freely. Create Responsibly.
+- Attribution: Made with LIMAGINATION, only where accurate.
 
-The new wordmark and symbol are visual shorthand, **not a renaming** of the brand. Do not use `LIMAGINANTION` as the official spelling.
+The symbol expresses spiritual beauty and autonomous reasoning as a modern brand interpretation. Preserve the owner-selected traced outline, proportions, gaps and composition; do not redraw, add orbit, sparkle, gradients, shadows, or stretch. Original source color #6D4D74 is retained for reference only.
 
-## 2. Approved visual assets — Muted Amethyst
+## 2. Muted Amethyst (unchanged)
 
-LIMAGINATION 2.0 replaces the former company mint/teal palette. The 2026-11-25 palette decision preserved the wordmark and symbol geometry. The 2026-11-27 constitution v4.0 motto update also leaves these visual assets unchanged.
+| Token | HEX |
+|---|---|
+| Amethyst Noir | #222025 |
+| Deep Amethyst | #62516F |
+| Muted Violet | #9D84B7 |
+| Soft Amethyst | #C9B5DB |
+| Porcelain | #F4F1F5 |
 
-| Token | HEX | Use |
-| --- | --- | --- |
-| Amethyst Noir | `#222025` | dark base and wordmark text |
-| Deep Amethyst | `#62516F` | secondary accent |
-| Muted Violet | `#9D84B7` | restrained accent |
-| Soft Amethyst | `#C9B5DB` | dark-background symbol and highlights |
-| Porcelain | `#F4F1F5` | light base |
+Light pairing: Deep Amethyst on Porcelain. Dark pairing: Soft Amethyst on Amethyst Noir. Black and white versions are for monochrome reproduction. Product palettes remain independent.
 
-Use restrained accents, avoid excessive neon and decorative gradients, and check contrast for each actual text/background pair. Product palettes remain independent. The following logo color pairings implement the approved palette; existing geometry is preserved.
+## 3. Canonical assets
 
-| Role | Preview / source | Background | Foreground |
-| --- | --- | --- | --- |
-| Abbreviated wordmark — `LIMA.` | [SVG](visual/LIMAGINATION_WORDMARK_LIMA.svg) | `#F4F1F5` | `#222025` |
-| Symbol — `L/` | [SVG](visual/LIMAGINATION_SYMBOL_L_SLASH.svg) | `#222025` | `#C9B5DB` |
+| Role | Source |
+|---|---|
+| Original geometry / reference color | [Quiet Compass SVG](visual/quiet-compass-reference.svg) |
+| Light background | [Symbol SVG](visual/quiet-compass-light.svg) |
+| Dark background | [Symbol SVG](visual/quiet-compass-dark.svg) |
+| Monochrome | [Black SVG](visual/quiet-compass-black.svg) / [White SVG](visual/quiet-compass-white.svg) |
+| Full wordmark master | [Outlined SVG](visual/limagination-wordmark.svg) |
+| Wordmark variants | [Light](visual/limagination-wordmark-light.svg) / [Dark](visual/limagination-wordmark-dark.svg) |
+| Combined lockup | [Light](visual/limagination-lockup-light.svg) / [Dark](visual/limagination-lockup-dark.svg) |
+| Threads avatar | [PNG 1024](visual/threads-avatar.png) / [SVG](visual/threads-avatar.svg) |
+| Compatibility PNGs | [Light](logo.png) / [Dark](logo-v2.png) |
 
-![LIMA. wordmark](visual/LIMAGINATION_WORDMARK_LIMA.svg)
+![Quiet Compass](visual/quiet-compass-light.svg)
 
-![L/ symbol](visual/LIMAGINATION_SYMBOL_L_SLASH.svg)
+The original wordmark consists of traced letter outlines, not a complete installable font. Limagination Sans development is separate; no font binaries or product font stacks are replaced by this migration.
 
-These SVGs are **approved color/composition source assets** for current web and social use. They contain text glyphs rendered with a common sans-serif stack; their letter shapes may differ slightly by platform. Before physical printing, trademark filings, or exact cross-platform pixel reproduction, create and review an outlined-vector master without changing the approved composition.
+## 4. Usage
 
-## 3. Usage
+Use full wordmark for company headers and lockups, symbol alone for profile photos, compact brand badges and favicon where legible. Maintain master aspect ratio and padding; check circular crop and 16/24/32/64px reproduction. At 16px the fine gaps may lose clarity; avoid claiming a validated small-size redesign. Do not impose the parent mark, palette or typeface on independent product logos or UI. Do not imply legal registration, endorsement, or sponsorship.
 
-- **GitHub, website and brand documents:** Display `LIMAGINATION` as the full official company name where clarity is needed. Use `LIMA.` as a prominent short wordmark.
-- **Threads/social profile, favicon, compact avatar:** Prefer `L/` symbol for small circular/square crops. Maintain sufficient padding so neither character is clipped.
-- **Branded visuals:** Keep the approved background/foreground pairs above for their respective variants. Check legibility at small sizes.
-- **Product brands:** FONS, Harbor, RESONA and other product identities may keep separate design systems. Do not automatically impose company colors or symbols on each product.
-- **Voice/behavior:** Keep the company constitution's accuracy, accessibility, user-centered responsibility, and honest claims. Avoid making the brand appear to be a registered legal company if that has not been established.
+The Threads avatar is opaque Amethyst Noir with Soft Amethyst symbol, 1024×1024. Upload this exact PNG to the LIMAGINATION account only. See [Threads guide](LIMAGINATION_THREADS_PROFILE.md).
 
-### 3.1 Official Threads profile avatar — symbol confirmed 2026-11-23; colors revised 2026-11-25
+## 5. History and legal review
 
-The officially selected Threads profile avatar is **L/** in its approved Amethyst Noir / Soft Amethyst composition: [original SVG](visual/LIMAGINATION_SYMBOL_L_SLASH.svg). For profile upload, render a square 1024×1024 PNG without changing the SVG's arrangement or colors. Keep the glyph fully visible after the platform's circular crop. The **LIMA.** wordmark remains a separate brand asset for headers and promotional graphics.
-
-Approved bio, first pinned post, and editing rules: [LIMAGINATION_THREADS_PROFILE.md](LIMAGINATION_THREADS_PROFILE.md). GitHub documentation does not itself update the live Threads account.
-
-## 4. Do not
-
-- Change `LIMA.` to `LIMA` or `L/` to a different character arrangement in the approved variants.
-- Recolor the assets, distort their aspect ratio, stretch the characters, or add gradients/shadows without a new explicit brand decision.
-- Treat an abbreviated logo as a replacement for the legally relevant full name.
-- Use branding to imply ownership, sponsorship or a partnership that does not exist.
-
-## 5. Change record
-
-- **2026-11-27:** Adopted Dare to Imagine. as the official motto and documented its philosophical inspiration and operating maxim; existing visual assets remain approved. New symbol exploration is not an approved replacement.
-
-- **2026-11-23:** Confirmed `L/` as the official Threads profile avatar and published the approved social bio/pinned post in the Threads guide.
-- **2026-11-23:** Approved the `LIMA.` wordmark and `L/` symbol from Threads brand exploration. Added SVG source assets, color palette, usage rules, and distinction from the existing official name. The Brand Constitution v3.0 and Limagination Sans technical specifications remain unchanged.
-
-- **2026-11-26:** Synchronized the November 25 Muted Amethyst decision, source SVG colors and documentation. Previous mint/teal assets are historical; legacy PNGs and font specimen are not current logo masters. Live social profile changes are separate.
+- 2026-11-23: L/ and LIMA. originally adopted.
+- 2026-11-25/26: Muted Amethyst adopted and synchronized.
+- 2026-11-27: motto/philosophical foundation adopted; owner subsequently selected Quiet Compass and full outlined wordmark.
+- Prior logo files are archived in [legacy](legacy/2026-11-27-pre-quiet-compass/); legacy spelling remains valid only as historical context or independent product names, e.g. LIMA TOOLKIT.
+- [Trademark review](research/QUIET_COMPASS_TRADEMARK_REVIEW.md): partial search; owner authorized asset migration after disclosure, not a legal clearance or a filing.
